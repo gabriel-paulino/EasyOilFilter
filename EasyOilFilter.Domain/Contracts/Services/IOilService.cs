@@ -11,8 +11,10 @@ namespace EasyOilFilter.Domain.Contracts.Services
         Task<IEnumerable<OilViewModel>> GetByViscosity(string viscosity);
         Task<IEnumerable<OilViewModel>> Get(OilType type);
 
-        Task<bool> Create(AddOilViewModel oil);
-        Task<bool> Update(OilViewModel oil);
-        Task<bool> Delete(Guid id);
+        Task<OilViewModel> Create(AddOilViewModel model);
+        Task<OilViewModel> Update(Guid id, OilViewModel model);
+        Task<(bool Sucess, string Message)> ChangePriceOfAllOilsByAbsoluteValue(decimal absoluteValue);
+        Task<(bool Sucess, string Message)> ChangePriceOfAllOilsByPercentage(decimal percentage);
+        Task<(bool Sucess, string Message)> Delete(Guid id);
     }
 }

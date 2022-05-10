@@ -3,8 +3,9 @@ using EasyOilFilter.Domain.Enums;
 
 namespace EasyOilFilter.Domain.Contracts.Repositories
 {
-    public interface IOilRepository
+    public interface IOilRepository : IDisposable
     {
+        Task<IEnumerable<Oil>> GetAll();
         Task<IEnumerable<Oil>> Get(int page, int quantity);
         Task<Oil> Get(Guid id);
         Task<IEnumerable<Oil>> GetByName(string name);

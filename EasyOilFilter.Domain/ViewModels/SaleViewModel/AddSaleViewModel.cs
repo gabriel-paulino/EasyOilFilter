@@ -3,7 +3,7 @@
     public class AddSaleViewModel
     {
         //ToDo: Inserir props
-        public List<AddSaleItemViewModel>? Items { get; set; }
+        public List<AddSaleItemViewModel> Items { get; set; }
     }
 
     public class AddSaleItemViewModel

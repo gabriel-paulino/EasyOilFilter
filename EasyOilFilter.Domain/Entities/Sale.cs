@@ -14,8 +14,8 @@ namespace EasyOilFilter.Domain.Entities
         public decimal Total { get; set; }
         public decimal Discount { get; set; }
         public DateTime Date { get; set; }
-        public string? Remark { get; set; }
-        public string? Client { get; set; }
+        public string Remarks { get; set; }
+        public string Client { get; set; }
 
         private IEnumerable<SaleItem> _items;
         public IReadOnlyCollection<SaleItem> Items { get => _items.ToArray(); }

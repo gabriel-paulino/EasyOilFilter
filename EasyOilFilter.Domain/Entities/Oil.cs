@@ -35,11 +35,21 @@ namespace EasyOilFilter.Domain.Entities
             }
         }
 
-        public string? Name { get; set; }
-        public string? Viscosity { get; set; }
+        public string Name { get; set; }
+        public string Viscosity { get; set; }
         public decimal Price { get; set; }
         public OilType Type { get; set; }
         public UoM UnitOfMeasurement { get; set; }
+
+        public void ChangePriceByAbsoluteValue(decimal absoluteValue)
+        {
+            Price += absoluteValue;
+        }
+
+        public void ChangePriceByPercentage(decimal percentage)
+        {
+            Price = (1 + percentage / 100) * Price;
+        }
 
         private static Contract<Oil> GetContract(string name, string viscosity, decimal price, OilType type, UoM unitOfMeasurement) =>
             new Contract<Oil>()
