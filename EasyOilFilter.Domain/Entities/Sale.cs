@@ -1,8 +1,9 @@
-﻿using EasyOilFilter.Domain.Enums;
+﻿using EasyOilFilter.Domain.Entities.Base;
+using EasyOilFilter.Domain.Enums;
 
 namespace EasyOilFilter.Domain.Entities
 {
-    public class Sale
+    public class Sale : BaseEntity
     {
         public Sale()
         {
@@ -11,7 +12,6 @@ namespace EasyOilFilter.Domain.Entities
 
         private IEnumerable<SaleItem> _items;
 
-        public int Id { get; set; }
         public PaymentMethodType PaymentMethod { get; set; }
         public decimal Total { get; set; }
         public decimal Discount { get; set; }

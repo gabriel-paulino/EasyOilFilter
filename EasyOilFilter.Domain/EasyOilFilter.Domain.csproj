@@ -11,7 +11,10 @@
     <Folder Include="Contracts\Repositories\" />
     <Folder Include="Contracts\Services\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="Entities\Base\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Flunt" Version="2.0.5" />
   </ItemGroup>
 
 </Project>

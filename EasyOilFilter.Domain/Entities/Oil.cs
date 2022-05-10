@@ -1,10 +1,10 @@
-﻿using EasyOilFilter.Domain.Enums;
+﻿using EasyOilFilter.Domain.Entities.Base;
+using EasyOilFilter.Domain.Enums;
 
 namespace EasyOilFilter.Domain.Entities
 {
-    public class Oil
+    public class Oil : BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Viscosity { get; set; }
         public decimal Price { get; set; }

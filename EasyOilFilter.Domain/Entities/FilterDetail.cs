@@ -1,8 +1,10 @@
-﻿namespace EasyOilFilter.Domain.Entities
+﻿using EasyOilFilter.Domain.Entities.Base;
+
+namespace EasyOilFilter.Domain.Entities
 {
-    public class FilterDetail
+    public class FilterDetail : BaseEntity
     {
-        public int Id { get; set; }
+        public Guid FilterId { get; set; }
         public string Manufacturer { get; set; }
         public string Code { get; set; }      
     }
