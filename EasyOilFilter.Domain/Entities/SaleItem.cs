@@ -6,7 +6,7 @@ namespace EasyOilFilter.Domain.Entities
     public class SaleItem : BaseEntity
     {
         public Guid SaleId { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public UoM UnitOfMeasurement { get; set; }
         public decimal Quantity { get; set; }
         public decimal UnitaryPrice { get; set; }
