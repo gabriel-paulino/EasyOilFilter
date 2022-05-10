@@ -126,7 +126,7 @@ namespace EasyOilFilter.Domain.Implementation
             foreach (var oil in oils)
             {
                 oil.ChangePriceByAbsoluteValue(absoluteValue);
-                if (await _oilRepository.Update(oil)) continue;
+                if (await _oilRepository.UpdatePrice(oil.Id, oil.Price)) continue;
                 else
                 {
                     sucess = false;
@@ -159,7 +159,7 @@ namespace EasyOilFilter.Domain.Implementation
             foreach (var oil in oils)
             {
                 oil.ChangePriceByPercentage(percentage);
-                if (await _oilRepository.Update(oil)) continue;
+                if (await _oilRepository.UpdatePrice(oil.Id, oil.Price)) continue;
                 else
                 {
                     sucess = false;
