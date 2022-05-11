@@ -7,6 +7,7 @@
         Fuel,
         Diesel,
         Sediment,
-        AirConditioning
+        AirConditioning,
+        Other
     }
 }

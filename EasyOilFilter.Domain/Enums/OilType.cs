@@ -5,6 +5,7 @@
         Mineral,
         SemiSynthetic,
         Synthetic,
-        Transmission
+        Transmission,
+        Other
     }
 }

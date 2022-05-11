@@ -4,6 +4,7 @@
     {
         Liter,
         Bucket,
-        Unit
+        Unit,
+        Other
     }
 }

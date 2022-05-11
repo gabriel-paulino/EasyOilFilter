@@ -7,6 +7,7 @@
         Credit,
         Debit,
         TwoInstallments,
-        BankSlip
+        BankSlip,
+        Other
     }
 }

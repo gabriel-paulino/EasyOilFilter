@@ -8,6 +8,7 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
         public string Name { get; set; }
         public string Viscosity { get; set; }
         public decimal Price { get; set; }
+        public decimal StockQuantity { get; set; }
         public int Type { get; set; }
         public int UnitOfMeasurement { get; set; }
 
@@ -16,6 +17,7 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
                 name: model.Name,
                 viscosity: model.Viscosity,
                 price: model.Price,
+                stockQuantity: model.StockQuantity,
                 type: (OilType)model.Type,
                 unitOfMeasurement: (UoM)model.UnitOfMeasurement
                 );
