@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyOilFilter.Domain", "Eas
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{E6ECDF9D-2B1C-484E-BAD0-04102D5ABAB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyOilFilter.Infra.Data", "EasyOilFilter.Infra.Data\EasyOilFilter.Infra.Data.csproj", "{ED52FD79-64AE-4700-BE0D-00B3FF4D63A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyOilFilter.Infra.Data", "EasyOilFilter.Infra.Data\EasyOilFilter.Infra.Data.csproj", "{ED52FD79-64AE-4700-BE0D-00B3FF4D63A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyOilFilter.Presentation", "EasyOilFilter.Presentation\EasyOilFilter.Presentation.csproj", "{C4EBA619-920D-439A-8980-E6317FCBE020}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{ED52FD79-64AE-4700-BE0D-00B3FF4D63A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED52FD79-64AE-4700-BE0D-00B3FF4D63A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED52FD79-64AE-4700-BE0D-00B3FF4D63A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4EBA619-920D-439A-8980-E6317FCBE020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4EBA619-920D-439A-8980-E6317FCBE020}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4EBA619-920D-439A-8980-E6317FCBE020}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4EBA619-920D-439A-8980-E6317FCBE020}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
