@@ -26,9 +26,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
             string command =
                 @"
                     INSERT INTO [Oil]
-                        ([Id], [Name], [Viscosity], [Price], [Type], [UnitOfMeasurement]) 
+                        ([Id], [Name], [Viscosity], [Price], [Type], [UnitOfMeasurement], [StockQuantity]) 
                     VALUES 
-                        (@Id, @Name, @Viscosity, @Price, @Type, @UnitOfMeasurement)
+                        (@Id, @Name, @Viscosity, @Price, @Type, @UnitOfMeasurement, @StockQuantity)
                 ";
 
             int rowsAffected = await _session.Connection.ExecuteAsync(command, new
@@ -37,6 +37,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 oil.Name,
                 oil.Viscosity,
                 oil.Price,
+                oil.StockQuantity,
                 Type = (int)oil.Type,
                 UnitOfMeasurement = (int)oil.UnitOfMeasurement
             });
@@ -66,6 +67,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Price],
+                    [StockQuantity],
                     [Type],
                     [UnitOfMeasurement]
                 FROM 
@@ -86,6 +88,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Price],
+                    [StockQuantity],
                     [Type],
                     [UnitOfMeasurement]
                 FROM 
@@ -105,6 +108,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Price],
+                    [StockQuantity],
                     [Type],
                     [UnitOfMeasurement]
                 FROM 
@@ -113,7 +117,8 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Type] = @Type
             ";
 
-            return await _session.Connection.QueryAsync<Oil>(query, new { Type = (int)type });
+            var oils =  await _session.Connection.QueryAsync<Oil>(query, new { Type = (int)type });
+            return oils.OrderByDescending(oil => oil.Name);
         }
 
         public async Task<IEnumerable<Oil>> GetAll()
@@ -124,13 +129,15 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Price],
+                    [StockQuantity],
                     [Type],
                     [UnitOfMeasurement]
                 FROM 
                     [Oil]
             ";
 
-            return await _session.Connection.QueryAsync<Oil>(query);
+            var oils = await _session.Connection.QueryAsync<Oil>(query);
+            return oils.OrderByDescending(oil => oil.Name);
         }
 
         public async Task<IEnumerable<Oil>> GetByName(string name)
@@ -141,15 +148,17 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Price],
+                    [StockQuantity],
                     [Type],
                     [UnitOfMeasurement]
                 FROM 
                     [Oil]
                 WHERE
-                    [Name] = @Name
+                    [Name] LIKE '@Name%'
             ";
 
-            return await _session.Connection.QueryAsync<Oil>(query, new { Name = name });
+            var oils = await _session.Connection.QueryAsync<Oil>(query, new { Name = name });
+            return oils.OrderByDescending(oil => oil.Name);
         }
 
         public async Task<IEnumerable<Oil>> GetByViscosity(string viscosity)
@@ -160,6 +169,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Price],
+                    [StockQuantity],
                     [Type],
                     [UnitOfMeasurement]
                 FROM 
@@ -168,7 +178,8 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Viscosity] = @Viscosity
             ";
 
-            return await _session.Connection.QueryAsync<Oil>(query, new { Viscosity = viscosity });
+            var oils =  await _session.Connection.QueryAsync<Oil>(query, new { Viscosity = viscosity });
+            return oils.OrderByDescending(oil => oil.Name);
         }
 
         public async Task<bool> Update(Oil oil)
@@ -180,6 +191,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                         [Name] = @Name,
                         [Viscosity] = @Viscosity,
                         [Price] = @Price,
+                        [StockQuantity] = @StockQuantity,
                         [Type] = @Type,
                         [UnitOfMeasurement] = @UnitOfMeasurement
                     WHERE [Id] = @Id
@@ -191,6 +203,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 oil.Name,
                 oil.Viscosity,
                 oil.Price,
+                oil.StockQuantity,
                 Platform = (int)oil.Type,
                 UnitOfMeasurement = (int)oil.UnitOfMeasurement,
             },

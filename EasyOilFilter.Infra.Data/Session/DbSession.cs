@@ -8,12 +8,12 @@ namespace EasyOilFilter.Infra.Data.Session
     {
         private Guid _id;
         public IDbConnection Connection { get; }
-        public IDbTransaction? Transaction { get; set; }
+        public IDbTransaction Transaction { get; set; }
 
-        public DbSession(IConfiguration configuration)
+        public DbSession(SqlSettings settings)
         {
             _id = Guid.NewGuid();
-            Connection = new SqlConnection(configuration.GetConnectionString("ConnectionString"));
+            Connection = new SqlConnection(settings.ConnectionString);
             Connection.Open();
         }
 
