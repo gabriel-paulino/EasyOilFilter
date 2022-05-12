@@ -140,7 +140,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return oils.OrderByDescending(oil => oil.Name);
         }
 
-        public async Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", int type = 0)
+        public async Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", OilType type = OilType.All)
         {
             string query = @"
                 SELECT
@@ -164,7 +164,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             if (!string.IsNullOrEmpty(viscosity))
                 builder.Where("[Viscosity] LIKE @Viscosity", new { Viscosity = $"{viscosity}%" });
             
-            if(type > 0)
+            if(type != OilType.All)
                 builder.Where("[Type] = @Type", new { Type = type });
 
             var templete = builder.AddTemplate(query);

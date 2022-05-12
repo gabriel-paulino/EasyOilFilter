@@ -7,7 +7,7 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
     {
         Task<IEnumerable<Oil>> GetAll();
         Task<IEnumerable<Oil>> Get(int page, int quantity);
-        Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", int type = 0);
+        Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", OilType type = OilType.All);
         Task<Oil> Get(Guid id);
         Task<IEnumerable<Oil>> GetByName(string name);
         Task<IEnumerable<Oil>> GetByViscosity(string viscosity);

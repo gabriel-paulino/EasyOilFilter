@@ -41,12 +41,11 @@ namespace EasyOilFilter.Presentation
             string selectedType = ComboType?.SelectedItem?.ToString() ?? "Todos";
             var oilType = EnumUtility.GetEnumByDescription<OilType>(selectedType);
 
-
             var model = new SearchOilViewModel()
             {
                 Name = TextName.Text.FixTextToManageDataBaseResult(),
                 Viscosity = TextViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
-                Type = (int)oilType
+                Type = oilType
             };
 
             var oils = await _oilService.Get(model);
@@ -75,17 +74,15 @@ namespace EasyOilFilter.Presentation
             dataGridView.Columns["Name"].HeaderText = "Lubrificante";
             dataGridView.Columns["Viscosity"].HeaderText = "Viscosidade";
             dataGridView.Columns["Price"].HeaderText = "Preço";
-            dataGridView.Columns["StockQuantity"].HeaderText = "Em estoque";
+            dataGridView.Columns["StockQuantity"].HeaderText = "Estoque";
             dataGridView.Columns["Type"].HeaderText = "Tipo";
             dataGridView.Columns["UnitOfMeasurement"].HeaderText = "Embalagem";
 
             dataGridView.AutoResizeColumns();
             dataGridView.ReadOnly = true;
-            //dataGridView.Columns["Name"].Width = 185;
-            //dataGridView.Columns["Price"].Width = 100;
-            //dataGridView.Columns["StockQuantity"].Width = 100;
-            
-            //dataGridView.Columns["UnitOfMeasurement"].MinimumWidth = 150;
+            dataGridView.Columns["Name"].MinimumWidth = 188;
+            dataGridView.Columns["Price"].MinimumWidth = 100;
+            dataGridView.Columns["StockQuantity"].MinimumWidth = 100;
         }
     }
 }
