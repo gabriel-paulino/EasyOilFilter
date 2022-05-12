@@ -5,8 +5,10 @@ namespace EasyOilFilter.Domain.Contracts.Services
 {
     public interface IOilService : IDisposable
     {
+        Task<IEnumerable<OilViewModel>> GetAll();
         Task<IEnumerable<OilViewModel>> Get(int page, int quantity);
         Task<OilViewModel> Get(Guid id);
+        Task<IEnumerable<OilViewModel>> Get(SearchOilViewModel model);
         Task<IEnumerable<OilViewModel>> GetByName(string name);
         Task<IEnumerable<OilViewModel>> GetByViscosity(string viscosity);
         Task<IEnumerable<OilViewModel>> Get(OilType type);

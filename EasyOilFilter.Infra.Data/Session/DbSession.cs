@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 
 namespace EasyOilFilter.Infra.Data.Session

@@ -24,6 +24,24 @@ namespace EasyOilFilter.Domain.Implementation
             _notification = notification;
         }
 
+        public async Task<IEnumerable<OilViewModel>> GetAll()
+        {
+            var oils = await _oilRepository.GetAll();
+
+            return oils.Any()
+                ? OilViewModel.MapMany(oils)
+                : default;
+        }
+
+        public async Task<IEnumerable<OilViewModel>> Get(SearchOilViewModel model)
+        {
+            var oils = await _oilRepository.Get(model.Name, model.Viscosity, model.Type);
+
+            return oils.Any()
+                ? OilViewModel.MapMany(oils)
+                : default;
+        }
+
         public async Task<IEnumerable<OilViewModel>> Get(int page, int quantity)
         {
             var oils = await _oilRepository.Get(page, quantity);
@@ -193,6 +211,6 @@ namespace EasyOilFilter.Domain.Implementation
             return (false, string.Empty);
         }
 
-        public void Dispose() => _oilRepository.Dispose();   
+        public void Dispose() => _oilRepository.Dispose();
     }
 }

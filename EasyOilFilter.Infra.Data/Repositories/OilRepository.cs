@@ -72,7 +72,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [UnitOfMeasurement]
                 FROM 
                     [Oil]
-                ORDER BY [Id]
+                ORDER BY [Name]
                 OFFSET @Page ROWS 
                 FETCH NEXT @Quantity ROWS ONLY
             ");
@@ -140,6 +140,39 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return oils.OrderByDescending(oil => oil.Name);
         }
 
+        public async Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", int type = 0)
+        {
+            string query = @"
+                SELECT
+                    [Id],
+                    [Name],
+                    [Viscosity],
+                    [Price],
+                    [StockQuantity],
+                    [Type],
+                    [UnitOfMeasurement]
+                FROM 
+                    [Oil]
+                /**where**/
+            ";
+
+            var builder = new SqlBuilder();
+
+            if (!string.IsNullOrEmpty(name))
+                builder.Where("[Name] LIKE @Name", new { Name = $"{name}%" });
+
+            if (!string.IsNullOrEmpty(viscosity))
+                builder.Where("[Viscosity] LIKE @Viscosity", new { Viscosity = $"{viscosity}%" });
+            
+            if(type > 0)
+                builder.Where("[Type] = @Type", new { Type = type });
+
+            var templete = builder.AddTemplate(query);
+
+            var oils = await _session.Connection.QueryAsync<Oil>(templete.RawSql, templete.Parameters);
+            return oils.OrderByDescending(oil => oil.Name);
+        }
+
         public async Task<IEnumerable<Oil>> GetByName(string name)
         {
             string query = @"
@@ -154,10 +187,10 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 FROM 
                     [Oil]
                 WHERE
-                    [Name] LIKE '@Name%'
+                    [Name] LIKE @Name
             ";
 
-            var oils = await _session.Connection.QueryAsync<Oil>(query, new { Name = name });
+            var oils = await _session.Connection.QueryAsync<Oil>(query, new { Name = $"{name}%" });
             return oils.OrderByDescending(oil => oil.Name);
         }
 
@@ -175,10 +208,10 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 FROM 
                     [Oil]
                 WHERE
-                    [Viscosity] = @Viscosity
+                    [Viscosity] LIKE @Viscosity
             ";
 
-            var oils =  await _session.Connection.QueryAsync<Oil>(query, new { Viscosity = viscosity });
+            var oils =  await _session.Connection.QueryAsync<Oil>(query, new { Viscosity = $"{viscosity}%" });
             return oils.OrderByDescending(oil => oil.Name);
         }
 

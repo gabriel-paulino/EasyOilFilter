@@ -30,7 +30,7 @@ namespace EasyOilFilter.Presentation
 
             var container = Bootstrap();
 
-            Application.Run(container.GetInstance<Form1>());
+            Application.Run(container.GetInstance<OilForm>());
         }
 
         private static Container Bootstrap()
