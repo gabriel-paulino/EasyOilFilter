@@ -45,20 +45,6 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return rowsAffected == 1;
         }
 
-        public async Task<bool> Delete(Guid id)
-        {
-            string command =
-                @"
-                    DELETE [Oil]
-                    WHERE 
-                        [Id] = @Id
-                ";
-
-            int rowsAffected = await _session.Connection.ExecuteAsync(command, new { Id = id }, _session.Transaction);
-
-            return rowsAffected == 1;
-        }
-
         public async Task<IEnumerable<Oil>> Get(int page, int quantity)
         {
             string query = (@"
@@ -252,7 +238,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 @"
                     UPDATE [Oil] 
                     SET
-                        [Price] = @Price,
+                        [Price] = @Price
                     WHERE [Id] = @Id
                 ";
 

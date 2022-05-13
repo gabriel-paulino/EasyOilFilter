@@ -71,4 +71,41 @@
         rkJggg==
 </value>
   </data>
+  <data name="ButtonChangePriceValue.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAAXlJREFUSEvl
+        lb8uREEUh29CgXgDSrQKDVH5FzWJAp0GlT+NwsPgSVBKNBK8CSGR8H2zd2Ls7r2z9m7FL/kye5Izc87s
+        PWdO8W+1A2dwCGswCgPVGLzBZ8IrXMI0RC2Ua6Xm4A7uE1YhahL0WYJjuAGDvZe2N32ArHRMs92COpn5
+        M0T/R8jqBH4TRO1Bz0FmwKs/gRs/IBdkG/TrOcgV6DgfrNYBG62fXTUMm2AikXWolOVotVwH61tD5ToQ
+        mYG3OApWM42Xa4cOwCDLwepfE+B33Q1Wm87BILPB6l/u9xzP65Af2Y42kyZaAYPsB6uLfDqa6hQMkr4U
+        jdVefbfwAiPBqpBVlta9fWA/VMk+8q9Wi+AtLoJVIztWR7GT4wFVMhH9fCF8w6ysKahVGsSNORkk+ktP
+        fZYGMbPcfGgP4iuelfNAR+eDV3ejc8PX2UZ1njhXoqyidP44j/SpVZq5E8/JZ7Wk2dpPgyj3H/LxNGMb
+        zBmfK4Y/qaL4AuVDZkFde5b/AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="ButtonChangePricePercentage.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAAXlJREFUSEvl
+        lb8uREEUh29CgXgDSrQKDVH5FzWJAp0GlT+NwsPgSVBKNBK8CSGR8H2zd2Ls7r2z9m7FL/kye5Izc87s
+        PWdO8W+1A2dwCGswCgPVGLzBZ8IrXMI0RC2Ua6Xm4A7uE1YhahL0WYJjuAGDvZe2N32ArHRMs92COpn5
+        M0T/R8jqBH4TRO1Bz0FmwKs/gRs/IBdkG/TrOcgV6DgfrNYBG62fXTUMm2AikXWolOVotVwH61tD5ToQ
+        mYG3OApWM42Xa4cOwCDLwepfE+B33Q1Wm87BILPB6l/u9xzP65Af2Y42kyZaAYPsB6uLfDqa6hQMkr4U
+        jdVefbfwAiPBqpBVlta9fWA/VMk+8q9Wi+AtLoJVIztWR7GT4wFVMhH9fCF8w6ysKahVGsSNORkk+ktP
+        fZYGMbPcfGgP4iuelfNAR+eDV3ejc8PX2UZ1njhXoqyidP44j/SpVZq5E8/JZ7Wk2dpPgyj3H/LxNGMb
+        zBmfK4Y/qaL4AuVDZkFde5b/AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="ButtonAddOil.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAABGdBTUEAALGPC/xhBQAAAadJREFUSEvl
+        lDtOw0AQhn0IHgWPMwAC7pCHEzsSLQVtIIKrgIjgCkixkxiJjivwKElFArSpQgFF+H9rrI3XG2ctOvil
+        Xyt5Z76x17Pj/B+5kbvpBn6rGnqRG3rPWEeyRpXQO6l36xsSWly1Xm21EvhXgH3D03lGwS+47Qf+iqTa
+        CQW2ARjqwAV+h/cFkS8Gwp+SWNSTcq+2KyizeET49A9Dsr0D/610c7AsyKxQ4NqYKD68O5q27s/i1bSf
+        GA1xKci02EUIyP3JwSCcUlxN+4nZDKVOY13QSqh+akqYtW0Rmu0taCW3W781Bc+6SBG4L2glfCIvWCqQ
+        Z09g4pfxIC7Cdfb5nH/0KGgldoUeyJ9sI8bpueQJWgkPn/TAX37Jg6CV8DDSgjImkOJq2k858HuCVpIh
+        aE4QFyzSFLQSpyn725ggti0Sc6LqmqDTwmbblJSYZ29z48E5F2RWHNemLivoIabHkiDNcjuNPQROtERb
+        T5C/I6h8lUNvCwmvGiDfOAG+oCDsxHHNabqoGWT/YuER5YnTFJBjuC8XdhSvuAdwc24X/UE5zg/IEm8v
+        bVZPvwAAAABJRU5ErkJggg==
+</value>
+  </data>
 </root>

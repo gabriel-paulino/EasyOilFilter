@@ -16,6 +16,5 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
         Task<bool> Create(Oil oil);
         Task<bool> Update(Oil oil);
         Task<bool> UpdatePrice(Guid id, decimal price);
-        Task<bool> Delete(Guid id);
     }
 }

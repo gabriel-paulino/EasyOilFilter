@@ -192,25 +192,6 @@ namespace EasyOilFilter.Domain.Implementation
             return (sucess, message);
         }
 
-        public async Task<(bool Sucess, string Message)> Delete(Guid id)
-        {
-            var oil = await _oilRepository.Get(id);
-
-            if (oil is null)
-                return (false, $"Não existe lubrificante com Id: {id}.");
-
-            _unitOfWork.BeginTransaction();
-
-            if (await _oilRepository.Delete(id))
-            {
-                _unitOfWork.Commit();
-                return (true, string.Empty);
-            }
-
-            _unitOfWork.Rollback();
-            return (false, string.Empty);
-        }
-
         public void Dispose() => _oilRepository.Dispose();
     }
 }

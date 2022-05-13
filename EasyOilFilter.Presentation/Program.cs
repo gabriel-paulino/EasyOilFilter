@@ -6,6 +6,7 @@ using EasyOilFilter.Domain.Shared.Contexts;
 using EasyOilFilter.Infra.Data.Repositories;
 using EasyOilFilter.Infra.Data.Session;
 using EasyOilFilter.Infra.Data.UoW;
+using EasyOilFilter.Presentation.Forms;
 using SimpleInjector;
 using SimpleInjector.Diagnostics;
 
@@ -19,11 +20,6 @@ namespace EasyOilFilter.Presentation
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            //ApplicationConfiguration.Initialize();
-            //Application.Run(new Form1());
-
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -42,12 +38,11 @@ namespace EasyOilFilter.Presentation
             //To-Do: Validar ajustes necessarios mudança do ciclo de vida para Transient
 
             container.RegisterInstance(new SqlSettings(settings.ConnectionString));
-            container.Register<DbSession>(Lifestyle.Singleton);           
+            container.Register<DbSession>(Lifestyle.Singleton);
             container.Register<NotificationContext>(Lifestyle.Singleton);
             container.Register<IUnitOfWork, UnitOfWork>(Lifestyle.Singleton);
             container.Register<IOilRepository, OilRepository>(Lifestyle.Singleton);
             container.Register<IOilService, OilService>(Lifestyle.Singleton);
-            
 
             AutoRegisterWindowsForms(container);
 
