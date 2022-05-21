@@ -10,7 +10,7 @@ namespace EasyOilFilter.Domain.Entities
             _items = new List<SaleItem>();
         }
 
-        public PaymentMethodType PaymentMethod { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
         public decimal Total { get; set; }
         public decimal Discount { get; set; }
         public DateTime Date { get; set; }

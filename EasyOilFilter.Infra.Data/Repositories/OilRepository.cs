@@ -223,7 +223,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 oil.Viscosity,
                 oil.Price,
                 oil.StockQuantity,
-                Platform = (int)oil.Type,
+                Type = (int)oil.Type,
                 UnitOfMeasurement = (int)oil.UnitOfMeasurement,
             },
             _session.Transaction

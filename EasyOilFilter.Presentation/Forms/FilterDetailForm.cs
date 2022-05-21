@@ -2,62 +2,54 @@
 using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Domain.Extensions;
 using EasyOilFilter.Domain.Shared.Utils;
-using EasyOilFilter.Domain.ViewModels.OilViewModel;
+using EasyOilFilter.Domain.ViewModels.FilterViewModel;
 using EasyOilFilter.Presentation.Enums;
 
 namespace EasyOilFilter.Presentation.Forms
 {
-    public partial class OilDetailForm : Form
+    public partial class FilterDetailForm : Form
     {
-        private readonly IOilService _oilService;
-        public OilViewModel Model { get; set; }
+        private readonly IFilterService _filterService;
+        public FilterViewModel Model { get; set; }
         public FormMode Mode { get; set; }
         public bool IsUpdate { get; private set; }
         public bool IsAdd { get; private set; }
 
-        public OilDetailForm(IOilService oilService)
+        public FilterDetailForm(IFilterService filterService)
         {
-            _oilService = oilService;
-            Model = new OilViewModel();
+            _filterService = filterService;
+            Model = new FilterViewModel();
             IsUpdate = false;
             IsAdd = false;
             InitializeComponent();
         }
 
-        private void OilDetailForm_Load(object sender, EventArgs e)
+        private void FilterDetailForm_Load(object sender, EventArgs e)
         {
-            LoadOilTypeComboBox();
-            LoadUoMComboBox();
+            LoadFilterTypeComboBox();
 
             if (Mode == FormMode.Update)
             {
                 ButtonSave.Text = "Atualizar";
-                FillFieldsWithOilDetails();
+                FillFieldsWithFilterDetails();
                 return;
             }
             ButtonSave.Text = "Adicionar";
         }
 
-        private void FillFieldsWithOilDetails()
+        private void FillFieldsWithFilterDetails()
         {
-            TextBoxName.Text = Model.Name;
-            TextBoxViscosity.Text = Model.Viscosity;
+            TextBoxCode.Text = Model.Code;
+            TextBoxManufacturer.Text = Model.Manufacturer;
             TextBoxPrice.Text = Model.Price.ToString("C2");
             TextBoxStockQuantity.Text = Model.StockQuantity.ToString("F2");
-            ComboBoxType.SelectedIndex = (int)EnumUtility.GetEnumByDescription<OilType>(Model.Type);
-            ComboBoxUoM.SelectedIndex = (int)EnumUtility.GetEnumByDescription<UoM>(Model.UnitOfMeasurement);
+            ComboBoxType.SelectedIndex = (int)EnumUtility.GetEnumByDescription<FilterType>(Model.Type);
         }
 
-        private void LoadOilTypeComboBox()
+        private void LoadFilterTypeComboBox()
         {
-            foreach (var type in EnumUtility.EnumToList<OilType>())
+            foreach (var type in EnumUtility.EnumToList<FilterType>())
                 ComboBoxType.Items.Add(type.GetDescription());
-        }
-
-        private void LoadUoMComboBox()
-        {
-            foreach (var type in EnumUtility.EnumToList<UoM>())
-                ComboBoxUoM.Items.Add(type.GetDescription());
         }
 
         private void ButtonSave_Click(object sender, EventArgs e)
@@ -65,46 +57,46 @@ namespace EasyOilFilter.Presentation.Forms
             switch (Mode)
             {
                 case FormMode.Add:
-                    AddOil();
+                    AddFilter();
                     break;
                 case FormMode.Update:
-                    UpdateOil();
+                    UpdateFilter();
                     break;
                 default:
                     break;
             }
         }
 
-        private async void AddOil()
+        private async void AddFilter()
         {
             var (model, message) = GetAddOilViewModel();
 
             if (!string.IsNullOrEmpty(message))
                 MessageBox.Show(message);
 
-            var oils = await _oilService.GetByName(model.Name);
+            var oils = await _filterService.GetByCode(model.Code);
 
             if (oils?.Any() ?? false)
             {
-                MessageBox.Show($"O lubrificante: {TextBoxName.Text} já está adicionado na base de dados.");
+                MessageBox.Show($"O filtro: {TextBoxCode.Text} já está adicionado na base de dados.");
                 return;
             }
 
-            var result = await _oilService.Create(model);
+            var result = await _filterService.Create(model);
 
             if (result == default)
             {
-                MessageBox.Show($"Falha ao adicionar lubrificante: {TextBoxName.Text}.");
+                MessageBox.Show($"Falha ao adicionar filtro: {TextBoxCode.Text}.");
                 return;
             }
 
             IsAdd = true;
-            MessageBox.Show($"Lubrificante: {TextBoxName.Text} adicionado com sucesso.");
+            MessageBox.Show($"Lubrificante: {TextBoxCode.Text} adicionado com sucesso.");
         }
 
-        private async void UpdateOil()
+        private async void UpdateFilter()
         {
-            var (model, message) = GetOilViewModel();
+            var (model, message) = GetFilterViewModel();
 
             if (!string.IsNullOrEmpty(message))
                 MessageBox.Show(message);
@@ -114,19 +106,19 @@ namespace EasyOilFilter.Presentation.Forms
             if (!anyChange)
                 return;
 
-            var result = await _oilService.Update(Model.Id, model);
+            var result = await _filterService.Update(Model.Id, model);
 
             if (result == default)
             {
-                MessageBox.Show($"Falha ao atualizar lubrificante: {TextBoxName.Text}.");
+                MessageBox.Show($"Falha ao atualizar filtro: {TextBoxCode.Text}.");
                 return;
             }
 
             IsUpdate = true;
-            MessageBox.Show($"Lubrificante: {TextBoxName.Text} atualizado com sucesso.");
+            MessageBox.Show($"Filtro: {TextBoxCode.Text} atualizado com sucesso.");
         }
 
-        private (OilViewModel model, string message) GetOilViewModel()
+        private (FilterViewModel model, string message) GetFilterViewModel()
         {
             string message = string.Empty;
 
@@ -145,19 +137,18 @@ namespace EasyOilFilter.Presentation.Forms
             if (!string.IsNullOrEmpty(message))
                 message += "Preencha com um valor numérico.";
 
-            return (new OilViewModel()
+            return (new FilterViewModel()
             {
                 Id = Model.Id,
-                Name = TextBoxName.Text,
-                Viscosity = TextBoxViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
+                Code = TextBoxCode.Text,
+                Manufacturer = TextBoxManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: true),
                 Price = price,
                 StockQuantity = stockQuantity,
-                Type = ComboBoxType.SelectedItem.ToString(),
-                UnitOfMeasurement = ComboBoxUoM.SelectedItem.ToString()
+                Type = ComboBoxType.SelectedItem.ToString()
             }, message);
         }
 
-        private (AddOilViewModel model, string message) GetAddOilViewModel()
+        private (AddFilterViewModel model, string message) GetAddOilViewModel()
         {
             string message = string.Empty;
 
@@ -176,25 +167,23 @@ namespace EasyOilFilter.Presentation.Forms
             if (!string.IsNullOrEmpty(message))
                 message += "Preencha com um valor numérico.";
 
-            return (new AddOilViewModel()
+            return (new AddFilterViewModel()
             {
-                Name = TextBoxName.Text,
-                Viscosity = TextBoxViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
+                Code = TextBoxCode.Text,
+                Manufacturer = TextBoxManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: true),
                 Price = price,
                 StockQuantity = stockQuantity,
-                Type = ComboBoxType.SelectedItem.ToString(),
-                UnitOfMeasurement = ComboBoxUoM.SelectedItem.ToString()
+                Type = ComboBoxType.SelectedItem.ToString()
             }, message);
         }
 
-        private bool HasChangedAnyField(OilViewModel updatedOil)
+        private bool HasChangedAnyField(FilterViewModel updatedOil)
         {
             return
-                updatedOil.Name != Model.Name ||
-                updatedOil.Viscosity != Model.Viscosity ||
+                updatedOil.Code != Model.Code ||
+                updatedOil.Manufacturer != Model.Manufacturer ||
                 updatedOil.StockQuantity != Model.StockQuantity ||
                 updatedOil.Type != Model.Type ||
-                updatedOil.UnitOfMeasurement != Model.UnitOfMeasurement ||
                 updatedOil.Price != Model.Price;
         }
     }

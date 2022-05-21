@@ -4,7 +4,7 @@ using Flunt.Validations;
 
 namespace EasyOilFilter.Domain.Entities
 {
-    public class Oil : BaseEntity
+    public class Oil : Product
     {
         public Oil(Guid id, string name, string viscosity, decimal price, decimal stockQuantity, OilType type, UoM unitOfMeasurement)
         {
@@ -37,12 +37,10 @@ namespace EasyOilFilter.Domain.Entities
             }
         }
 
-        public string Name { get; set; }
-        public string Viscosity { get; set; }
-        public decimal Price { get; set; }
-        public decimal StockQuantity { get; set; }
-        public OilType Type { get; set; }
-        public UoM UnitOfMeasurement { get; set; }
+        public string Name { get; private set; }
+        public string Viscosity { get; private set; }
+        public OilType Type { get; private set; }
+        public UoM UnitOfMeasurement { get; private set; }
 
         public void ChangePriceByAbsoluteValue(decimal absoluteValue)
         {
@@ -60,8 +58,8 @@ namespace EasyOilFilter.Domain.Entities
                 .IsGreaterThan(name, 2, "Name", "O nome do lubrificante deve ter pelo menos 2 caracteres.")
                 .IsLowerThan(viscosity, 10, "Viscosity", "A viscosidade do lubrificante não pode ter mais do que 10 caracteres.")
                 .IsGreaterThan(viscosity, 2, "Viscosity", "A viscosidade do lubrificante deve ter pelo menos 2 caracteres.")
-                .IsBetween((int)type, 0, 4, "Type", "O tipo do lubrificante deve ser selecionado.")
-                .IsBetween((int)unitOfMeasurement, 0, 9, "UnitOfMeasurement", "A unidade de medida do lubrificante deve ser preenchida.")
+                .IsBetween((int)type, 1, 5, "Type", "O tipo do lubrificante deve ser informado.")
+                .IsBetween((int)unitOfMeasurement, 0, 2, "UnitOfMeasurement", "A unidade de medida do lubrificante deve ser preenchida.")
                 .IsBetween(price, 1, 1000, "Price", "O preço do lubrificante deve ser pelo menos R$ 1 e não maior que R$ 1000.")
                 .IsGreaterThan(stockQuantity, 0, "StockQuantity", "A quantidade em estoque do lubrificante deve ser maior que 0.");
     }

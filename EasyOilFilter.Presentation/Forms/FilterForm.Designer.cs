@@ -1,14 +1,14 @@
 ﻿namespace EasyOilFilter.Presentation.Forms
 {
-    partial class OilForm
+    partial class FilterForm
     {
         /// <summary>
-        ///  Required designer variable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -28,16 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OilForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FilterForm));
             this.DataGridView = new System.Windows.Forms.DataGridView();
             this.ButtonSearch = new System.Windows.Forms.Button();
             this.labelName = new System.Windows.Forms.Label();
-            this.labelViscosity = new System.Windows.Forms.Label();
             this.labelType = new System.Windows.Forms.Label();
             this.ComboType = new System.Windows.Forms.ComboBox();
-            this.TextViscosity = new System.Windows.Forms.TextBox();
             this.TextName = new System.Windows.Forms.TextBox();
             this.GroupBoxSearch = new System.Windows.Forms.GroupBox();
+            this.labelManufacturer = new System.Windows.Forms.Label();
+            this.TextManufacturer = new System.Windows.Forms.TextBox();
             this.GroupBoxUtils = new System.Windows.Forms.GroupBox();
             this.TextBoxChangePriceValue = new System.Windows.Forms.TextBox();
             this.TextBoxChangePricePercentage = new System.Windows.Forms.TextBox();
@@ -89,19 +89,9 @@
             this.labelName.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.labelName.Location = new System.Drawing.Point(11, 34);
             this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(54, 19);
+            this.labelName.Size = new System.Drawing.Size(47, 19);
             this.labelName.TabIndex = 2;
-            this.labelName.Text = "Código";
-            // 
-            // labelViscosity
-            // 
-            this.labelViscosity.AutoSize = true;
-            this.labelViscosity.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.labelViscosity.Location = new System.Drawing.Point(320, 34);
-            this.labelViscosity.Name = "labelViscosity";
-            this.labelViscosity.Size = new System.Drawing.Size(87, 19);
-            this.labelViscosity.TabIndex = 3;
-            this.labelViscosity.Text = "Viscosidade";
+            this.labelName.Text = "Nome";
             // 
             // labelType
             // 
@@ -122,18 +112,11 @@
             this.ComboType.Size = new System.Drawing.Size(120, 27);
             this.ComboType.TabIndex = 5;
             // 
-            // TextViscosity
-            // 
-            this.TextViscosity.Location = new System.Drawing.Point(320, 59);
-            this.TextViscosity.Name = "TextViscosity";
-            this.TextViscosity.Size = new System.Drawing.Size(120, 23);
-            this.TextViscosity.TabIndex = 6;
-            // 
             // TextName
             // 
             this.TextName.Location = new System.Drawing.Point(11, 59);
             this.TextName.Name = "TextName";
-            this.TextName.Size = new System.Drawing.Size(263, 23);
+            this.TextName.Size = new System.Drawing.Size(239, 23);
             this.TextName.TabIndex = 7;
             // 
             // GroupBoxSearch
@@ -143,8 +126,8 @@
             this.GroupBoxSearch.Controls.Add(this.labelName);
             this.GroupBoxSearch.Controls.Add(this.TextName);
             this.GroupBoxSearch.Controls.Add(this.labelType);
-            this.GroupBoxSearch.Controls.Add(this.labelViscosity);
-            this.GroupBoxSearch.Controls.Add(this.TextViscosity);
+            this.GroupBoxSearch.Controls.Add(this.labelManufacturer);
+            this.GroupBoxSearch.Controls.Add(this.TextManufacturer);
             this.GroupBoxSearch.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.GroupBoxSearch.Location = new System.Drawing.Point(14, 12);
             this.GroupBoxSearch.Name = "GroupBoxSearch";
@@ -152,6 +135,23 @@
             this.GroupBoxSearch.TabIndex = 8;
             this.GroupBoxSearch.TabStop = false;
             this.GroupBoxSearch.Text = "Pesquisar";
+            // 
+            // labelManufacturer
+            // 
+            this.labelManufacturer.AutoSize = true;
+            this.labelManufacturer.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelManufacturer.Location = new System.Drawing.Point(306, 34);
+            this.labelManufacturer.Name = "labelManufacturer";
+            this.labelManufacturer.Size = new System.Drawing.Size(77, 19);
+            this.labelManufacturer.TabIndex = 3;
+            this.labelManufacturer.Text = "Fabricante";
+            // 
+            // TextManufacturer
+            // 
+            this.TextManufacturer.Location = new System.Drawing.Point(306, 59);
+            this.TextManufacturer.Name = "TextManufacturer";
+            this.TextManufacturer.Size = new System.Drawing.Size(138, 23);
+            this.TextManufacturer.TabIndex = 6;
             // 
             // GroupBoxUtils
             // 
@@ -167,7 +167,7 @@
             this.GroupBoxUtils.Size = new System.Drawing.Size(758, 130);
             this.GroupBoxUtils.TabIndex = 9;
             this.GroupBoxUtils.TabStop = false;
-            this.GroupBoxUtils.Text = "Alterar preço de todos lubrificantes";
+            this.GroupBoxUtils.Text = "Alterar preço de todos filtros";
             // 
             // TextBoxChangePriceValue
             // 
@@ -247,9 +247,9 @@
             this.ButtonAddOil.Text = "Novo";
             this.ButtonAddOil.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ButtonAddOil.UseVisualStyleBackColor = true;
-            this.ButtonAddOil.Click += new System.EventHandler(this.ButtonAddOil_Click);
+            this.ButtonAddOil.Click += new System.EventHandler(this.ButtonAddFilter_Click);
             // 
-            // OilForm
+            // FilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -260,9 +260,9 @@
             this.Controls.Add(this.ButtonAddOil);
             this.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "OilForm";
-            this.Text = "Lubrificantes";
-            this.Load += new System.EventHandler(this.OilForm_Load);
+            this.Name = "FilterForm";
+            this.Text = "Filtros";
+            this.Load += new System.EventHandler(this.FilterForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).EndInit();
             this.GroupBoxSearch.ResumeLayout(false);
             this.GroupBoxSearch.PerformLayout();
@@ -277,10 +277,8 @@
         private DataGridView DataGridView;
         private Button ButtonSearch;
         private Label labelName;
-        private Label labelViscosity;
         private Label labelType;
         private ComboBox ComboType;
-        private TextBox TextViscosity;
         private TextBox TextName;
         private GroupBox GroupBoxSearch;
         private GroupBox GroupBoxUtils;
@@ -291,5 +289,7 @@
         private Button ButtonChangePricePercentage;
         private TextBox TextBoxChangePriceValue;
         private TextBox TextBoxChangePricePercentage;
+        private Label labelManufacturer;
+        private TextBox TextManufacturer;
     }
 }

@@ -28,7 +28,7 @@ namespace EasyOilFilter.Domain.Implementation
         {
             var oils = await _oilRepository.GetAll();
 
-            return oils.Any()
+            return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
                 : default;
         }
@@ -37,7 +37,7 @@ namespace EasyOilFilter.Domain.Implementation
         {
             var oils = await _oilRepository.Get(model.Name, model.Viscosity, model.Type);
 
-            return oils.Any()
+            return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
                 : default;
         }
@@ -46,7 +46,7 @@ namespace EasyOilFilter.Domain.Implementation
         {
             var oils = await _oilRepository.Get(page, quantity);
 
-            return oils.Any()
+            return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
                 : default;
         }
@@ -60,7 +60,7 @@ namespace EasyOilFilter.Domain.Implementation
         {
             var oils = await _oilRepository.Get(type);
 
-            return oils.Any()
+            return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
                 : default;
         }
@@ -69,7 +69,7 @@ namespace EasyOilFilter.Domain.Implementation
         {
             var oils = await _oilRepository.GetByName(name);
 
-            return oils.Any()
+            return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
                 : default;
         }
@@ -78,7 +78,7 @@ namespace EasyOilFilter.Domain.Implementation
         {
             var oils = await _oilRepository.GetByViscosity(viscosity);
 
-            return oils.Any()
+            return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
                 : default;
         }
@@ -107,7 +107,7 @@ namespace EasyOilFilter.Domain.Implementation
             }
 
             var updatedOil = (Oil)model;
-            _notification.AddNotifications(updatedOil);
+            _notification.AddNotifications(updatedOil.Notifications);
 
             if (!_notification.IsValid)
                 return default;
@@ -133,7 +133,7 @@ namespace EasyOilFilter.Domain.Implementation
 
             var oils = await _oilRepository.GetAll();
 
-            if (!oils.Any())
+            if (!oils?.Any() ?? true)
                 return (true, "Não existem lubrificantes cadastrados.");
 
             bool sucess = true;
@@ -166,7 +166,7 @@ namespace EasyOilFilter.Domain.Implementation
 
             var oils = await _oilRepository.GetAll();
 
-            if (!oils.Any())
+            if (!oils?.Any() ?? true)
                 return (true, "Não existem lubrificantes cadastrados.");
 
             bool sucess = true;

@@ -1,38 +1,37 @@
-using EasyOilFilter.Domain.Contracts.Services;
+Ôªøusing EasyOilFilter.Domain.Contracts.Services;
 using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Domain.Extensions;
 using EasyOilFilter.Domain.Shared.Utils;
-using EasyOilFilter.Domain.ViewModels.OilViewModel;
+using EasyOilFilter.Domain.ViewModels.FilterViewModel;
 using EasyOilFilter.Presentation.Enums;
 
 namespace EasyOilFilter.Presentation.Forms
 {
-    public partial class OilForm : Form
+    public partial class FilterForm : Form
     {
-        private readonly IOilService _oilService;
+        private readonly IFilterService _filterService;
 
-        public OilForm(IOilService oilService)
+        public FilterForm(IFilterService filterService)
         {
-            _oilService = oilService;
+            _filterService = filterService;
             InitializeComponent();
         }
 
-        private async void OilForm_Load(object sender, EventArgs e)
+        private async void FilterForm_Load(object sender, EventArgs e)
         {
             ConfigureComponents();
 
-            //To-Do: Usar paginaÁ„o
-            var oils = await _oilService.GetAll();
+            //To-Do: Usar pagina√ß√£o
+            var oils = await _filterService.GetAll();
             if (oils?.Any() ?? false)
             {
                 DataGridView.DataSource = oils.ToList();
                 ConfigureGrid();
             }
         }
-
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
-            SearchLubs();   
+            SearchFilters();
         }
 
         private void CheckBoxChangePricePercentage_CheckedChanged(object sender, EventArgs e)
@@ -52,25 +51,25 @@ namespace EasyOilFilter.Presentation.Forms
             if (decimal.TryParse(userInput, out decimal percentage))
             {
                 var choice = MessageBox.Show(
-                    "Alterar os preÁos dos lubrificantes È um processo irreversÌvel. Deseja continuar?",
+                    "Alterar os pre√ßos dos lubrificantes √© um processo irrevers√≠vel. Deseja continuar?",
                     "Alerta",
                     MessageBoxButtons.YesNo);
 
                 if (choice == DialogResult.Yes)
                 {
-                    (bool Sucess, string Message) = await _oilService.ChangePriceOfAllOilsByPercentage(percentage);
+                    (bool Sucess, string Message) = await _filterService.ChangePriceOfAllFiltersByPercentage(percentage);
 
                     MessageBox.Show(Sucess
-                        ? "Os preÁos dos lubrificantes foram alterados com sucesso."
+                        ? "Os pre√ßos dos lubrificantes foram alterados com sucesso."
                         : Message);
 
                     if (Sucess)
-                        SearchLubs();
+                        SearchFilters();
                 }
                 return;
             }
 
-            MessageBox.Show($"A porcentagem '{userInput}' È inv·lida.{Environment.NewLine} Preencha com um valor numÈrico.");
+            MessageBox.Show($"A porcentagem '{userInput}' √© inv√°lida.{Environment.NewLine} Preencha com um valor num√©rico.");
         }
 
         private async void ButtonChangePriceValue_Click(object sender, EventArgs e)
@@ -80,25 +79,25 @@ namespace EasyOilFilter.Presentation.Forms
             if (decimal.TryParse(userInput, out decimal value))
             {
                 var choice = MessageBox.Show(
-                    "Alterar os preÁos dos lubrificantes È um processo irreversÌvel. Deseja continuar?",
+                    "Alterar os pre√ßos dos lubrificantes √© um processo irrevers√≠vel. Deseja continuar?",
                     "Alerta",
                     MessageBoxButtons.YesNo);
 
                 if (choice == DialogResult.Yes)
                 {
-                    (bool Sucess, string Message) = await _oilService.ChangePriceOfAllOilsByAbsoluteValue(value);
+                    (bool Sucess, string Message) = await _filterService.ChangePriceOfAllFiltersByAbsoluteValue(value);
 
                     MessageBox.Show(Sucess
-                        ? "Os preÁos dos lubrificantes foram alterados com sucesso."
+                        ? "Os pre√ßos dos lubrificantes foram alterados com sucesso."
                         : Message);
 
                     if (Sucess)
-                        SearchLubs();
+                        SearchFilters();
                 }
                 return;
             }
 
-            MessageBox.Show($"O valor '{userInput}' È inv·lido.{Environment.NewLine} Preencha com um valor numÈrico.");
+            MessageBox.Show($"O valor '{userInput}' √© inv√°lido.{Environment.NewLine} Preencha com um valor num√©rico.");
         }
 
         private void DataGridView_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -107,36 +106,35 @@ namespace EasyOilFilter.Presentation.Forms
             decimal.TryParse(DataGridView.CurrentRow.Cells["Price"].Value.ToString(), out decimal price);
             decimal.TryParse(DataGridView.CurrentRow.Cells["StockQuantity"].Value.ToString(), out decimal stockQuantity);
 
-            OilViewModel selectedOilModel = new()
+            FilterViewModel selectedFilterModel = new()
             {
                 Id = id,
-                Name = DataGridView.CurrentRow.Cells["Name"].Value.ToString(),
-                Viscosity = DataGridView.CurrentRow.Cells["Viscosity"].Value.ToString(),
+                Code = DataGridView.CurrentRow.Cells["Code"].Value.ToString(),
+                Manufacturer = DataGridView.CurrentRow.Cells["Manufacturer"].Value.ToString(),
                 Price = price,
                 StockQuantity = stockQuantity,
-                Type = DataGridView.CurrentRow.Cells["Type"].Value.ToString(),
-                UnitOfMeasurement = DataGridView.CurrentRow.Cells["UnitOfMeasurement"].Value.ToString()
+                Type = DataGridView.CurrentRow.Cells["Type"].Value.ToString()
             };
 
             bool isUpdated = false;
 
-            using (var detail = new OilDetailForm(_oilService))
+            using (var detail = new FilterDetailForm(_filterService))
             {
                 detail.Mode = FormMode.Update;
-                detail.Model = selectedOilModel;
+                detail.Model = selectedFilterModel;
                 detail.ShowDialog();
                 isUpdated = detail.IsUpdate;
             }
 
             if (isUpdated)
-                SearchLubs();
+                SearchFilters();
         }
 
-        private void ButtonAddOil_Click(object sender, EventArgs e)
+        private void ButtonAddFilter_Click(object sender, EventArgs e)
         {
             bool isAdd = false;
 
-            using (var detail = new OilDetailForm(_oilService))
+            using (var detail = new FilterDetailForm(_filterService))
             {
                 detail.Mode = FormMode.Add;
                 detail.ShowDialog();
@@ -144,14 +142,14 @@ namespace EasyOilFilter.Presentation.Forms
             }
 
             if (isAdd)
-                SearchLubs();
+                SearchFilters();
         }
 
         private void ConfigureComponents()
         {
             SetEnabledChangePricePercentageComponents(false);
             SetEnabledChangePriceValueComponents(false);
-            LoadOilTypeComboBox();
+            LoadFilterTypeComboBox();
         }
 
         private void SetEnabledChangePricePercentageComponents(bool enabled)
@@ -166,54 +164,53 @@ namespace EasyOilFilter.Presentation.Forms
             ButtonChangePriceValue.Enabled = enabled;
         }
 
-        private void LoadOilTypeComboBox()
+        private void LoadFilterTypeComboBox()
         {
-            foreach (var type in EnumUtility.EnumToList<OilType>())
+            foreach (var type in EnumUtility.EnumToList<FilterType>())
                 ComboType.Items.Add(type.GetDescription());
 
             ComboType.SelectedIndex = 0;
         }
 
-        private async void SearchLubs()
+        private async void SearchFilters()
         {
             string selectedType = ComboType?.SelectedItem?.ToString() ?? "Todos";
-            var oilType = EnumUtility.GetEnumByDescription<OilType>(selectedType);
+            var filterType = EnumUtility.GetEnumByDescription<FilterType>(selectedType);
 
-            var model = new SearchOilViewModel()
+            var model = new SearchFilterViewModel()
             {
                 Name = TextName.Text.FixTextToManageDataBaseResult(),
-                Viscosity = TextViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
-                Type = oilType
+                Manufacturer = TextManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
+                Type = filterType
             };
 
-            var oils = await _oilService.Get(model);
+            var filters = await _filterService.Get(model);
 
-            if (oils?.Any() ?? false)
+            if (filters?.Any() ?? false)
             {
-                DataGridView.DataSource = oils.ToList();
+                DataGridView.DataSource = filters.ToList();
                 return;
             }
 
-            DataGridView.DataSource = new List<OilViewModel>();
+            DataGridView.DataSource = new List<FilterViewModel>();
         }
 
         private void ConfigureGrid()
         {
             DataGridView.Columns["Id"].Visible = false;
 
-            DataGridView.Columns["Name"].HeaderText = "Lubrificante";
-            DataGridView.Columns["Viscosity"].HeaderText = "Viscosidade";
-            DataGridView.Columns["Price"].HeaderText = "PreÁo";
+            DataGridView.Columns["Code"].HeaderText = "C√≥digo";
+            DataGridView.Columns["Manufacturer"].HeaderText = "Fabricante";
+            DataGridView.Columns["Price"].HeaderText = "Pre√ßo";
             DataGridView.Columns["StockQuantity"].HeaderText = "Estoque";
             DataGridView.Columns["Type"].HeaderText = "Tipo";
-            DataGridView.Columns["UnitOfMeasurement"].HeaderText = "Embalagem";
 
             DataGridView.Columns["Price"].DefaultCellStyle.Format = "C2";
             DataGridView.Columns["StockQuantity"].DefaultCellStyle.Format = "F2";
 
             DataGridView.AutoResizeColumns();
             DataGridView.ReadOnly = true;
-            DataGridView.Columns["Name"].MinimumWidth = 188;
+            DataGridView.Columns["Code"].MinimumWidth = 188;
             DataGridView.Columns["Price"].MinimumWidth = 100;
             DataGridView.Columns["StockQuantity"].MinimumWidth = 100;
         }

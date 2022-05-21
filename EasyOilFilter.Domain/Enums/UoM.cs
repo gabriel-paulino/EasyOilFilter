@@ -8,8 +8,6 @@ namespace EasyOilFilter.Domain.Enums
         Liter,
         [Description("Balde")]
         Bucket,
-        [Description("Unidade")]
-        Unit,
         [Description("Outro")]
         Other
     }

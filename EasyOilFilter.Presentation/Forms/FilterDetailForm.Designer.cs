@@ -1,6 +1,6 @@
 ﻿namespace EasyOilFilter.Presentation.Forms
 {
-    partial class OilDetailForm
+    partial class FilterDetailForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.LabelName = new System.Windows.Forms.Label();
-            this.TextBoxName = new System.Windows.Forms.TextBox();
+            this.LabelCode = new System.Windows.Forms.Label();
+            this.TextBoxCode = new System.Windows.Forms.TextBox();
             this.LabelPrice = new System.Windows.Forms.Label();
             this.TextBoxPrice = new System.Windows.Forms.TextBox();
             this.LabelTipo = new System.Windows.Forms.Label();
@@ -37,27 +37,25 @@
             this.LabelStockQuantity = new System.Windows.Forms.Label();
             this.ComboBoxType = new System.Windows.Forms.ComboBox();
             this.ButtonSave = new System.Windows.Forms.Button();
-            this.TextBoxViscosity = new System.Windows.Forms.TextBox();
-            this.LabelViscosity = new System.Windows.Forms.Label();
-            this.LabelUoM = new System.Windows.Forms.Label();
-            this.ComboBoxUoM = new System.Windows.Forms.ComboBox();
+            this.TextBoxManufacturer = new System.Windows.Forms.TextBox();
+            this.LabelManufacturer = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // LabelName
+            // LabelCode
             // 
-            this.LabelName.AutoSize = true;
-            this.LabelName.Location = new System.Drawing.Point(27, 14);
-            this.LabelName.Name = "LabelName";
-            this.LabelName.Size = new System.Drawing.Size(47, 19);
-            this.LabelName.TabIndex = 0;
-            this.LabelName.Text = "Nome";
+            this.LabelCode.AutoSize = true;
+            this.LabelCode.Location = new System.Drawing.Point(27, 14);
+            this.LabelCode.Name = "LabelCode";
+            this.LabelCode.Size = new System.Drawing.Size(54, 19);
+            this.LabelCode.TabIndex = 0;
+            this.LabelCode.Text = "Código";
             // 
-            // TextBoxName
+            // TextBoxCode
             // 
-            this.TextBoxName.Location = new System.Drawing.Point(27, 36);
-            this.TextBoxName.Name = "TextBoxName";
-            this.TextBoxName.Size = new System.Drawing.Size(356, 27);
-            this.TextBoxName.TabIndex = 0;
+            this.TextBoxCode.Location = new System.Drawing.Point(27, 36);
+            this.TextBoxCode.Name = "TextBoxCode";
+            this.TextBoxCode.Size = new System.Drawing.Size(356, 27);
+            this.TextBoxCode.TabIndex = 0;
             // 
             // LabelPrice
             // 
@@ -110,69 +108,50 @@
             // 
             // ButtonSave
             // 
-            this.ButtonSave.Location = new System.Drawing.Point(27, 404);
+            this.ButtonSave.Location = new System.Drawing.Point(27, 368);
             this.ButtonSave.Name = "ButtonSave";
             this.ButtonSave.Size = new System.Drawing.Size(90, 30);
             this.ButtonSave.TabIndex = 6;
             this.ButtonSave.UseVisualStyleBackColor = true;
             this.ButtonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
-            // TextBoxViscosity
+            // TextBoxManufacturer
             // 
-            this.TextBoxViscosity.Location = new System.Drawing.Point(27, 89);
-            this.TextBoxViscosity.Name = "TextBoxViscosity";
-            this.TextBoxViscosity.Size = new System.Drawing.Size(356, 27);
-            this.TextBoxViscosity.TabIndex = 1;
+            this.TextBoxManufacturer.Location = new System.Drawing.Point(27, 89);
+            this.TextBoxManufacturer.Name = "TextBoxManufacturer";
+            this.TextBoxManufacturer.Size = new System.Drawing.Size(356, 27);
+            this.TextBoxManufacturer.TabIndex = 1;
             // 
-            // LabelViscosity
+            // LabelManufacturer
             // 
-            this.LabelViscosity.AutoSize = true;
-            this.LabelViscosity.Location = new System.Drawing.Point(27, 67);
-            this.LabelViscosity.Name = "LabelViscosity";
-            this.LabelViscosity.Size = new System.Drawing.Size(87, 19);
-            this.LabelViscosity.TabIndex = 14;
-            this.LabelViscosity.Text = "Viscosidade";
+            this.LabelManufacturer.AutoSize = true;
+            this.LabelManufacturer.Location = new System.Drawing.Point(27, 67);
+            this.LabelManufacturer.Name = "LabelManufacturer";
+            this.LabelManufacturer.Size = new System.Drawing.Size(77, 19);
+            this.LabelManufacturer.TabIndex = 14;
+            this.LabelManufacturer.Text = "Fabricante";
             // 
-            // LabelUoM
-            // 
-            this.LabelUoM.AutoSize = true;
-            this.LabelUoM.Location = new System.Drawing.Point(27, 284);
-            this.LabelUoM.Name = "LabelUoM";
-            this.LabelUoM.Size = new System.Drawing.Size(85, 19);
-            this.LabelUoM.TabIndex = 10;
-            this.LabelUoM.Text = "Embalagem";
-            // 
-            // ComboBoxUoM
-            // 
-            this.ComboBoxUoM.FormattingEnabled = true;
-            this.ComboBoxUoM.Location = new System.Drawing.Point(27, 306);
-            this.ComboBoxUoM.Name = "ComboBoxUoM";
-            this.ComboBoxUoM.Size = new System.Drawing.Size(356, 27);
-            this.ComboBoxUoM.TabIndex = 5;
-            // 
-            // OilDetailForm
+            // FilterDetailForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 459);
-            this.Controls.Add(this.TextBoxViscosity);
-            this.Controls.Add(this.LabelViscosity);
+            this.ClientSize = new System.Drawing.Size(417, 422);
+            this.Controls.Add(this.TextBoxManufacturer);
+            this.Controls.Add(this.LabelManufacturer);
             this.Controls.Add(this.ButtonSave);
-            this.Controls.Add(this.ComboBoxUoM);
-            this.Controls.Add(this.LabelUoM);
             this.Controls.Add(this.ComboBoxType);
             this.Controls.Add(this.LabelTipo);
             this.Controls.Add(this.TextBoxStockQuantity);
             this.Controls.Add(this.LabelStockQuantity);
             this.Controls.Add(this.TextBoxPrice);
             this.Controls.Add(this.LabelPrice);
-            this.Controls.Add(this.TextBoxName);
-            this.Controls.Add(this.LabelName);
+            this.Controls.Add(this.TextBoxCode);
+            this.Controls.Add(this.LabelCode);
             this.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "OilDetailForm";
-            this.Text = "Lubrificante";
-            this.Load += new System.EventHandler(this.OilDetailForm_Load);
+            this.Name = "FilterDetailForm";
+            this.Text = "Filtro";
+            this.Load += new System.EventHandler(this.FilterDetailForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -180,8 +159,8 @@
 
         #endregion
 
-        private Label LabelName;
-        private TextBox TextBoxName;
+        private Label LabelCode;
+        private TextBox TextBoxCode;
         private Label LabelPrice;
         private TextBox TextBoxPrice;
         private Label LabelTipo;
@@ -189,9 +168,7 @@
         private Label LabelStockQuantity;
         private ComboBox ComboBoxType;
         private Button ButtonSave;
-        private TextBox TextBoxViscosity;
-        private Label LabelViscosity;
-        private Label LabelUoM;
-        private ComboBox ComboBoxUoM;
+        private TextBox TextBoxManufacturer;
+        private Label LabelManufacturer;
     }
 }

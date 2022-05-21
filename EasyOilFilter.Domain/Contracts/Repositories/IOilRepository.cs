@@ -12,7 +12,6 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
         Task<IEnumerable<Oil>> GetByName(string name);
         Task<IEnumerable<Oil>> GetByViscosity(string viscosity);
         Task<IEnumerable<Oil>> Get(OilType type);
-
         Task<bool> Create(Oil oil);
         Task<bool> Update(Oil oil);
         Task<bool> UpdatePrice(Guid id, decimal price);

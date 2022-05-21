@@ -26,7 +26,7 @@ namespace EasyOilFilter.Presentation
 
             var container = Bootstrap();
 
-            Application.Run(container.GetInstance<OilForm>());
+            Application.Run(container.GetInstance<FilterForm>());
         }
 
         private static Container Bootstrap()
@@ -41,8 +41,12 @@ namespace EasyOilFilter.Presentation
             container.Register<DbSession>(Lifestyle.Singleton);
             container.Register<NotificationContext>(Lifestyle.Singleton);
             container.Register<IUnitOfWork, UnitOfWork>(Lifestyle.Singleton);
+
             container.Register<IOilRepository, OilRepository>(Lifestyle.Singleton);
+            container.Register<IFilterRepository, FilterRepository>(Lifestyle.Singleton);
+
             container.Register<IOilService, OilService>(Lifestyle.Singleton);
+            container.Register<IFilterService, FilterService>(Lifestyle.Singleton);
 
             AutoRegisterWindowsForms(container);
 
