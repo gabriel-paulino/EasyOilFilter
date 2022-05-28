@@ -36,8 +36,8 @@ namespace EasyOilFilter.Domain.Entities
         }
 
         public string Code { get; private set; }
-        public string Manufacturer { get; set; }
-        public FilterType Type { get; set; }
+        public string Manufacturer { get; private set; }
+        public FilterType Type { get; private set; }
         
         public void ChangePriceByAbsoluteValue(decimal absoluteValue)
         {

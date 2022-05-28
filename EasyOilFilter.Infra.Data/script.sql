@@ -1,20 +1,35 @@
 CREATE DATABASE EasyOilFilter;
 
-CREATE TABLE Oil (
+CREATE TABLE Product (
     Id uniqueidentifier primary key,
-    Name varchar(100),
+    Name varchar(100) not null,
     Viscosity varchar(10),
-    Price decimal(19,4),
-	Type int,
-	UnitOfMeasurement int,
-	StockQuantity decimal(19,4)
+	Manufacturer varchar(15),
+    Price decimal(19,4) not null,
+	Type int not null,
+	FilterType int,
+	UnitOfMeasurement int not null,
+	StockQuantity decimal(19,4) not null
 );
 
-CREATE TABLE Filter (
+CREATE TABLE Sale (
     Id uniqueidentifier primary key,
-    Code varchar(100),
-    Manufacturer varchar(15),
-    Price decimal(19,4),
-	Type int,
-	StockQuantity decimal(19,4)
+    Description varchar(50) not null,
+	PaymentMethod int not null,
+    Total decimal(19,4) not null,
+	Discount decimal(19,4),
+	Date date not null,
+	Remarks varchar(150),
+	Status int not null
+);
+
+CREATE TABLE SaleItem (
+    Id uniqueidentifier primary key,
+    SaleId uniqueidentifier FOREIGN KEY REFERENCES Sale(Id),
+	ProductId uniqueidentifier FOREIGN KEY REFERENCES Product(Id),
+	ItemDescription varchar(100),
+	UnitOfMeasurement int not null,
+	Quantity decimal(19,4) not null,
+	UnitaryPrice decimal(19,4) not null,
+	TotalItem decimal(19,4) not null
 );

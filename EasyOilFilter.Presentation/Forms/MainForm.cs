@@ -1,20 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using EasyOilFilter.Domain.Contracts.Services;
 
 namespace EasyOilFilter.Presentation.Forms
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        private readonly IOilService _oilService;
+        private readonly IFilterService _filterService;
+        private readonly ISaleService _saleService;
+
+
+        public MainForm(IOilService oilService, IFilterService filterService, ISaleService saleService)
         {
+            _oilService = oilService;
+            _filterService = filterService;
+            _saleService = saleService;
             InitializeComponent();
+        }
+
+
+        private void ButtonLubs_Click(object sender, EventArgs e)
+        {
+            using var oilForm = new OilForm(_oilService);
+            oilForm.ShowDialog();
+        }
+
+        private void ButtonFilters_Click(object sender, EventArgs e)
+        {
+            using var filterForm = new FilterForm(_filterService);
+            filterForm.ShowDialog();
+        }
+
+        private void ButtonSale_Click(object sender, EventArgs e)
+        {
+            using var saleForm = new SaleForm(_saleService);
+            saleForm.ShowDialog();
         }
     }
 }
