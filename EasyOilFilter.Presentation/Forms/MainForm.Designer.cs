@@ -114,6 +114,8 @@
             this.Controls.Add(this.ButtonSale);
             this.Controls.Add(this.ButtonFilter);
             this.Controls.Add(this.ButtonOil);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Easy Oil Filter";
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxMain)).EndInit();

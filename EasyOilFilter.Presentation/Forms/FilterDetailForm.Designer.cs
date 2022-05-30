@@ -148,7 +148,9 @@
             this.Controls.Add(this.TextBoxCode);
             this.Controls.Add(this.LabelCode);
             this.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
             this.Name = "FilterDetailForm";
             this.Text = "Filtro";
             this.Load += new System.EventHandler(this.FilterDetailForm_Load);

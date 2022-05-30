@@ -1,6 +1,6 @@
 ﻿namespace EasyOilFilter.Presentation.Forms
 {
-    partial class SaleForm
+    partial class SaleListForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SaleForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SaleListForm));
             this.DataGridView = new System.Windows.Forms.DataGridView();
             this.LabelDate = new System.Windows.Forms.Label();
             this.GroupBoxSearch = new System.Windows.Forms.GroupBox();
@@ -46,6 +46,7 @@
             this.DataGridView.AllowUserToDeleteRows = false;
             this.DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridView.Location = new System.Drawing.Point(12, 41);
+            this.DataGridView.MultiSelect = false;
             this.DataGridView.Name = "DataGridView";
             this.DataGridView.ReadOnly = true;
             this.DataGridView.RowTemplate.Height = 25;
@@ -54,13 +55,14 @@
             // 
             // LabelDate
             // 
-            this.LabelDate.AutoSize = true;
+            this.LabelDate.Dock = System.Windows.Forms.DockStyle.Top;
             this.LabelDate.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelDate.Location = new System.Drawing.Point(254, 9);
+            this.LabelDate.Location = new System.Drawing.Point(0, 0);
             this.LabelDate.Name = "LabelDate";
-            this.LabelDate.Size = new System.Drawing.Size(121, 29);
+            this.LabelDate.Size = new System.Drawing.Size(675, 29);
             this.LabelDate.TabIndex = 1;
             this.LabelDate.Text = "dd/MM/yy";
+            this.LabelDate.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // GroupBoxSearch
             // 
@@ -81,9 +83,8 @@
             this.LabelTotal.ForeColor = System.Drawing.Color.Black;
             this.LabelTotal.Location = new System.Drawing.Point(514, 29);
             this.LabelTotal.Name = "LabelTotal";
-            this.LabelTotal.Size = new System.Drawing.Size(62, 29);
+            this.LabelTotal.Size = new System.Drawing.Size(0, 29);
             this.LabelTotal.TabIndex = 4;
-            this.LabelTotal.Text = "Total";
             // 
             // DateTimePickerSearch
             // 
@@ -92,8 +93,8 @@
             this.DateTimePickerSearch.Location = new System.Drawing.Point(6, 31);
             this.DateTimePickerSearch.Name = "DateTimePickerSearch";
             this.DateTimePickerSearch.Size = new System.Drawing.Size(124, 27);
-            this.DateTimePickerSearch.TabIndex = 3;
-            this.DateTimePickerSearch.Value = new System.DateTime(2022, 5, 26, 20, 41, 9, 0);
+            this.DateTimePickerSearch.TabIndex = 1;
+            this.DateTimePickerSearch.Value = new System.DateTime(2022, 5, 30, 19, 12, 59, 0);
             // 
             // ButtonSearch
             // 
@@ -133,6 +134,8 @@
             this.Controls.Add(this.GroupBoxSearch);
             this.Controls.Add(this.LabelDate);
             this.Controls.Add(this.DataGridView);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "SaleForm";
             this.Text = "Vendas";
             this.Load += new System.EventHandler(this.SaleForm_Load);
@@ -140,7 +143,6 @@
             this.GroupBoxSearch.ResumeLayout(false);
             this.GroupBoxSearch.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

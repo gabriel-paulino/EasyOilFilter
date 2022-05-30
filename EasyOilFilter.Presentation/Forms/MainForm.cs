@@ -32,7 +32,7 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void ButtonSale_Click(object sender, EventArgs e)
         {
-            using var saleForm = new SaleForm(_saleService);
+            using var saleForm = new SaleListForm(_saleService);
             saleForm.ShowDialog();
         }
     }

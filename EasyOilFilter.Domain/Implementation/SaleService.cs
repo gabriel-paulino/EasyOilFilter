@@ -34,9 +34,10 @@ namespace EasyOilFilter.Domain.Implementation
                 : default;
         }
 
-        public async Task<(bool sucess, string message)> Create(SaleViewModel model)
+        public async Task<(bool sucess, string message)> Create(AddSaleViewModel model)
         {
             var sale = (Sale)model;
+
             _notification.AddNotifications(sale.Notifications);
 
             if (!_notification.IsValid)

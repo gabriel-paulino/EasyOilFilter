@@ -5,12 +5,19 @@ namespace EasyOilFilter.Domain.Entities
 {
     public class Sale : BaseEntity
     {
-        public Sale()
+        public Sale(string description, PaymentMethod paymentMethod, decimal discount, DateTime date, string remarks, List<SaleItem> items)
         {
-            _items = new List<SaleItem>();
+            Description = description;
+            PaymentMethod = paymentMethod;
+            Discount = discount;
+            Date = date;
+            Remarks = remarks;
+            Status = SaleStatus.Finished;
+
+            _items = items;
         }
 
-        public Sale(Guid id, string description, PaymentMethod paymentMethod, decimal total, decimal discount, DateTime date, string remarks)
+        public Sale(Guid id, string description, PaymentMethod paymentMethod, decimal total, decimal discount, DateTime date, string remarks, SaleStatus status)
         {
             Id = id;
             Description = description;
@@ -19,21 +26,26 @@ namespace EasyOilFilter.Domain.Entities
             Discount = discount;
             Date = date;
             Remarks = remarks;
-            Status = SaleStatus.Finished;
+            Status = status;
 
             _items = new List<SaleItem>();
         }
 
-        public string Description { get; set; }
-        public PaymentMethod PaymentMethod { get; set; }
-        public decimal Total { get; set; }
-        public decimal Discount { get; set; }
-        public DateTime Date { get; set; }
-        public string Remarks { get; set; }
-        public SaleStatus Status { get; set; }
+        public string Description { get; private set; }
+        public PaymentMethod PaymentMethod { get; private set; }
+        public decimal Total { get; private set; }
+        public decimal Discount { get; private set; }
+        public DateTime Date { get; private set; }
+        public string Remarks { get; private set; }
+        public SaleStatus Status { get; private set; }
         
         private List<SaleItem> _items;
         public IReadOnlyCollection<SaleItem> Items { get => _items.ToArray(); }
+
+        public void SetTotal(decimal total)
+        {
+            Total = total;
+        }
 
         public void AddItem(SaleItem item)
         {

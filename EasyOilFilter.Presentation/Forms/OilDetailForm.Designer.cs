@@ -169,7 +169,9 @@
             this.Controls.Add(this.TextBoxName);
             this.Controls.Add(this.LabelName);
             this.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
             this.Name = "OilDetailForm";
             this.Text = "Lubrificante";
             this.Load += new System.EventHandler(this.OilDetailForm_Load);

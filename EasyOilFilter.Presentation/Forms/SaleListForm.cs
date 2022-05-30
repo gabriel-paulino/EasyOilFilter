@@ -3,11 +3,11 @@ using EasyOilFilter.Domain.ViewModels.SaleViewModel;
 
 namespace EasyOilFilter.Presentation.Forms
 {
-    public partial class SaleForm : Form
+    public partial class SaleListForm : Form
     {
         private readonly ISaleService _saleService;
 
-        public SaleForm(ISaleService saleService)
+        public SaleListForm(ISaleService saleService)
         {
             _saleService = saleService;
             InitializeComponent();
@@ -15,7 +15,7 @@ namespace EasyOilFilter.Presentation.Forms
 
         private async void SaleForm_Load(object sender, EventArgs e)
         {
-            SetDateLabel(DateTime.Today);
+            SetDateInfo(DateTime.Today);
             var sales = await _saleService.Get(DateTime.Today);
 
             if (sales?.Any() ?? false)
@@ -26,14 +26,22 @@ namespace EasyOilFilter.Presentation.Forms
             }
         }
 
-        private void ButtonSearch_Click(object sender, EventArgs e)
+        private async void ButtonSearch_Click(object sender, EventArgs e)
         {
+            var sales = await _saleService.Get(DateTimePickerSearch.Value);
 
+            if (sales?.Any() ?? false)
+            {
+                DataGridView.DataSource = sales.ToList();
+                LabelDate.Text = DateTimePickerSearch.Value.ToString("d");
+                SetTotalLabel(sales.Sum(sale => sale.Total));
+            }
         }
 
-        private void SetDateLabel(DateTime date)
+        private void SetDateInfo(DateTime date)
         {
             LabelDate.Text = date.ToString("d");
+            DateTimePickerSearch.Value = date;
         }
 
         private void SetTotalLabel(decimal total)
@@ -49,6 +57,7 @@ namespace EasyOilFilter.Presentation.Forms
             DataGridView.Columns["Date"].Visible = false;
             DataGridView.Columns["Remarks"].Visible = false;
             DataGridView.Columns["Items"].Visible = false;
+            DataGridView.Columns["Status"].Visible = false;
 
             DataGridView.Columns["Description"].HeaderText = "Descrição";
             DataGridView.Columns["PaymentMethod"].HeaderText = "Forma de pagamento";
@@ -65,10 +74,9 @@ namespace EasyOilFilter.Presentation.Forms
 
         private async void ButtonAddSale_Click(object sender, EventArgs e)
         {
-            var id = Guid.NewGuid();
-            var mock = new SaleViewModel()
+            //ToDo: Open screen of new Sale
+            var mock = new AddSaleViewModel()
             {
-                Id = id,
                 Description = "Gol",
                 PaymentMethod = "Dinheiro",
                 Total = 150.00m,
@@ -77,10 +85,8 @@ namespace EasyOilFilter.Presentation.Forms
                 Remarks = "Observações"
             };
 
-            var oil = new SaleItemViewModel()
+            var oil = new AddSaleItemViewModel()
             {
-                Id = Guid.NewGuid(),
-                SaleId = id,
                 ProductId = Guid.Parse("95DAC815-5784-4C21-83D2-F794E4FC95F0"),
                 ItemDescription = "Selenia Perform",
                 UnitOfMeasurement = "Litro",
@@ -89,7 +95,7 @@ namespace EasyOilFilter.Presentation.Forms
                 TotalItem = 3 * 48.35m
             };
 
-            mock.Items = new List<SaleItemViewModel> { oil };
+            mock.Items = new List<AddSaleItemViewModel> { oil };
 
             var (sucess, message) = await _saleService.Create(mock);
         }

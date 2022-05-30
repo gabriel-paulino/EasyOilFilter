@@ -106,7 +106,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             await _session.Connection.QueryAsync<Sale, SaleItem, Sale>(query,
                 map: (sale, saleItem) =>
                 {
-                    saleItem.SaleId = sale.Id;
+                    saleItem.SetSaleId(sale.Id);
 
                     if (saleMap.TryGetValue(sale.Id, out Sale? existingSale))
                         sale = existingSale;
@@ -116,14 +116,13 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     sale.AddItem(saleItem);
                     return sale;
                 },
-                //splitOn: "SaleItemId",
                 param: new { date }
             );
 
             return saleMap.Values;
         }
 
-        public async Task<Sale> Get(Guid id)
+        public async Task<Sale?> Get(Guid id)
         {
             string query = @"
                 SELECT 
@@ -156,10 +155,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     sale.AddItem(saleItem);
                     return sale;
                 },
-             //splitOn: "SaleItemId",
              param: new { Id = id });
 
-            return result?.FirstOrDefault() ?? new Sale();
+            return result.FirstOrDefault();
         }
 
         public void Dispose()

@@ -19,6 +19,8 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
         public decimal Discount { get; set; }
         public DateTime Date { get; set; }
         public string Remarks { get; set; }
+        public string Status { get; set; }
+
         public IEnumerable<SaleItemViewModel> Items { get; set; }
 
         public static implicit operator SaleViewModel(Sale sale) =>
@@ -31,6 +33,7 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
                 Discount = sale.Discount,
                 Date = sale.Date,
                 Remarks = sale.Remarks,
+                Status = sale.Status.GetDescription(),
                 Items = sale.Items.Select(item => (SaleItemViewModel)item),
             };
         
@@ -44,7 +47,8 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
                             total: model.Total,
                             discount: model.Discount,
                             date: model.Date,
-                            remarks: model.Remarks
+                            remarks: model.Remarks,
+                            status: EnumUtility.GetEnumByDescription<SaleStatus>(model.Status)
                             );
 
             foreach (var item in model.Items)

@@ -259,7 +259,9 @@
             this.Controls.Add(this.DataGridView);
             this.Controls.Add(this.ButtonAddOil);
             this.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
             this.Name = "FilterForm";
             this.Text = "Filtros";
             this.Load += new System.EventHandler(this.FilterForm_Load);
