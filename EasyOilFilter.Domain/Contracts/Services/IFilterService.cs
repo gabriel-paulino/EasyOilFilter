@@ -9,7 +9,7 @@ namespace EasyOilFilter.Domain.Contracts.Services
         Task<IEnumerable<FilterViewModel>> Get(int page, int quantity);
         Task<FilterViewModel> Get(Guid id);
         Task<IEnumerable<FilterViewModel>> Get(SearchFilterViewModel model);
-        Task<IEnumerable<FilterViewModel>> GetByCode(string code);
+        Task<IEnumerable<FilterViewModel>> GetByName(string name);
         Task<IEnumerable<FilterViewModel>> GetByManufacturer(string manufacturer);
         Task<IEnumerable<FilterViewModel>> Get(FilterType type);
 

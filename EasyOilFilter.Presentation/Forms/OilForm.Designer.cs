@@ -89,9 +89,9 @@
             this.labelName.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.labelName.Location = new System.Drawing.Point(11, 34);
             this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(54, 19);
+            this.labelName.Size = new System.Drawing.Size(85, 19);
             this.labelName.TabIndex = 2;
-            this.labelName.Text = "Código";
+            this.labelName.Text = "Lubrificante";
             // 
             // labelViscosity
             // 

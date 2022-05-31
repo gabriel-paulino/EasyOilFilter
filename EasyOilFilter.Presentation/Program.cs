@@ -42,8 +42,7 @@ namespace EasyOilFilter.Presentation
             container.Register<NotificationContext>(Lifestyle.Singleton);
             container.Register<IUnitOfWork, UnitOfWork>(Lifestyle.Singleton);
 
-            container.Register<IOilRepository, OilRepository>(Lifestyle.Singleton);
-            container.Register<IFilterRepository, FilterRepository>(Lifestyle.Singleton);
+            container.Register<IProductRepository, ProductRepository>(Lifestyle.Singleton);
             container.Register<ISaleRepository, SaleRepository>(Lifestyle.Singleton);
 
             container.Register<IOilService, OilService>(Lifestyle.Singleton);

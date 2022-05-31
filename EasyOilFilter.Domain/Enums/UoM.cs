@@ -9,6 +9,7 @@ namespace EasyOilFilter.Domain.Enums
         [Description("Balde")]
         Bucket,
         [Description("Outro")]
-        Other
+        Other,
+        Unity
     }
 }

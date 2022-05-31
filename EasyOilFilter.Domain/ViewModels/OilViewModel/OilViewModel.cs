@@ -12,7 +12,7 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
         public string Viscosity { get; set; }
         public decimal Price { get; set; }
         public decimal StockQuantity { get; set; }
-        public string Type { get; set; }
+        public string OilType { get; set; }
         public string UnitOfMeasurement { get; set; }
 
         public static implicit operator OilViewModel(Oil oil) =>
@@ -23,7 +23,7 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
                Viscosity = oil.Viscosity,
                Price = oil.Price,
                StockQuantity = oil.StockQuantity,
-               Type = oil.Type.GetDescription(),
+               OilType = oil.OilType.GetDescription(),
                UnitOfMeasurement = oil.UnitOfMeasurement.GetDescription(),
            };
 
@@ -34,7 +34,7 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
                 viscosity: model.Viscosity,
                 price: model.Price,
                 stockQuantity: model.StockQuantity,
-                type: EnumUtility.GetEnumByDescription<OilType>(model.Type),
+                oilType: EnumUtility.GetEnumByDescription<OilType>(model.OilType),
                 unitOfMeasurement: EnumUtility.GetEnumByDescription<UoM>(model.UnitOfMeasurement)
                 );
 

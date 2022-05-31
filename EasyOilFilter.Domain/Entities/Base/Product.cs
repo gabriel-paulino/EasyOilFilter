@@ -6,5 +6,7 @@ namespace EasyOilFilter.Domain.Entities.Base
     {
         public decimal Price { get; protected set; }
         public decimal StockQuantity { get; protected set; }
+        public ProductType Type { get; protected set; }
+        public UoM UnitOfMeasurement { get; protected set; }
     }
 }

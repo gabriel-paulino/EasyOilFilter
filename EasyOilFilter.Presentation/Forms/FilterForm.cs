@@ -20,14 +20,11 @@ namespace EasyOilFilter.Presentation.Forms
         private async void FilterForm_Load(object sender, EventArgs e)
         {
             ConfigureComponents();
+            ConfigureGrid();
 
-            //To-Do: Usar paginação
-            var oils = await _filterService.GetAll();
-            if (oils?.Any() ?? false)
-            {
-                DataGridView.DataSource = oils.ToList();
-                ConfigureGrid();
-            }
+            var filters = await _filterService.GetAll();
+            if (filters?.Any() ?? false)
+                DataGridView.DataSource = filters.ToList();
         }
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
@@ -51,7 +48,7 @@ namespace EasyOilFilter.Presentation.Forms
             if (decimal.TryParse(userInput, out decimal percentage))
             {
                 var choice = MessageBox.Show(
-                    "Alterar os preços dos lubrificantes é um processo irreversível. Deseja continuar?",
+                    "Alterar os preços dos filtros é um processo irreversível. Deseja continuar?",
                     "Alerta",
                     MessageBoxButtons.YesNo);
 
@@ -60,7 +57,7 @@ namespace EasyOilFilter.Presentation.Forms
                     (bool Sucess, string Message) = await _filterService.ChangePriceOfAllFiltersByPercentage(percentage);
 
                     MessageBox.Show(Sucess
-                        ? "Os preços dos lubrificantes foram alterados com sucesso."
+                        ? "Os preços dos filtros foram alterados com sucesso."
                         : Message);
 
                     if (Sucess)
@@ -79,7 +76,7 @@ namespace EasyOilFilter.Presentation.Forms
             if (decimal.TryParse(userInput, out decimal value))
             {
                 var choice = MessageBox.Show(
-                    "Alterar os preços dos lubrificantes é um processo irreversível. Deseja continuar?",
+                    "Alterar os preços dos filtros é um processo irreversível. Deseja continuar?",
                     "Alerta",
                     MessageBoxButtons.YesNo);
 
@@ -88,7 +85,7 @@ namespace EasyOilFilter.Presentation.Forms
                     (bool Sucess, string Message) = await _filterService.ChangePriceOfAllFiltersByAbsoluteValue(value);
 
                     MessageBox.Show(Sucess
-                        ? "Os preços dos lubrificantes foram alterados com sucesso."
+                        ? "Os preços dos filtros foram alterados com sucesso."
                         : Message);
 
                     if (Sucess)
@@ -109,11 +106,11 @@ namespace EasyOilFilter.Presentation.Forms
             FilterViewModel selectedFilterModel = new()
             {
                 Id = id,
-                Code = DataGridView.CurrentRow.Cells["Code"].Value.ToString(),
+                Name = DataGridView.CurrentRow.Cells["Name"].Value.ToString(),
                 Manufacturer = DataGridView.CurrentRow.Cells["Manufacturer"].Value.ToString(),
                 Price = price,
                 StockQuantity = stockQuantity,
-                Type = DataGridView.CurrentRow.Cells["Type"].Value.ToString()
+                FilterType = DataGridView.CurrentRow.Cells["FilterType"].Value.ToString()
             };
 
             bool isUpdated = false;
@@ -181,7 +178,7 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 Name = TextName.Text.FixTextToManageDataBaseResult(),
                 Manufacturer = TextManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
-                Type = filterType
+                FilterType = filterType
             };
 
             var filters = await _filterService.Get(model);
@@ -197,22 +194,22 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void ConfigureGrid()
         {
+            DataGridView.DataSource = new List<FilterViewModel>();
+            DataGridView.ReadOnly = true;
             DataGridView.Columns["Id"].Visible = false;
-
-            DataGridView.Columns["Code"].HeaderText = "Código";
+            DataGridView.Columns["Name"].HeaderText = "Código";
             DataGridView.Columns["Manufacturer"].HeaderText = "Fabricante";
             DataGridView.Columns["Price"].HeaderText = "Preço";
             DataGridView.Columns["StockQuantity"].HeaderText = "Estoque";
-            DataGridView.Columns["Type"].HeaderText = "Tipo";
-
+            DataGridView.Columns["FilterType"].HeaderText = "Tipo";
             DataGridView.Columns["Price"].DefaultCellStyle.Format = "C2";
             DataGridView.Columns["StockQuantity"].DefaultCellStyle.Format = "F2";
-
-            DataGridView.AutoResizeColumns();
-            DataGridView.ReadOnly = true;
-            DataGridView.Columns["Code"].MinimumWidth = 188;
+            DataGridView.Columns["Name"].MinimumWidth = 215;
+            DataGridView.Columns["Manufacturer"].MinimumWidth = 200;
             DataGridView.Columns["Price"].MinimumWidth = 100;
             DataGridView.Columns["StockQuantity"].MinimumWidth = 100;
+            DataGridView.Columns["FilterType"].MinimumWidth = 100;
+            DataGridView.AutoResizeColumns();
         }
     }
 }

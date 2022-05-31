@@ -8,31 +8,31 @@ namespace EasyOilFilter.Domain.ViewModels.FilterViewModel
     public class FilterViewModel
     {
         public Guid Id { get; set; }
-        public string Code { get; set; }
+        public string Name { get; set; }
         public string Manufacturer { get; set; }
         public decimal Price { get; set; }
         public decimal StockQuantity { get; set; }
-        public string Type { get; set; }
+        public string FilterType { get; set; }
 
         public static implicit operator FilterViewModel(Filter filter) =>
            new()
            {
                Id = filter.Id,
-               Code = filter.Code,
+               Name = filter.Name,
                Manufacturer = filter.Manufacturer,
                Price = filter.Price,
                StockQuantity = filter.StockQuantity,
-               Type = filter.Type.GetDescription(),
+               FilterType = filter.FilterType.GetDescription(),
            };
 
         public static implicit operator Filter(FilterViewModel model) =>
             new(
                 id: model.Id,
-                code: model.Code,
+                name: model.Name,
                 manufacturer: model.Manufacturer,
                 price: model.Price,
                 stockQuantity: model.StockQuantity,
-                type: EnumUtility.GetEnumByDescription<FilterType>(model.Type)
+                filterType: EnumUtility.GetEnumByDescription<FilterType>(model.FilterType)
                 );
 
         public static IEnumerable<FilterViewModel> MapMany(IEnumerable<Filter> filters) =>

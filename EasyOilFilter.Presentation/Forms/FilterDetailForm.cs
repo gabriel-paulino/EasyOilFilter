@@ -39,11 +39,11 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void FillFieldsWithFilterDetails()
         {
-            TextBoxCode.Text = Model.Code;
+            TextBoxCode.Text = Model.Name;
             TextBoxManufacturer.Text = Model.Manufacturer;
             TextBoxPrice.Text = Model.Price.ToString("C2");
             TextBoxStockQuantity.Text = Model.StockQuantity.ToString("F2");
-            ComboBoxType.SelectedIndex = (int)EnumUtility.GetEnumByDescription<FilterType>(Model.Type);
+            ComboBoxType.SelectedIndex = (int)EnumUtility.GetEnumByDescription<FilterType>(Model.FilterType);
         }
 
         private void LoadFilterTypeComboBox()
@@ -69,14 +69,14 @@ namespace EasyOilFilter.Presentation.Forms
 
         private async void AddFilter()
         {
-            var (model, message) = GetAddOilViewModel();
+            var (model, message) = GetAddFilterViewModel();
 
             if (!string.IsNullOrEmpty(message))
                 MessageBox.Show(message);
 
-            var oils = await _filterService.GetByCode(model.Code);
+            var filters = await _filterService.GetByName(model.Name);
 
-            if (oils?.Any() ?? false)
+            if (filters?.Any() ?? false)
             {
                 MessageBox.Show($"O filtro: {TextBoxCode.Text} já está adicionado na base de dados.");
                 return;
@@ -91,7 +91,7 @@ namespace EasyOilFilter.Presentation.Forms
             }
 
             IsAdd = true;
-            MessageBox.Show($"Lubrificante: {TextBoxCode.Text} adicionado com sucesso.");
+            MessageBox.Show($"{model.FilterType}: {TextBoxCode.Text} adicionado com sucesso.");
         }
 
         private async void UpdateFilter()
@@ -115,7 +115,7 @@ namespace EasyOilFilter.Presentation.Forms
             }
 
             IsUpdate = true;
-            MessageBox.Show($"Filtro: {TextBoxCode.Text} atualizado com sucesso.");
+            MessageBox.Show($"{model.FilterType}: {TextBoxCode.Text} atualizado com sucesso.");
         }
 
         private (FilterViewModel model, string message) GetFilterViewModel()
@@ -140,15 +140,15 @@ namespace EasyOilFilter.Presentation.Forms
             return (new FilterViewModel()
             {
                 Id = Model.Id,
-                Code = TextBoxCode.Text,
+                Name = TextBoxCode.Text,
                 Manufacturer = TextBoxManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: true),
                 Price = price,
                 StockQuantity = stockQuantity,
-                Type = ComboBoxType.SelectedItem.ToString()
+                FilterType = ComboBoxType.SelectedItem.ToString()
             }, message);
         }
 
-        private (AddFilterViewModel model, string message) GetAddOilViewModel()
+        private (AddFilterViewModel model, string message) GetAddFilterViewModel()
         {
             string message = string.Empty;
 
@@ -169,22 +169,22 @@ namespace EasyOilFilter.Presentation.Forms
 
             return (new AddFilterViewModel()
             {
-                Code = TextBoxCode.Text,
+                Name = TextBoxCode.Text,
                 Manufacturer = TextBoxManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: true),
                 Price = price,
                 StockQuantity = stockQuantity,
-                Type = ComboBoxType.SelectedItem.ToString()
+                FilterType = ComboBoxType.SelectedItem.ToString()
             }, message);
         }
 
-        private bool HasChangedAnyField(FilterViewModel updatedOil)
+        private bool HasChangedAnyField(FilterViewModel updatedFilter)
         {
             return
-                updatedOil.Code != Model.Code ||
-                updatedOil.Manufacturer != Model.Manufacturer ||
-                updatedOil.StockQuantity != Model.StockQuantity ||
-                updatedOil.Type != Model.Type ||
-                updatedOil.Price != Model.Price;
+                updatedFilter.Name != Model.Name ||
+                updatedFilter.Manufacturer != Model.Manufacturer ||
+                updatedFilter.StockQuantity != Model.StockQuantity ||
+                updatedFilter.FilterType != Model.FilterType ||
+                updatedFilter.Price != Model.Price;
         }
     }
 }

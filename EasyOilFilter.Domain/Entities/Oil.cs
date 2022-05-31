@@ -6,9 +6,9 @@ namespace EasyOilFilter.Domain.Entities
 {
     public class Oil : Product
     {
-        public Oil(Guid id, string name, string viscosity, decimal price, decimal stockQuantity, OilType type, UoM unitOfMeasurement)
+        public Oil(Guid id, string name, string viscosity, decimal price, decimal stockQuantity, OilType oilType, UoM unitOfMeasurement)
         {
-            AddNotifications(GetContract(name, viscosity, price, stockQuantity, type, unitOfMeasurement));
+            AddNotifications(GetContract(name, viscosity, price, stockQuantity, oilType, unitOfMeasurement));
 
             if (IsValid)
             {
@@ -17,14 +17,14 @@ namespace EasyOilFilter.Domain.Entities
                 Viscosity = viscosity;
                 Price = price;
                 StockQuantity = stockQuantity;
-                Type = type;
+                OilType = oilType;
                 UnitOfMeasurement = unitOfMeasurement;
             }
         }
 
-        public Oil(string name, string viscosity, decimal price, decimal stockQuantity, OilType type, UoM unitOfMeasurement)
+        public Oil(string name, string viscosity, decimal price, decimal stockQuantity, OilType oilType, UoM unitOfMeasurement)
         {
-            AddNotifications(GetContract(name, viscosity, price, stockQuantity, type, unitOfMeasurement));
+            AddNotifications(GetContract(name, viscosity, price, stockQuantity, oilType, unitOfMeasurement));
 
             if (IsValid)
             {
@@ -32,15 +32,15 @@ namespace EasyOilFilter.Domain.Entities
                 Viscosity = viscosity;
                 Price = price;
                 StockQuantity = stockQuantity;
-                Type = type;
+                OilType = oilType;
                 UnitOfMeasurement = unitOfMeasurement;
+                Type = ProductType.Oil;
             }
         }
 
         public string Name { get; private set; }
         public string Viscosity { get; private set; }
-        public OilType Type { get; private set; }
-        public UoM UnitOfMeasurement { get; private set; }
+        public OilType OilType { get; private set; }
 
         public void ChangePriceByAbsoluteValue(decimal absoluteValue)
         {

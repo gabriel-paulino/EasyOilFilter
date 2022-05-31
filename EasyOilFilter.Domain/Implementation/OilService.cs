@@ -10,23 +10,23 @@ namespace EasyOilFilter.Domain.Implementation
 {
     public class OilService : IOilService
     {
-        private readonly IOilRepository _oilRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly NotificationContext _notification;
 
         public OilService(
-            IOilRepository oilRepository,
+            IProductRepository productRepository,
             IUnitOfWork unitOfWork, 
             NotificationContext notification)
         {
-            _oilRepository = oilRepository;
+            _productRepository = productRepository;
             _unitOfWork = unitOfWork;
             _notification = notification;
         }
 
         public async Task<IEnumerable<OilViewModel>> GetAll()
         {
-            var oils = await _oilRepository.GetAll();
+            var oils = await _productRepository.GetAllOils();
 
             return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
@@ -35,7 +35,7 @@ namespace EasyOilFilter.Domain.Implementation
 
         public async Task<IEnumerable<OilViewModel>> Get(SearchOilViewModel model)
         {
-            var oils = await _oilRepository.Get(model.Name, model.Viscosity, model.Type);
+            var oils = await _productRepository.Get(model.Name, model.Viscosity, model.OilType);
 
             return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
@@ -44,7 +44,7 @@ namespace EasyOilFilter.Domain.Implementation
 
         public async Task<IEnumerable<OilViewModel>> Get(int page, int quantity)
         {
-            var oils = await _oilRepository.Get(page, quantity);
+            var oils = await _productRepository.GetOils(page, quantity);
 
             return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
@@ -53,12 +53,12 @@ namespace EasyOilFilter.Domain.Implementation
 
         public async Task<OilViewModel> Get(Guid id)
         {
-            return await _oilRepository.Get(id);
+            return await _productRepository.GetOil(id);
         }
 
         public async Task<IEnumerable<OilViewModel>> Get(OilType type)
         {
-            var oils = await _oilRepository.Get(type);
+            var oils = await _productRepository.Get(type);
 
             return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
@@ -67,7 +67,7 @@ namespace EasyOilFilter.Domain.Implementation
 
         public async Task<IEnumerable<OilViewModel>> GetByName(string name)
         {
-            var oils = await _oilRepository.GetByName(name);
+            var oils = await _productRepository.GetOilsByName(name);
 
             return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
@@ -76,7 +76,7 @@ namespace EasyOilFilter.Domain.Implementation
 
         public async Task<IEnumerable<OilViewModel>> GetByViscosity(string viscosity)
         {
-            var oils = await _oilRepository.GetByViscosity(viscosity);
+            var oils = await _productRepository.GetByViscosity(viscosity);
 
             return oils?.Any() ?? false
                 ? OilViewModel.MapMany(oils)
@@ -91,7 +91,7 @@ namespace EasyOilFilter.Domain.Implementation
             if (!_notification.IsValid)
                 return default;
 
-            if (await _oilRepository.Create(oil))
+            if (await _productRepository.Create(oil))
                 return (OilViewModel)oil;
 
             _notification.AddNotification("Id", "Falha ao adicionar lubrificante.");
@@ -114,7 +114,7 @@ namespace EasyOilFilter.Domain.Implementation
 
             _unitOfWork.BeginTransaction();
 
-            if (await _oilRepository.Update(updatedOil))
+            if (await _productRepository.Update(updatedOil))
             {
                 _unitOfWork.Commit();
                 return updatedOil;
@@ -131,7 +131,7 @@ namespace EasyOilFilter.Domain.Implementation
             if(absoluteValue == 0)
                 return (false, "Valor absoluto deve ser diferente de zero.");
 
-            var oils = await _oilRepository.GetAll();
+            var oils = await _productRepository.GetAllOils();
 
             if (!oils?.Any() ?? true)
                 return (true, "Não existem lubrificantes cadastrados.");
@@ -144,7 +144,7 @@ namespace EasyOilFilter.Domain.Implementation
             foreach (var oil in oils)
             {
                 oil.ChangePriceByAbsoluteValue(absoluteValue);
-                if (await _oilRepository.UpdatePrice(oil.Id, oil.Price)) continue;
+                if (await _productRepository.UpdatePrice(oil.Id, oil.Price)) continue;
                 else
                 {
                     sucess = false;
@@ -164,7 +164,7 @@ namespace EasyOilFilter.Domain.Implementation
             if (percentage == 0)
                 return (false, "Porcentagem deve ser diferente de zero.");
 
-            var oils = await _oilRepository.GetAll();
+            var oils = await _productRepository.GetAllOils();
 
             if (!oils?.Any() ?? true)
                 return (true, "Não existem lubrificantes cadastrados.");
@@ -177,7 +177,7 @@ namespace EasyOilFilter.Domain.Implementation
             foreach (var oil in oils)
             {
                 oil.ChangePriceByPercentage(percentage);
-                if (await _oilRepository.UpdatePrice(oil.Id, oil.Price)) continue;
+                if (await _productRepository.UpdatePrice(oil.Id, oil.Price)) continue;
                 else
                 {
                     sucess = false;
@@ -192,6 +192,6 @@ namespace EasyOilFilter.Domain.Implementation
             return (sucess, message);
         }
 
-        public void Dispose() => _oilRepository.Dispose();
+        public void Dispose() => _productRepository.Dispose();
     }
 }

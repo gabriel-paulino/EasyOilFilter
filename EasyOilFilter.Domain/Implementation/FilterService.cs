@@ -10,16 +10,16 @@ namespace EasyOilFilter.Domain.Implementation
 {
     public class FilterService : IFilterService
     {
-        private readonly IFilterRepository _filterRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly NotificationContext _notification;
 
         public FilterService(
-            IFilterRepository filterRepository,
+            IProductRepository productRepository,
             IUnitOfWork unitOfWork,
             NotificationContext notification)
         {
-            _filterRepository = filterRepository;
+            _productRepository = productRepository;
             _unitOfWork = unitOfWork;
             _notification = notification;
         }
@@ -29,7 +29,7 @@ namespace EasyOilFilter.Domain.Implementation
             if (absoluteValue == 0)
                 return (false, "Valor absoluto deve ser diferente de zero.");
 
-            var filters = await _filterRepository.GetAll();
+            var filters = await _productRepository.GetAllFilters();
 
             if (!filters?.Any() ?? true)
                 return (true, "Não existem filtros cadastrados.");
@@ -42,11 +42,11 @@ namespace EasyOilFilter.Domain.Implementation
             foreach (var filter in filters)
             {
                 filter.ChangePriceByAbsoluteValue(absoluteValue);
-                if (await _filterRepository.UpdatePrice(filter.Id, filter.Price)) continue;
+                if (await _productRepository.UpdatePrice(filter.Id, filter.Price)) continue;
                 else
                 {
                     sucess = false;
-                    message = $"Falha ao atualizar preço do filtro: {filter.Code}.";
+                    message = $"Falha ao atualizar preço do filtro: {filter.Name}.";
                     _unitOfWork.Rollback();
                     break;
                 }
@@ -62,7 +62,7 @@ namespace EasyOilFilter.Domain.Implementation
             if (percentage == 0)
                 return (false, "Porcentagem deve ser diferente de zero.");
 
-            var filters = await _filterRepository.GetAll();
+            var filters = await _productRepository.GetAllFilters();
 
             if (!filters?.Any() ?? true)
                 return (true, "Não existem filtros cadastrados.");
@@ -75,11 +75,11 @@ namespace EasyOilFilter.Domain.Implementation
             foreach (var filter in filters)
             {
                 filter.ChangePriceByPercentage(percentage);
-                if (await _filterRepository.UpdatePrice(filter.Id, filter.Price)) continue;
+                if (await _productRepository.UpdatePrice(filter.Id, filter.Price)) continue;
                 else
                 {
                     sucess = false;
-                    message = $"Falha ao atualizar preço do filtro: {filter.Code}.";
+                    message = $"Falha ao atualizar preço do filtro: {filter.Name}.";
                     _unitOfWork.Rollback();
                     break;
                 }
@@ -98,7 +98,7 @@ namespace EasyOilFilter.Domain.Implementation
             if (!_notification.IsValid)
                 return default;
 
-            if (await _filterRepository.Create(filter))
+            if (await _productRepository.Create(filter))
                 return (FilterViewModel)filter;
 
             _notification.AddNotification("Id", "Falha ao adicionar filtro.");
@@ -107,7 +107,7 @@ namespace EasyOilFilter.Domain.Implementation
 
         public async Task<IEnumerable<FilterViewModel>> Get(int page, int quantity)
         {
-            var filters = await _filterRepository.Get(page, quantity);
+            var filters = await _productRepository.GetFilters(page, quantity);
 
             return filters?.Any() ?? false
                 ? FilterViewModel.MapMany(filters)
@@ -116,12 +116,12 @@ namespace EasyOilFilter.Domain.Implementation
 
         public async Task<FilterViewModel> Get(Guid id)
         {
-            return await _filterRepository.Get(id);
+            return await _productRepository.GetFilter(id);
         }
 
         public async Task<IEnumerable<FilterViewModel>> Get(SearchFilterViewModel model)
         {
-            var filters = await _filterRepository.Get(model.Name, model.Manufacturer, model.Type);
+            var filters = await _productRepository.Get(model.Name, model.Manufacturer, model.FilterType);
 
             return filters?.Any() ?? false
                 ? FilterViewModel.MapMany(filters)
@@ -130,7 +130,7 @@ namespace EasyOilFilter.Domain.Implementation
 
         public async Task<IEnumerable<FilterViewModel>> Get(FilterType type)
         {
-            var filters = await _filterRepository.Get(type);
+            var filters = await _productRepository.Get(type);
 
             return filters?.Any() ?? false
                 ? FilterViewModel.MapMany(filters)
@@ -139,16 +139,16 @@ namespace EasyOilFilter.Domain.Implementation
 
         public async Task<IEnumerable<FilterViewModel>> GetAll()
         {
-            var filters = await _filterRepository.GetAll();
+            var filters = await _productRepository.GetAllFilters();
 
             return filters?.Any() ?? false
                 ? FilterViewModel.MapMany(filters)
                 : default;
         }
 
-        public async Task<IEnumerable<FilterViewModel>> GetByCode(string code)
+        public async Task<IEnumerable<FilterViewModel>> GetByName(string name)
         {
-            var filters = await _filterRepository.GetByCode(code);
+            var filters = await _productRepository.GetFiltersByName(name);
 
             return filters?.Any() ?? false
                 ? FilterViewModel.MapMany(filters)
@@ -157,7 +157,7 @@ namespace EasyOilFilter.Domain.Implementation
 
         public async Task<IEnumerable<FilterViewModel>> GetByManufacturer(string manufacturer)
         {
-            var filter = await _filterRepository.GetByManufacturer(manufacturer);
+            var filter = await _productRepository.GetByManufacturer(manufacturer);
 
             return filter?.Any() ?? false
                 ? FilterViewModel.MapMany(filter)
@@ -180,7 +180,7 @@ namespace EasyOilFilter.Domain.Implementation
 
             _unitOfWork.BeginTransaction();
 
-            if (await _filterRepository.Update(updatedFilter))
+            if (await _productRepository.Update(updatedFilter))
             {
                 _unitOfWork.Commit();
                 return updatedFilter;
@@ -192,6 +192,6 @@ namespace EasyOilFilter.Domain.Implementation
             return default;
         }
 
-        public void Dispose() => _filterRepository.Dispose();
+        public void Dispose() => _productRepository.Dispose();
     }
 }

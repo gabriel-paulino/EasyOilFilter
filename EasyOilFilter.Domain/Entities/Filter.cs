@@ -6,38 +6,40 @@ namespace EasyOilFilter.Domain.Entities
 {
     public class Filter: Product
     {
-        public Filter(Guid id, string code, string manufacturer, decimal price, decimal stockQuantity, FilterType type)
+        public Filter(Guid id, string name, string manufacturer, decimal price, decimal stockQuantity, FilterType filterType)
         {
-            AddNotifications(GetContract(code, manufacturer, price, stockQuantity, type));
+            AddNotifications(GetContract(name, manufacturer, price, stockQuantity, filterType));
 
             if (IsValid)
             {
                 Id = id;
-                Code = code;
+                Name = name;
                 Manufacturer = manufacturer;
                 Price = price;
                 StockQuantity = stockQuantity;
-                Type = type;
+                FilterType = filterType;
             }
         }
 
-        public Filter(string code, string manufacturer, decimal price, decimal stockQuantity, FilterType type)
+        public Filter(string name, string manufacturer, decimal price, decimal stockQuantity, FilterType filterType)
         {
-            AddNotifications(GetContract(code, manufacturer, price, stockQuantity, type));
+            AddNotifications(GetContract(name, manufacturer, price, stockQuantity, filterType));
 
             if (IsValid)
             {
-                Code = code;
+                Name = name;
                 Manufacturer = manufacturer;
                 Price = price;
                 StockQuantity = stockQuantity;
-                Type = type;
+                FilterType = filterType;
+                Type = ProductType.Filter;
+                UnitOfMeasurement = UoM.Unity;
             }
         }
 
-        public string Code { get; private set; }
+        public string Name { get; private set; }
         public string Manufacturer { get; private set; }
-        public FilterType Type { get; private set; }
+        public FilterType FilterType { get; private set; }
         
         public void ChangePriceByAbsoluteValue(decimal absoluteValue)
         {
@@ -49,10 +51,10 @@ namespace EasyOilFilter.Domain.Entities
             Price = (1 + percentage / 100) * Price;
         }
 
-        private static Contract<Filter> GetContract(string code, string manufacturer, decimal price, decimal stockQuantity, FilterType type) =>
+        private static Contract<Filter> GetContract(string name, string manufacturer, decimal price, decimal stockQuantity, FilterType type) =>
             new Contract<Filter>()
-                .IsLowerThan(code, 100, "Code", "O código do filtro não pode ter mais do que 100 caracteres.")
-                .IsGreaterThan(code, 2, "Code", "O código do filtro deve ter pelo menos 2 caracteres.")
+                .IsLowerThan(name, 100, "Name", "O código do filtro não pode ter mais do que 100 caracteres.")
+                .IsGreaterThan(name, 2, "Name", "O código do filtro deve ter pelo menos 2 caracteres.")
                 .IsLowerThan(manufacturer, 15, "Manufacturer", "O fabricante do filtro não pode ter mais do que 15 caracteres.")
                 .IsGreaterThan(manufacturer, 2, "Manufacturer", "O fabricante do filtro deve ter pelo menos 2 caracteres.")
                 .IsBetween((int)type, 0, 4, "Type", "O tipo do filtro deve ser informado.")

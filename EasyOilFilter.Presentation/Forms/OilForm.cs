@@ -20,14 +20,11 @@ namespace EasyOilFilter.Presentation.Forms
         private async void OilForm_Load(object sender, EventArgs e)
         {
             ConfigureComponents();
+            ConfigureGrid();
 
-            //To-Do: Usar paginação
             var oils = await _oilService.GetAll();
             if (oils?.Any() ?? false)
-            {
-                DataGridView.DataSource = oils.ToList();
-                ConfigureGrid();
-            }
+                DataGridView.DataSource = oils.ToList();      
         }
 
         private void ButtonSearch_Click(object sender, EventArgs e)
@@ -114,7 +111,7 @@ namespace EasyOilFilter.Presentation.Forms
                 Viscosity = DataGridView.CurrentRow.Cells["Viscosity"].Value.ToString(),
                 Price = price,
                 StockQuantity = stockQuantity,
-                Type = DataGridView.CurrentRow.Cells["Type"].Value.ToString(),
+                OilType = DataGridView.CurrentRow.Cells["OilType"].Value.ToString(),
                 UnitOfMeasurement = DataGridView.CurrentRow.Cells["UnitOfMeasurement"].Value.ToString()
             };
 
@@ -183,7 +180,7 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 Name = TextName.Text.FixTextToManageDataBaseResult(),
                 Viscosity = TextViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
-                Type = oilType
+                OilType = oilType
             };
 
             var oils = await _oilService.Get(model);
@@ -199,23 +196,22 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void ConfigureGrid()
         {
+            DataGridView.DataSource = new List<OilViewModel>();
+            DataGridView.ReadOnly = true;
             DataGridView.Columns["Id"].Visible = false;
-
             DataGridView.Columns["Name"].HeaderText = "Lubrificante";
             DataGridView.Columns["Viscosity"].HeaderText = "Viscosidade";
             DataGridView.Columns["Price"].HeaderText = "Preço";
             DataGridView.Columns["StockQuantity"].HeaderText = "Estoque";
-            DataGridView.Columns["Type"].HeaderText = "Tipo";
+            DataGridView.Columns["OilType"].HeaderText = "Tipo";
             DataGridView.Columns["UnitOfMeasurement"].HeaderText = "Embalagem";
-
             DataGridView.Columns["Price"].DefaultCellStyle.Format = "C2";
             DataGridView.Columns["StockQuantity"].DefaultCellStyle.Format = "F2";
-
-            DataGridView.AutoResizeColumns();
-            DataGridView.ReadOnly = true;
-            DataGridView.Columns["Name"].MinimumWidth = 188;
+            DataGridView.Columns["Name"].MinimumWidth = 190;
             DataGridView.Columns["Price"].MinimumWidth = 100;
             DataGridView.Columns["StockQuantity"].MinimumWidth = 100;
+            DataGridView.Columns["OilType"].MinimumWidth = 100;
+            DataGridView.AutoResizeColumns();
         }
     }
 }

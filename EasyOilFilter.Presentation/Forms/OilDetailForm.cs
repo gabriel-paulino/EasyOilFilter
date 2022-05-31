@@ -44,7 +44,7 @@ namespace EasyOilFilter.Presentation.Forms
             TextBoxViscosity.Text = Model.Viscosity;
             TextBoxPrice.Text = Model.Price.ToString("C2");
             TextBoxStockQuantity.Text = Model.StockQuantity.ToString("F2");
-            ComboBoxType.SelectedIndex = (int)EnumUtility.GetEnumByDescription<OilType>(Model.Type);
+            ComboBoxType.SelectedIndex = (int)EnumUtility.GetEnumByDescription<OilType>(Model.OilType);
             ComboBoxUoM.SelectedIndex = (int)EnumUtility.GetEnumByDescription<UoM>(Model.UnitOfMeasurement);
         }
 
@@ -99,7 +99,7 @@ namespace EasyOilFilter.Presentation.Forms
             }
 
             IsAdd = true;
-            MessageBox.Show($"Lubrificante: {TextBoxName.Text} adicionado com sucesso.");
+            MessageBox.Show($"{model.OilType}: {TextBoxName.Text} adicionado com sucesso.");
         }
 
         private async void UpdateOil()
@@ -123,7 +123,7 @@ namespace EasyOilFilter.Presentation.Forms
             }
 
             IsUpdate = true;
-            MessageBox.Show($"Lubrificante: {TextBoxName.Text} atualizado com sucesso.");
+            MessageBox.Show($"{model.OilType}: {TextBoxName.Text} atualizado com sucesso.");
         }
 
         private (OilViewModel model, string message) GetOilViewModel()
@@ -152,7 +152,7 @@ namespace EasyOilFilter.Presentation.Forms
                 Viscosity = TextBoxViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
                 Price = price,
                 StockQuantity = stockQuantity,
-                Type = ComboBoxType.SelectedItem.ToString(),
+                OilType = ComboBoxType.SelectedItem.ToString(),
                 UnitOfMeasurement = ComboBoxUoM.SelectedItem.ToString()
             }, message);
         }
@@ -182,7 +182,7 @@ namespace EasyOilFilter.Presentation.Forms
                 Viscosity = TextBoxViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
                 Price = price,
                 StockQuantity = stockQuantity,
-                Type = ComboBoxType.SelectedItem.ToString(),
+                OilType = ComboBoxType.SelectedItem.ToString(),
                 UnitOfMeasurement = ComboBoxUoM.SelectedItem.ToString()
             }, message);
         }
@@ -193,7 +193,7 @@ namespace EasyOilFilter.Presentation.Forms
                 updatedOil.Name != Model.Name ||
                 updatedOil.Viscosity != Model.Viscosity ||
                 updatedOil.StockQuantity != Model.StockQuantity ||
-                updatedOil.Type != Model.Type ||
+                updatedOil.OilType != Model.OilType ||
                 updatedOil.UnitOfMeasurement != Model.UnitOfMeasurement ||
                 updatedOil.Price != Model.Price;
         }

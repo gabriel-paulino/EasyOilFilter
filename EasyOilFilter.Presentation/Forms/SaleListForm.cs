@@ -16,14 +16,15 @@ namespace EasyOilFilter.Presentation.Forms
         private async void SaleForm_Load(object sender, EventArgs e)
         {
             SetDateInfo(DateTime.Today);
+            ConfigureGrid();
+
             var sales = await _saleService.Get(DateTime.Today);
 
             if (sales?.Any() ?? false)
             {
-                DataGridView.DataSource = sales.ToList();
-                ConfigureGrid();
+                DataGridView.DataSource = sales.ToList();               
                 SetTotalLabel(sales.Sum(sale => sale.Total));
-            }
+            }          
         }
 
         private async void ButtonSearch_Click(object sender, EventArgs e)
@@ -51,6 +52,7 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void ConfigureGrid()
         {
+            DataGridView.DataSource = new List<SaleViewModel>();
             DataGridView.ReadOnly = true;
             DataGridView.Columns["Id"].Visible = false;
             DataGridView.Columns["Discount"].Visible = false;
@@ -58,17 +60,13 @@ namespace EasyOilFilter.Presentation.Forms
             DataGridView.Columns["Remarks"].Visible = false;
             DataGridView.Columns["Items"].Visible = false;
             DataGridView.Columns["Status"].Visible = false;
-
             DataGridView.Columns["Description"].HeaderText = "Descrição";
             DataGridView.Columns["PaymentMethod"].HeaderText = "Forma de pagamento";
             DataGridView.Columns["Total"].HeaderText = "Valor";
-
             DataGridView.Columns["Total"].DefaultCellStyle.Format = "C2";
-
             DataGridView.Columns["Description"].MinimumWidth = 310;
             DataGridView.Columns["PaymentMethod"].MinimumWidth = 155;
             DataGridView.Columns["Total"].MinimumWidth = 140;
-
             DataGridView.AutoResizeColumns();
         }
 

@@ -7,6 +7,7 @@ CREATE TABLE Product (
 	Manufacturer varchar(15),
     Price decimal(19,4) not null,
 	Type int not null,
+	OilType int,
 	FilterType int,
 	UnitOfMeasurement int not null,
 	StockQuantity decimal(19,4) not null
