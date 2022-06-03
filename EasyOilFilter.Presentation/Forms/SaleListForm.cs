@@ -6,10 +6,12 @@ namespace EasyOilFilter.Presentation.Forms
     public partial class SaleListForm : Form
     {
         private readonly ISaleService _saleService;
+        private readonly IProductService _productService;
 
-        public SaleListForm(ISaleService saleService)
+        public SaleListForm(ISaleService saleService, IProductService productService)
         {
             _saleService = saleService;
+            _productService = productService;
             InitializeComponent();
         }
 
@@ -70,9 +72,17 @@ namespace EasyOilFilter.Presentation.Forms
             DataGridView.AutoResizeColumns();
         }
 
-        private async void ButtonAddSale_Click(object sender, EventArgs e)
+        private void ButtonAddSale_Click(object sender, EventArgs e)
         {
+            using (var saleForm = new SaleForm(_saleService, _productService))
+            {
+                saleForm.ShowDialog();
+            }
+
+
+
             //ToDo: Open screen of new Sale
+            /*
             var mock = new AddSaleViewModel()
             {
                 Description = "Gol",
@@ -96,6 +106,7 @@ namespace EasyOilFilter.Presentation.Forms
             mock.Items = new List<AddSaleItemViewModel> { oil };
 
             var (sucess, message) = await _saleService.Create(mock);
+            */
         }
     }
 }

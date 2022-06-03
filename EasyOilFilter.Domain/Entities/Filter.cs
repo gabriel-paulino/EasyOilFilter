@@ -1,10 +1,9 @@
-﻿using EasyOilFilter.Domain.Entities.Base;
-using EasyOilFilter.Domain.Enums;
+﻿using EasyOilFilter.Domain.Enums;
 using Flunt.Validations;
 
 namespace EasyOilFilter.Domain.Entities
 {
-    public class Filter: Product
+    public class Filter : Product
     {
         public Filter(Guid id, string name, string manufacturer, decimal price, decimal stockQuantity, FilterType filterType)
         {
@@ -37,10 +36,6 @@ namespace EasyOilFilter.Domain.Entities
             }
         }
 
-        public string Name { get; private set; }
-        public string Manufacturer { get; private set; }
-        public FilterType FilterType { get; private set; }
-        
         public void ChangePriceByAbsoluteValue(decimal absoluteValue)
         {
             Price += absoluteValue;

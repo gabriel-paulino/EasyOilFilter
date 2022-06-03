@@ -1,5 +1,4 @@
-﻿using EasyOilFilter.Domain.Entities.Base;
-using EasyOilFilter.Domain.Enums;
+﻿using EasyOilFilter.Domain.Enums;
 using Flunt.Validations;
 
 namespace EasyOilFilter.Domain.Entities
@@ -37,10 +36,6 @@ namespace EasyOilFilter.Domain.Entities
                 Type = ProductType.Oil;
             }
         }
-
-        public string Name { get; private set; }
-        public string Viscosity { get; private set; }
-        public OilType OilType { get; private set; }
 
         public void ChangePriceByAbsoluteValue(decimal absoluteValue)
         {

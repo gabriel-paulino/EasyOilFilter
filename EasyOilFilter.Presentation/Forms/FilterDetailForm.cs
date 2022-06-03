@@ -9,15 +9,15 @@ namespace EasyOilFilter.Presentation.Forms
 {
     public partial class FilterDetailForm : Form
     {
-        private readonly IFilterService _filterService;
+        private readonly IProductService _productService;
         public FilterViewModel Model { get; set; }
         public FormMode Mode { get; set; }
         public bool IsUpdate { get; private set; }
         public bool IsAdd { get; private set; }
 
-        public FilterDetailForm(IFilterService filterService)
+        public FilterDetailForm(IProductService productService)
         {
-            _filterService = filterService;
+            _productService = productService;
             Model = new FilterViewModel();
             IsUpdate = false;
             IsAdd = false;
@@ -74,7 +74,7 @@ namespace EasyOilFilter.Presentation.Forms
             if (!string.IsNullOrEmpty(message))
                 MessageBox.Show(message);
 
-            var filters = await _filterService.GetByName(model.Name);
+            var filters = await _productService.GetFiltersByName(model.Name);
 
             if (filters?.Any() ?? false)
             {
@@ -82,7 +82,7 @@ namespace EasyOilFilter.Presentation.Forms
                 return;
             }
 
-            var result = await _filterService.Create(model);
+            var result = await _productService.Create(model);
 
             if (result == default)
             {
@@ -106,7 +106,7 @@ namespace EasyOilFilter.Presentation.Forms
             if (!anyChange)
                 return;
 
-            var result = await _filterService.Update(Model.Id, model);
+            var result = await _productService.Update(Model.Id, model);
 
             if (result == default)
             {

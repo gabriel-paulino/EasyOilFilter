@@ -10,9 +10,9 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
         public Guid Id { get; set; }
         public Guid SaleId { get; set; }
         public Guid ProductId { get; set; }
-        public string ItemDescription { get; set; }
-        public string UnitOfMeasurement { get; set; }
+        public string ItemDescription { get; set; }      
         public decimal Quantity { get; set; }
+        public string UnitOfMeasurement { get; set; }
         public decimal UnitaryPrice { get; set; }
         public decimal TotalItem { get; set; }
 
@@ -41,5 +41,14 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
                 unitaryPrice: model.UnitaryPrice,
                 totalItem: model.TotalItem
                 );
+
+        public static implicit operator SaleItemViewModel(Product product) =>
+            new()
+            {
+                ProductId = product.Id,
+                ItemDescription = product.Name,
+                UnitOfMeasurement = product.UnitOfMeasurement.GetDescription(),
+                UnitaryPrice = product.Price,
+            };
     }
 }

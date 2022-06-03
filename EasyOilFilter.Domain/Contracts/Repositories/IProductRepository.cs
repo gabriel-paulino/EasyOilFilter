@@ -5,6 +5,8 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
 {
     public interface IProductRepository : IDisposable
     {
+        Task<IEnumerable<Product>> GetAll();
+        Task<IEnumerable<Product>> GetByName(string name);
         Task<IEnumerable<Filter>> GetAllFilters();
         Task<IEnumerable<Filter>> GetFilters(int page, int quantity);
         Task<IEnumerable<Filter>> Get(string name = "", string manufacturer = "", FilterType type = FilterType.All);

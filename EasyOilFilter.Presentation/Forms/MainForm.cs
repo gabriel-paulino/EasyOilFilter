@@ -4,15 +4,13 @@ namespace EasyOilFilter.Presentation.Forms
 {
     public partial class MainForm : Form
     {
-        private readonly IOilService _oilService;
-        private readonly IFilterService _filterService;
+        private readonly IProductService _productService;
         private readonly ISaleService _saleService;
 
 
-        public MainForm(IOilService oilService, IFilterService filterService, ISaleService saleService)
+        public MainForm(IProductService productService, ISaleService saleService)
         {
-            _oilService = oilService;
-            _filterService = filterService;
+            _productService = productService;
             _saleService = saleService;
             InitializeComponent();
         }
@@ -20,19 +18,19 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void ButtonLubs_Click(object sender, EventArgs e)
         {
-            using var oilForm = new OilForm(_oilService);
+            using var oilForm = new OilForm(_productService);
             oilForm.ShowDialog();
         }
 
         private void ButtonFilters_Click(object sender, EventArgs e)
         {
-            using var filterForm = new FilterForm(_filterService);
+            using var filterForm = new FilterForm(_productService);
             filterForm.ShowDialog();
         }
 
         private void ButtonSale_Click(object sender, EventArgs e)
         {
-            using var saleForm = new SaleListForm(_saleService);
+            using var saleForm = new SaleListForm(_saleService, _productService);
             saleForm.ShowDialog();
         }
     }

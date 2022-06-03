@@ -4,6 +4,8 @@ namespace EasyOilFilter.Domain.Enums
 {
     public enum PaymentMethod
     {
+        [Description("")]
+        All,
         [Description("Dinheiro")]
         Money,
         [Description("Pix")]

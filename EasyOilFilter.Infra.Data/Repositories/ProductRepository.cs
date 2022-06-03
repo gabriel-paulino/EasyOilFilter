@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EasyOilFilter.Domain.Contracts.Repositories;
 using EasyOilFilter.Domain.Entities;
+using EasyOilFilter.Domain.Entities.Base;
 using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Infra.Data.Session;
 
@@ -52,6 +53,57 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 _session.Dispose();
 
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<IEnumerable<Product>> GetAll()
+        {
+            string query = @"
+                SELECT
+                    [Id],
+                    [Name],                 
+                    [Price],
+                    [StockQuantity],
+                    [Type],
+                    [UnitOfMeasurement],
+                    [Viscosity],
+                    [OilType],
+                    [Manufacturer],
+                    [FilterType]                   
+                FROM 
+                    [Product]
+            ";
+
+            var filters = await _session.Connection.QueryAsync<Product>(query);
+
+            return filters.OrderByDescending(filter => filter.Name);
+        }
+
+        public async Task<IEnumerable<Product>> GetByName(string name)
+        {
+            string query = @"
+                SELECT
+                    [Id],
+                    [Name],                 
+                    [Price],
+                    [StockQuantity],
+                    [Type],
+                    [UnitOfMeasurement],
+                    [Viscosity],
+                    [OilType],
+                    [Manufacturer],
+                    [FilterType]                   
+                FROM 
+                    [Product]
+                WHERE
+                    [Name] LIKE @Name
+            ";
+
+            var products = await _session.Connection.QueryAsync<Product>(query, new
+            {
+                Name = $"{name}%"
+            });
+
+            return products.OrderByDescending(filter => filter.Name);
         }
 
         public async Task<IEnumerable<Filter>> GetFilters(int page, int quantity)
@@ -534,5 +586,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
 
             return rowsAffected == 1;
         }
+
+        
     }
 }

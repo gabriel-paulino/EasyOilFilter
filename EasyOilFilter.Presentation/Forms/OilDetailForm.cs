@@ -9,15 +9,15 @@ namespace EasyOilFilter.Presentation.Forms
 {
     public partial class OilDetailForm : Form
     {
-        private readonly IOilService _oilService;
+        private readonly IProductService _productService;
         public OilViewModel Model { get; set; }
         public FormMode Mode { get; set; }
         public bool IsUpdate { get; private set; }
         public bool IsAdd { get; private set; }
 
-        public OilDetailForm(IOilService oilService)
+        public OilDetailForm(IProductService productService)
         {
-            _oilService = oilService;
+            _productService = productService;
             Model = new OilViewModel();
             IsUpdate = false;
             IsAdd = false;
@@ -82,7 +82,7 @@ namespace EasyOilFilter.Presentation.Forms
             if (!string.IsNullOrEmpty(message))
                 MessageBox.Show(message);
 
-            var oils = await _oilService.GetByName(model.Name);
+            var oils = await _productService.GetOilsByName(model.Name);
 
             if (oils?.Any() ?? false)
             {
@@ -90,7 +90,7 @@ namespace EasyOilFilter.Presentation.Forms
                 return;
             }
 
-            var result = await _oilService.Create(model);
+            var result = await _productService.Create(model);
 
             if (result == default)
             {
@@ -114,7 +114,7 @@ namespace EasyOilFilter.Presentation.Forms
             if (!anyChange)
                 return;
 
-            var result = await _oilService.Update(Model.Id, model);
+            var result = await _productService.Update(Model.Id, model);
 
             if (result == default)
             {

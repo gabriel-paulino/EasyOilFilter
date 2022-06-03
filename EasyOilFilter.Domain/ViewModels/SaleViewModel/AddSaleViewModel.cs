@@ -30,7 +30,13 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
             foreach (var item in sale.Items)
                 item.SetSaleId(sale.Id);
 
-            sale.SetTotal(items.Sum(item => item.TotalItem));
+            decimal totalItems = items.Sum(item => item.TotalItem);
+
+            decimal total = model.Discount > 0
+                ? totalItems - model.Discount
+                : totalItems;
+
+            sale.SetTotal(total);
 
             return sale;
         }

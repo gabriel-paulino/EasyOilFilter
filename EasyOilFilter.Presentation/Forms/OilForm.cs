@@ -9,11 +9,11 @@ namespace EasyOilFilter.Presentation.Forms
 {
     public partial class OilForm : Form
     {
-        private readonly IOilService _oilService;
+        private readonly IProductService _productService;
 
-        public OilForm(IOilService oilService)
+        public OilForm(IProductService productService)
         {
-            _oilService = oilService;
+            _productService = productService;
             InitializeComponent();
         }
 
@@ -22,7 +22,7 @@ namespace EasyOilFilter.Presentation.Forms
             ConfigureComponents();
             ConfigureGrid();
 
-            var oils = await _oilService.GetAll();
+            var oils = await _productService.GetAllOils();
             if (oils?.Any() ?? false)
                 DataGridView.DataSource = oils.ToList();      
         }
@@ -55,7 +55,7 @@ namespace EasyOilFilter.Presentation.Forms
 
                 if (choice == DialogResult.Yes)
                 {
-                    (bool Sucess, string Message) = await _oilService.ChangePriceOfAllOilsByPercentage(percentage);
+                    (bool Sucess, string Message) = await _productService.ChangePriceOfAllOilsByPercentage(percentage);
 
                     MessageBox.Show(Sucess
                         ? "Os preços dos lubrificantes foram alterados com sucesso."
@@ -83,7 +83,7 @@ namespace EasyOilFilter.Presentation.Forms
 
                 if (choice == DialogResult.Yes)
                 {
-                    (bool Sucess, string Message) = await _oilService.ChangePriceOfAllOilsByAbsoluteValue(value);
+                    (bool Sucess, string Message) = await _productService.ChangePriceOfAllOilsByAbsoluteValue(value);
 
                     MessageBox.Show(Sucess
                         ? "Os preços dos lubrificantes foram alterados com sucesso."
@@ -117,7 +117,7 @@ namespace EasyOilFilter.Presentation.Forms
 
             bool isUpdated = false;
 
-            using (var detail = new OilDetailForm(_oilService))
+            using (var detail = new OilDetailForm(_productService))
             {
                 detail.Mode = FormMode.Update;
                 detail.Model = selectedOilModel;
@@ -133,7 +133,7 @@ namespace EasyOilFilter.Presentation.Forms
         {
             bool isAdd = false;
 
-            using (var detail = new OilDetailForm(_oilService))
+            using (var detail = new OilDetailForm(_productService))
             {
                 detail.Mode = FormMode.Add;
                 detail.ShowDialog();
@@ -183,7 +183,7 @@ namespace EasyOilFilter.Presentation.Forms
                 OilType = oilType
             };
 
-            var oils = await _oilService.Get(model);
+            var oils = await _productService.Get(model);
 
             if (oils?.Any() ?? false)
             {
