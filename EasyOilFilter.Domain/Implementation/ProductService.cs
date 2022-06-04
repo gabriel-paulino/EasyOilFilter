@@ -4,6 +4,7 @@ using EasyOilFilter.Domain.Contracts.UoW;
 using EasyOilFilter.Domain.Entities;
 using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Domain.Shared.Contexts;
+using EasyOilFilter.Domain.ViewModels;
 using EasyOilFilter.Domain.ViewModels.FilterViewModel;
 using EasyOilFilter.Domain.ViewModels.OilViewModel;
 
@@ -27,9 +28,13 @@ namespace EasyOilFilter.Domain.Implementation
 
         public void Dispose() => _productRepository.Dispose();
 
-        public async Task<IEnumerable<Product>> GetProducts(string name)
+        public async Task<IEnumerable<ProductViewModel>> GetProducts(string name)
         {
-            return  await _productRepository.GetByName(name);
+            var products = await _productRepository.GetByName(name);
+
+            return products?.Any() ?? false
+                ? ProductViewModel.MapMany(products)
+                : default;
         }
 
         public async Task<(bool Sucess, string Message)> ChangePriceOfAllFiltersByAbsoluteValue(decimal absoluteValue)

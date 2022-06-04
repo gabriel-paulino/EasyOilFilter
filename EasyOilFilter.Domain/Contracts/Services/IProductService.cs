@@ -1,5 +1,5 @@
-﻿using EasyOilFilter.Domain.Entities;
-using EasyOilFilter.Domain.Enums;
+﻿using EasyOilFilter.Domain.Enums;
+using EasyOilFilter.Domain.ViewModels;
 using EasyOilFilter.Domain.ViewModels.FilterViewModel;
 using EasyOilFilter.Domain.ViewModels.OilViewModel;
 
@@ -7,7 +7,7 @@ namespace EasyOilFilter.Domain.Contracts.Services
 {
     public interface IProductService : IDisposable
     {
-        Task<IEnumerable<Product>> GetProducts(string name);
+        Task<IEnumerable<ProductViewModel>> GetProducts(string name);
 
         Task<IEnumerable<FilterViewModel>> GetAllFilters();
         Task<IEnumerable<FilterViewModel>> GetFilters(int page, int quantity);

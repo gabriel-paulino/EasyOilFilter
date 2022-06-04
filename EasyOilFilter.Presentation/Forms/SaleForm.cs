@@ -2,6 +2,7 @@
 using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Domain.Extensions;
 using EasyOilFilter.Domain.Shared.Utils;
+using EasyOilFilter.Domain.ViewModels;
 using EasyOilFilter.Domain.ViewModels.SaleViewModel;
 
 namespace EasyOilFilter.Presentation.Forms
@@ -99,8 +100,7 @@ namespace EasyOilFilter.Presentation.Forms
 
             if (products.Count() > 1)
             {
-                var dataSource = products.Select(product => (SaleItemViewModel)product);
-                var selectedProduct = GetSelectedProduct(dataSource);
+                var selectedProduct = GetSelectedProduct(products);
 
                 if (selectedProduct is null)
                     return;
@@ -124,14 +124,16 @@ namespace EasyOilFilter.Presentation.Forms
             SetCellValue(rowIndex, "TotalItem", unitaryPrice * quantity);
         }
 
-        private SaleItemViewModel? GetSelectedProduct(IEnumerable<SaleItemViewModel> dataSource)
+        private ProductViewModel? GetSelectedProduct(IEnumerable<ProductViewModel> dataSource)
         {
-            using (var chooseFromList = new SelectProductModalForm())
+            using (var cfl = new ChooseFromList())
             {
-                chooseFromList.DataSource = dataSource;
-                chooseFromList.ShowDialog();
+                cfl.DataSource = dataSource;
+                cfl.ShowDialog();
 
-                return chooseFromList.SelectedData;
+                return cfl?.Data is null
+                      ? default
+                      : (ProductViewModel)cfl.Data;
             }
         }
 
