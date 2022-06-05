@@ -125,11 +125,11 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 FETCH NEXT @Quantity ROWS ONLY
             ");
 
-            return await _session.Connection.QueryAsync<Filter>(query, new 
-            { 
-                Page = (page - 1) * quantity, 
-                Quantity = quantity, 
-                Type = (int)ProductType.Filter 
+            return await _session.Connection.QueryAsync<Filter>(query, new
+            {
+                Page = (page - 1) * quantity,
+                Quantity = quantity,
+                Type = (int)ProductType.Filter
             });
         }
 
@@ -183,9 +183,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id] = @Id
             ";
 
-            return await _session.Connection.QuerySingleOrDefaultAsync<Filter>(query, new 
-            { 
-                Id = id 
+            return await _session.Connection.QuerySingleOrDefaultAsync<Filter>(query, new
+            {
+                Id = id
             });
         }
 
@@ -206,10 +206,10 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [FilterType] = @FilterType
             ";
 
-            var filters = await _session.Connection.QueryAsync<Filter>(query, new 
-            { 
-                Type = (int)ProductType.Filter, 
-                FilterType = (int)type 
+            var filters = await _session.Connection.QueryAsync<Filter>(query, new
+            {
+                Type = (int)ProductType.Filter,
+                FilterType = (int)type
             });
 
             return filters.OrderByDescending(filter => filter.Name);
@@ -231,9 +231,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Type] = @Type
             ";
 
-            var filters = await _session.Connection.QueryAsync<Filter>(query, new 
-            { 
-                Type = (int)ProductType.Filter 
+            var filters = await _session.Connection.QueryAsync<Filter>(query, new
+            {
+                Type = (int)ProductType.Filter
             });
 
             return filters.OrderByDescending(filter => filter.Name);
@@ -256,10 +256,10 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name] LIKE @Name
             ";
 
-            var filters = await _session.Connection.QueryAsync<Filter>(query, new 
-            { 
-                Type = (int)ProductType.Filter, 
-                Name = $"{name}%" 
+            var filters = await _session.Connection.QueryAsync<Filter>(query, new
+            {
+                Type = (int)ProductType.Filter,
+                Name = $"{name}%"
             });
 
             return filters.OrderByDescending(filter => filter.Name);
@@ -282,10 +282,10 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Manufacturer] LIKE @Manufacturer
             ";
 
-            var filters = await _session.Connection.QueryAsync<Filter>(query, new 
-            { 
-                Type = (int)ProductType.Filter, 
-                Manufacturer = $"{manufacturer}%" 
+            var filters = await _session.Connection.QueryAsync<Filter>(query, new
+            {
+                Type = (int)ProductType.Filter,
+                Manufacturer = $"{manufacturer}%"
             });
 
             return filters.OrderByDescending(filter => filter.Name);
@@ -365,10 +365,10 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 FETCH NEXT @Quantity ROWS ONLY
             ");
 
-            return await _session.Connection.QueryAsync<Oil>(query, new 
+            return await _session.Connection.QueryAsync<Oil>(query, new
             {
                 Type = (int)ProductType.Oil,
-                Page = (page - 1) * quantity, 
+                Page = (page - 1) * quantity,
                 Quantity = quantity
             });
         }
@@ -390,9 +390,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id] = @Id
             ";
 
-            return await _session.Connection.QuerySingleOrDefaultAsync<Oil>(query, new 
-            { 
-                Id = id 
+            return await _session.Connection.QuerySingleOrDefaultAsync<Oil>(query, new
+            {
+                Id = id
             });
         }
 
@@ -414,8 +414,8 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [OilType] = @OilType        
             ";
 
-            var oils = await _session.Connection.QueryAsync<Oil>(query, new 
-            { 
+            var oils = await _session.Connection.QueryAsync<Oil>(query, new
+            {
                 Type = (int)type,
                 OilType = (int)ProductType.Oil
             });
@@ -501,10 +501,11 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name] LIKE @Name
             ";
 
-            var oils = await _session.Connection.QueryAsync<Oil>(query, new 
-            { 
+            var oils = await _session.Connection.QueryAsync<Oil>(query, new
+            {
                 Type = (int)ProductType.Oil,
-                Name = $"{name}%" }
+                Name = $"{name}%"
+            }
             );
             return oils.OrderByDescending(oil => oil.Name);
         }
@@ -527,10 +528,11 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Viscosity] LIKE @Viscosity
             ";
 
-            var oils = await _session.Connection.QueryAsync<Oil>(query, new 
+            var oils = await _session.Connection.QueryAsync<Oil>(query, new
             {
                 Type = (int)ProductType.Oil,
-                Viscosity = $"{viscosity}%" }
+                Viscosity = $"{viscosity}%"
+            }
             );
             return oils.OrderByDescending(oil => oil.Name);
         }
@@ -587,6 +589,55 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return rowsAffected == 1;
         }
 
-        
+        public async Task<IEnumerable<Product>> Get(IEnumerable<Guid> ids)
+        {
+            string query = @"
+                SELECT
+                    [Id],
+                    [Name],                 
+                    [Price],
+                    [StockQuantity],
+                    [Type],
+                    [UnitOfMeasurement],
+                    [Viscosity],
+                    [OilType],
+                    [Manufacturer],
+                    [FilterType]                   
+                FROM 
+                    [Product]
+                WHERE
+                    [Id] IN @Ids
+            ";
+
+            var products = await _session.Connection.QueryAsync<Product>(query, new
+            {
+                Ids = ids
+            },
+            _session.Transaction
+            );
+
+            return products.OrderByDescending(filter => filter.Name);
+        }
+
+        public async Task<bool> SetStockQuantity(Guid id, decimal stockQuantity)
+        {
+            string command =
+                @"
+                    UPDATE [Product] 
+                    SET
+                        [StockQuantity] = @StockQuantity
+                    WHERE [Id] = @Id
+                ";
+
+            int rowsAffected = await _session.Connection.ExecuteAsync(command, new
+            {
+                Id = id,
+                StockQuantity = stockQuantity
+            },
+            _session.Transaction
+            );
+
+            return rowsAffected == 1;
+        }
     }
 }

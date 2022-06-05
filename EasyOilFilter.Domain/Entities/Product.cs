@@ -1,5 +1,6 @@
 ﻿using EasyOilFilter.Domain.Entities.Base;
 using EasyOilFilter.Domain.Enums;
+using EasyOilFilter.Domain.Extensions;
 
 namespace EasyOilFilter.Domain.Entities
 {
@@ -14,5 +15,10 @@ namespace EasyOilFilter.Domain.Entities
         public OilType OilType { get; protected set; }
         public string Manufacturer { get; protected set; }
         public FilterType FilterType { get; protected set; }
+
+        public void ReduceStock(decimal soldAmount)
+        {
+            StockQuantity -= soldAmount;
+        }
     }
 }

@@ -10,15 +10,18 @@ namespace EasyOilFilter.Domain.Implementation
     public class SaleService : ISaleService
     {
         private readonly ISaleRepository _saleRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly NotificationContext _notification;
 
         public SaleService(
             ISaleRepository saleRepository,
+            IProductRepository productRepository,
             IUnitOfWork unitOfWork,
             NotificationContext notification)
         {
             _saleRepository = saleRepository;
+            _productRepository = productRepository;
             _unitOfWork = unitOfWork;
             _notification = notification;
         }
@@ -45,24 +48,29 @@ namespace EasyOilFilter.Domain.Implementation
 
             _unitOfWork.BeginTransaction();
 
-            bool sucess = await AddHeader(sale);
+            bool success = await AddHeader(sale);
 
-            if(!sucess)
+            if(!success)
             {
                 _unitOfWork.Rollback();
                 return (false, "Falha ao adicionar venda.");
             }    
 
-            sucess = await AddSaleItems(sale.Items);
+            success = await AddSaleItems(sale.Items);
 
-            if (!sucess)
+            if (!success)
             {
                 _unitOfWork.Rollback();
                 return (false, "Falha ao adicionar venda.");
             }
 
+            var (successToReduceStock, errorMessage) = await ReduceStock(sale.Items);
 
-            //ToDo: Reduzir quantidade em estoque dos itens
+            if (!successToReduceStock)
+            {
+                _unitOfWork.Rollback();
+                return (false, $"Falha ao adicionar venda. Detalhes: {errorMessage}");
+            }
 
             _unitOfWork.Commit();
 
@@ -77,8 +85,6 @@ namespace EasyOilFilter.Domain.Implementation
 
         private async Task<bool> AddSaleItems(IEnumerable<SaleItem> items)
         {
-            //ToDo - Verificar possivel simplificação
-
             bool success = true;
 
             foreach (var item in items)
@@ -93,6 +99,43 @@ namespace EasyOilFilter.Domain.Implementation
             }
 
             return success;
+        }
+
+        private async Task<(bool success, string errorMessage)> ReduceStock(IEnumerable<SaleItem> items)
+        {
+            bool success = true;
+            string errorMessage = string.Empty;
+
+            var products = await _productRepository.Get(items.Select(x => x.ProductId));
+
+            foreach (var product in products)
+            {
+                decimal soldAmount = items.FirstOrDefault(item => item.ProductId == product.Id).Quantity;
+                
+                if(soldAmount > product.StockQuantity)
+                {
+                    success = false;
+                    errorMessage = 
+                        $"Falha ao abater estoque do produto '{product.Name}'. " +
+                        $"Quantidade decai para valor negativo.";
+
+                    break;
+                }
+
+                product.ReduceStock(soldAmount);
+
+                if (await _productRepository.SetStockQuantity(product.Id, product.StockQuantity))
+                    continue;
+                else
+                {
+                    success = false;
+                    errorMessage = $"Falha ao atualizar estoque do produto '{product.Name}'.";
+
+                    break;
+                }
+            }
+
+            return (success, errorMessage);
         }
     }
 }

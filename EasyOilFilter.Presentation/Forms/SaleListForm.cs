@@ -32,13 +32,22 @@ namespace EasyOilFilter.Presentation.Forms
         private async void ButtonSearch_Click(object sender, EventArgs e)
         {
             var sales = await _saleService.Get(DateTimePickerSearch.Value);
+            SetDateLabel(DateTimePickerSearch.Value);
 
             if (sales?.Any() ?? false)
             {
-                DataGridView.DataSource = sales.ToList();
-                LabelDate.Text = DateTimePickerSearch.Value.ToString("d");
+                DataGridView.DataSource = sales.ToList();                
                 SetTotalLabel(sales.Sum(sale => sale.Total));
+
+                return;
             }
+            ResetList();  
+        }
+
+        private void ResetList()
+        {
+            SetTotalLabel(default);
+            DataGridView.DataSource = new List<SaleViewModel>();
         }
 
         private void SetDateInfo(DateTime date)
@@ -50,6 +59,11 @@ namespace EasyOilFilter.Presentation.Forms
         private void SetTotalLabel(decimal total)
         {
             LabelTotal.Text = total.ToString("C2");
+        }
+
+        private void SetDateLabel(DateTime date)
+        {
+            LabelDate.Text = date.ToString("d");
         }
 
         private void ConfigureGrid()
@@ -78,35 +92,6 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 saleForm.ShowDialog();
             }
-
-
-
-            //ToDo: Open screen of new Sale
-            /*
-            var mock = new AddSaleViewModel()
-            {
-                Description = "Gol",
-                PaymentMethod = "Dinheiro",
-                Total = 150.00m,
-                Discount = 5,
-                Date = DateTime.Now,
-                Remarks = "Observações"
-            };
-
-            var oil = new AddSaleItemViewModel()
-            {
-                ProductId = Guid.Parse("95DAC815-5784-4C21-83D2-F794E4FC95F0"),
-                ItemDescription = "Selenia Perform",
-                UnitOfMeasurement = "Litro",
-                Quantity = 3,
-                UnitaryPrice = 48.35m,
-                TotalItem = 3 * 48.35m
-            };
-
-            mock.Items = new List<AddSaleItemViewModel> { oil };
-
-            var (sucess, message) = await _saleService.Create(mock);
-            */
         }
     }
 }

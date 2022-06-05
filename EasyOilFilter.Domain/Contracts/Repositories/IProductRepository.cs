@@ -7,6 +7,7 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
     {
         Task<IEnumerable<Product>> GetAll();
         Task<IEnumerable<Product>> GetByName(string name);
+        Task<IEnumerable<Product>> Get(IEnumerable<Guid> ids);
         Task<IEnumerable<Filter>> GetAllFilters();
         Task<IEnumerable<Filter>> GetFilters(int page, int quantity);
         Task<IEnumerable<Filter>> Get(string name = "", string manufacturer = "", FilterType type = FilterType.All);
@@ -17,6 +18,7 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
         Task<bool> Create(Filter filter);
         Task<bool> Update(Filter filter);
         Task<bool> UpdatePrice(Guid id, decimal price);
+        Task<bool> SetStockQuantity(Guid id, decimal stockQuantity);
 
         Task<IEnumerable<Oil>> GetAllOils();
         Task<IEnumerable<Oil>> GetOils(int page, int quantity);
