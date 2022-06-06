@@ -4,6 +4,7 @@ using EasyOilFilter.Domain.Extensions;
 using EasyOilFilter.Domain.Shared.Utils;
 using EasyOilFilter.Domain.ViewModels;
 using EasyOilFilter.Domain.ViewModels.SaleViewModel;
+using EasyOilFilter.Presentation.Enums;
 using System.ComponentModel;
 using System.Globalization;
 
@@ -13,17 +14,68 @@ namespace EasyOilFilter.Presentation.Forms
     {
         private readonly ISaleService _saleService;
         private readonly IProductService _productService;
+        public SaleViewModel Model { get; set; }
+        public FormMode Mode { get; set; }
+        public bool IsAdd { get; private set; }
+        public bool IsCanceled { get; private set; }
+        public DateTime Date { get; private set; }
 
         public SaleForm(ISaleService saleService, IProductService productService)
         {
             _saleService = saleService;
             _productService = productService;
+            Model = new SaleViewModel();
+            IsAdd = false;
+            IsCanceled = false;
             InitializeComponent();
         }
 
         private void SaleForm_Load(object sender, EventArgs e)
         {
             ConfigureComponents();
+
+            if (Mode == FormMode.Add)
+            {
+                ButtonProcessSale.Text = "Adicionar";
+
+                SetDateTimePicker(DateTime.Today);
+                SelectPaymentMethod(PaymentMethod.All);
+                DisableFooterFields();
+
+                return;
+            }
+
+            ButtonProcessSale.Text = "Cancelar venda";
+            ButtonProcessSale.Width = 150;
+
+            FillFieldsWithSaleDetails();
+            DisableComponents();
+        }
+
+        private void FillFieldsWithSaleDetails()
+        {
+            TextBoxDescription.Text = Model.Description;
+            TextBoxDiscountValue.Text = Model.Discount.ToString("C2");
+            TextBoxDiscountPercentage.Text = ((Model.Discount / Model.Items.Sum(item => item.TotalItem)) * 100).ToString("F2");
+            TextBoxRemarks.Text = Model.Remarks;
+            TextBoxTotal.Text = Model.Total.ToString("C2");
+
+            SetDateTimePicker(Model.Date);
+            SelectPaymentMethod(EnumUtility.GetEnumByDescription<PaymentMethod>(Model.PaymentMethod));
+
+            Grid.DataSource = Model.Items.ToList();
+        }
+
+        private void DisableComponents()
+        {
+            TextBoxDescription.Enabled = false;
+            TextBoxDiscountPercentage.Enabled = false;
+            TextBoxRemarks.Enabled = false;
+            DateTimePickerSaleDate.Enabled = false;
+            ComboBoxPaymentMethod.Enabled = false;
+            Grid.ReadOnly = true;
+
+            DisableFooterFields();
         }
 
         private void DataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs cell)
@@ -54,10 +106,26 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void Grid_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            AddNewEmptyLineOnGrid();
+            if (Mode == FormMode.Add)
+                AddNewEmptyLineOnGrid();
         }
 
-        private async void ButtonAddSale_Click(object sender, EventArgs e)
+        private void ButtonProcessSale_Click(object sender, EventArgs e)
+        {
+            switch (Mode)
+            {
+                case FormMode.Add:
+                    AddSale();
+                    break;
+                case FormMode.OnlyReadCanCancel:
+                    CancelSale();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private async void AddSale()
         {
             var (sale, errorMessage) = GetAddSaleViewModel();
 
@@ -65,7 +133,7 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 MessageBox.Show(errorMessage);
                 return;
-            }                
+            }
 
             var (sucess, message) = await _saleService.Create(sale);
 
@@ -74,10 +142,39 @@ namespace EasyOilFilter.Presentation.Forms
                 : message);
 
             if (sucess)
+            {
                 ResetSaleForm();
+                IsAdd = true;
+                Date = sale.Date;
+            }
         }
 
- 
+        private async void CancelSale()
+        {
+            var choice = MessageBox.Show(
+                    $"Cancelar uma venda é um processo irreversível.{Environment.NewLine}" +
+                    $"Todos os itens utilizados nesta venda, serão estornados ao estoque.{Environment.NewLine}" +
+                    $"Deseja continuar?",
+                    "Alerta",
+                    MessageBoxButtons.YesNo);
+
+            if (choice == DialogResult.Yes)
+            {
+                var (sucess, message) = await _saleService.Cancel(Model);
+
+                MessageBox.Show(sucess
+                    ? "Venda cancelada com sucesso."
+                    : message);
+
+                if (sucess)
+                {
+                    IsCanceled = true;
+                    Date = Model.Date;
+                    ButtonProcessSale.Enabled = false;
+                }
+            }
+        }
+
         private void TextBoxDiscountPercentage_Validating(object sender, CancelEventArgs e)
         {
             bool isNumeric = decimal.TryParse(TextBoxDiscountPercentage.Text, out decimal discountPercentage);
@@ -93,9 +190,7 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void ConfigureComponents()
         {
-            SetDateTimePicker(DateTime.Today);
             LoadPaymentMethodComboBox();
-            DisableFooterFields();
             ConfigureGrid();
         }
 
@@ -108,8 +203,11 @@ namespace EasyOilFilter.Presentation.Forms
         {
             foreach (var type in EnumUtility.EnumToList<PaymentMethod>())
                 ComboBoxPaymentMethod.Items.Add(type.GetDescription());
+        }
 
-            ComboBoxPaymentMethod.SelectedIndex = 0;
+        private void SelectPaymentMethod(PaymentMethod paymentMethod)
+        {
+            ComboBoxPaymentMethod.SelectedIndex = (int)paymentMethod;
         }
 
         private void DisableFooterFields()
@@ -268,8 +366,8 @@ namespace EasyOilFilter.Presentation.Forms
 
             string description = TextBoxDescription.Text;
             string paymentMethod = ComboBoxPaymentMethod.SelectedItem?.ToString() ?? string.Empty;
-            decimal total =  decimal.Parse(TextBoxTotal.Text, NumberStyles.Currency);
-            decimal discount =  decimal.Parse(TextBoxDiscountValue.Text, NumberStyles.Currency);
+            decimal total = decimal.Parse(TextBoxTotal.Text, NumberStyles.Currency);
+            decimal discount = decimal.Parse(TextBoxDiscountValue.Text, NumberStyles.Currency);
 
             bool isInvalidDescription = string.IsNullOrEmpty(description);
             bool isInvalidPaymentMethod = string.IsNullOrEmpty(paymentMethod);
@@ -342,11 +440,11 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void ResetSaleForm()
         {
-            TextBoxDescription.Text = string.Empty;
-            TextBoxTotal.Text = string.Empty;
-            TextBoxDiscountValue.Text = string.Empty;
-            TextBoxDiscountPercentage.Text = string.Empty;
-            TextBoxRemarks.Text = string.Empty;
+            TextBoxDescription.Clear();
+            TextBoxTotal.Clear();
+            TextBoxDiscountValue.Clear();
+            TextBoxDiscountPercentage.Clear();
+            TextBoxRemarks.Clear();
             ComboBoxPaymentMethod.SelectedIndex = (int)PaymentMethod.All;
             SetDateTimePicker(DateTime.Today);
             Grid.DataSource = new List<SaleItemViewModel>() { new SaleItemViewModel() };

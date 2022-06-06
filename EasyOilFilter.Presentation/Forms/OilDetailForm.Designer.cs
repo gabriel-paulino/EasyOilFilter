@@ -36,7 +36,7 @@
             this.TextBoxStockQuantity = new System.Windows.Forms.TextBox();
             this.LabelStockQuantity = new System.Windows.Forms.Label();
             this.ComboBoxType = new System.Windows.Forms.ComboBox();
-            this.ButtonSave = new System.Windows.Forms.Button();
+            this.ButtonProcess = new System.Windows.Forms.Button();
             this.TextBoxViscosity = new System.Windows.Forms.TextBox();
             this.LabelViscosity = new System.Windows.Forms.Label();
             this.LabelUoM = new System.Windows.Forms.Label();
@@ -108,14 +108,14 @@
             this.ComboBoxType.Size = new System.Drawing.Size(356, 27);
             this.ComboBoxType.TabIndex = 4;
             // 
-            // ButtonSave
+            // ButtonProcess
             // 
-            this.ButtonSave.Location = new System.Drawing.Point(27, 404);
-            this.ButtonSave.Name = "ButtonSave";
-            this.ButtonSave.Size = new System.Drawing.Size(90, 30);
-            this.ButtonSave.TabIndex = 6;
-            this.ButtonSave.UseVisualStyleBackColor = true;
-            this.ButtonSave.Click += new System.EventHandler(this.ButtonSave_Click);
+            this.ButtonProcess.Location = new System.Drawing.Point(27, 404);
+            this.ButtonProcess.Name = "ButtonProcess";
+            this.ButtonProcess.Size = new System.Drawing.Size(90, 30);
+            this.ButtonProcess.TabIndex = 6;
+            this.ButtonProcess.UseVisualStyleBackColor = true;
+            this.ButtonProcess.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // TextBoxViscosity
             // 
@@ -157,7 +157,7 @@
             this.ClientSize = new System.Drawing.Size(417, 459);
             this.Controls.Add(this.TextBoxViscosity);
             this.Controls.Add(this.LabelViscosity);
-            this.Controls.Add(this.ButtonSave);
+            this.Controls.Add(this.ButtonProcess);
             this.Controls.Add(this.ComboBoxUoM);
             this.Controls.Add(this.LabelUoM);
             this.Controls.Add(this.ComboBoxType);
@@ -190,7 +190,7 @@
         private TextBox TextBoxStockQuantity;
         private Label LabelStockQuantity;
         private ComboBox ComboBoxType;
-        private Button ButtonSave;
+        private Button ButtonProcess;
         private TextBox TextBoxViscosity;
         private Label LabelViscosity;
         private Label LabelUoM;

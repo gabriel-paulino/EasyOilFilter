@@ -77,6 +77,42 @@ namespace EasyOilFilter.Domain.Implementation
             return (true, string.Empty);
         }
 
+        public async Task<(bool sucess, string message)> Cancel(SaleViewModel model)
+        {
+            var sale = (Sale)model;
+
+            _notification.AddNotifications(sale.Notifications);
+
+            if (!_notification.IsValid)
+                return (false, sale.Notifications.FirstOrDefault().Message);
+
+            _unitOfWork.BeginTransaction();
+
+            bool success = await Cancel(sale.Id);
+
+            if (!success)
+            {
+                _unitOfWork.Rollback();
+                return (false, "Falha ao cancelar venda.");
+            }
+
+            var (successToReversalStock, errorMessage) = await ReversalStock(sale.Items);
+
+            if (!successToReversalStock)
+            {
+                _unitOfWork.Rollback();
+                return (false, $"Falha ao cancelar venda. Detalhes: {errorMessage}");
+            }
+
+            _unitOfWork.Commit();
+
+            return (true, string.Empty);
+        }
+
+        private async Task<bool> Cancel(Guid id)
+        {
+            return await _saleRepository.Cancel(id);
+        }
 
         private async Task<bool> AddHeader(Sale sale)
         {
@@ -129,7 +165,34 @@ namespace EasyOilFilter.Domain.Implementation
                 else
                 {
                     success = false;
-                    errorMessage = $"Falha ao atualizar estoque do produto '{product.Name}'.";
+                    errorMessage = $"Falha ao atualizar estoque. Produto '{product.Name}'.";
+
+                    break;
+                }
+            }
+
+            return (success, errorMessage);
+        }
+
+        private async Task<(bool success, string errorMessage)> ReversalStock(IEnumerable<SaleItem> items)
+        {
+            bool success = true;
+            string errorMessage = string.Empty;
+
+            var products = await _productRepository.Get(items.Select(x => x.ProductId));
+
+            foreach (var product in products)
+            {
+                decimal soldAmount = items.FirstOrDefault(item => item.ProductId == product.Id).Quantity;
+
+                product.IncreseStock(soldAmount);
+
+                if (await _productRepository.SetStockQuantity(product.Id, product.StockQuantity))
+                    continue;
+                else
+                {
+                    success = false;
+                    errorMessage = $"Falha ao estornar estoque. Produto '{product.Name}'.";
 
                     break;
                 }

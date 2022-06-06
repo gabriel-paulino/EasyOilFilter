@@ -6,5 +6,6 @@ namespace EasyOilFilter.Domain.Contracts.Services
     {
         Task<IEnumerable<SaleViewModel>> Get(DateTime date);
         Task<(bool sucess, string message)> Create(AddSaleViewModel model);
+        Task<(bool sucess, string message)> Cancel(SaleViewModel model);
     }
 }

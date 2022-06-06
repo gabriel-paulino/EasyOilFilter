@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EasyOilFilter.Domain.Contracts.Repositories;
 using EasyOilFilter.Domain.Entities;
+using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Infra.Data.Session;
 
 namespace EasyOilFilter.Infra.Data.Repositories
@@ -40,7 +41,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 sale.Date,
                 sale.Remarks,
                 Status = (int)sale.Status
-            }, 
+            },
             _session.Transaction
             );
 
@@ -98,7 +99,8 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 JOIN [SaleItem] T1
                     ON T0.[Id] = T1.[SaleId]
                 WHERE 
-                    T0.[Date] = @Date
+                    T0.[Date] = @Date AND
+                    T0.[Status] = @Status
             ";
 
             var saleMap = new Dictionary<Guid, Sale>();
@@ -116,7 +118,11 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     sale.AddItem(saleItem);
                     return sale;
                 },
-                param: new { date }
+                param: new 
+                { 
+                    Date = date,
+                    Status = (int)SaleStatus.Finished
+                }
             );
 
             return saleMap.Values;
@@ -149,15 +155,39 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     T0.[Id] = @Id
             ";
 
-            var result =  await _session.Connection.QueryAsync<Sale, SaleItem, Sale>(query,
+            var result = await _session.Connection.QueryAsync<Sale, SaleItem, Sale>(query,
                 (sale, saleItem) =>
                 {
                     sale.AddItem(saleItem);
                     return sale;
                 },
-             param: new { Id = id });
+             param: new
+             {
+                 Id = id
+             });
 
             return result.FirstOrDefault();
+        }
+
+        public async Task<bool> Cancel(Guid id)
+        {
+            string command =
+                @"
+                    UPDATE [Sale] 
+                    SET
+                        [Status] = @Status
+                    WHERE [Id] = @Id
+                ";
+
+            int rowsAffected = await _session.Connection.ExecuteAsync(command, new
+            {
+                Id = id,
+                Status = (int)SaleStatus.Canceled
+            },
+            _session.Transaction
+            );
+
+            return rowsAffected == 1;
         }
 
         public void Dispose()

@@ -3,6 +3,7 @@
     public enum FormMode
     {
         Add,
-        Update
+        Update,
+        OnlyReadCanCancel
     }
 }

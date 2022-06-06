@@ -20,5 +20,10 @@ namespace EasyOilFilter.Domain.Entities
         {
             StockQuantity -= soldAmount;
         }
+
+        public void IncreseStock(decimal soldAmount)
+        {
+            StockQuantity += soldAmount;
+        }
     }
 }

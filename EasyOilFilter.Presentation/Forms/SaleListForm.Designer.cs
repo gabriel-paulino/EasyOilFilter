@@ -52,6 +52,7 @@
             this.DataGridView.RowTemplate.Height = 25;
             this.DataGridView.Size = new System.Drawing.Size(650, 440);
             this.DataGridView.TabIndex = 0;
+            this.DataGridView.RowHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_RowHeaderMouseDoubleClick);
             // 
             // LabelDate
             // 
@@ -125,7 +126,7 @@
             this.ButtonAddSale.UseVisualStyleBackColor = true;
             this.ButtonAddSale.Click += new System.EventHandler(this.ButtonAddSale_Click);
             // 
-            // SaleForm
+            // SaleListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -136,7 +137,7 @@
             this.Controls.Add(this.DataGridView);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "SaleForm";
+            this.Name = "SaleListForm";
             this.Text = "Vendas";
             this.Load += new System.EventHandler(this.SaleForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).EndInit();

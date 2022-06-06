@@ -1,5 +1,6 @@
 ﻿using EasyOilFilter.Domain.Contracts.Services;
 using EasyOilFilter.Domain.ViewModels.SaleViewModel;
+using EasyOilFilter.Presentation.Enums;
 
 namespace EasyOilFilter.Presentation.Forms
 {
@@ -7,6 +8,7 @@ namespace EasyOilFilter.Presentation.Forms
     {
         private readonly ISaleService _saleService;
         private readonly IProductService _productService;
+        private IEnumerable<SaleViewModel> _sales = new List<SaleViewModel>();
 
         public SaleListForm(ISaleService saleService, IProductService productService)
         {
@@ -15,33 +17,16 @@ namespace EasyOilFilter.Presentation.Forms
             InitializeComponent();
         }
 
-        private async void SaleForm_Load(object sender, EventArgs e)
+        private void SaleForm_Load(object sender, EventArgs e)
         {
             SetDateInfo(DateTime.Today);
             ConfigureGrid();
-
-            var sales = await _saleService.Get(DateTime.Today);
-
-            if (sales?.Any() ?? false)
-            {
-                DataGridView.DataSource = sales.ToList();               
-                SetTotalLabel(sales.Sum(sale => sale.Total));
-            }          
+            SearchSales(DateTime.Today);
         }
 
-        private async void ButtonSearch_Click(object sender, EventArgs e)
+        private void ButtonSearch_Click(object sender, EventArgs e)
         {
-            var sales = await _saleService.Get(DateTimePickerSearch.Value);
-            SetDateLabel(DateTimePickerSearch.Value);
-
-            if (sales?.Any() ?? false)
-            {
-                DataGridView.DataSource = sales.ToList();                
-                SetTotalLabel(sales.Sum(sale => sale.Total));
-
-                return;
-            }
-            ResetList();  
+            SearchSales(DateTimePickerSearch.Value);
         }
 
         private void ResetList()
@@ -88,8 +73,54 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void ButtonAddSale_Click(object sender, EventArgs e)
         {
+            bool isAdd = false;
+            DateTime saleDate = DateTimePickerSearch.Value;
+
             using (var saleForm = new SaleForm(_saleService, _productService))
             {
+                saleForm.Mode = FormMode.Add;
+                saleForm.ShowDialog();
+                isAdd = saleForm.IsAdd;
+                saleDate = saleForm.Date;
+            }
+
+            if (isAdd)
+                SearchSales(saleDate);
+        }
+
+        private async void SearchSales(DateTime date)
+        {
+            _sales = await _saleService.Get(date);
+            SetDateLabel(date);
+
+            if (_sales?.Any() ?? false)
+            {
+                DataGridView.DataSource = _sales.ToList();
+                SetTotalLabel(_sales.Sum(sale => sale.Total));
+                return;
+            }
+
+            ResetList();
+        }
+
+        private void DataGridView_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            var saleId = DataGridView
+            .Rows[e.RowIndex]
+            .Cells["Id"]
+            .Value.ToString();
+
+            Guid.TryParse(saleId, out Guid id);
+
+            var selectedSaleModel = _sales.FirstOrDefault(sale => sale.Id == id);
+
+            if (selectedSaleModel is null)
+                return;
+
+            using (var saleForm = new SaleForm(_saleService, _productService))
+            {
+                saleForm.Model = selectedSaleModel;
+                saleForm.Mode = FormMode.OnlyReadCanCancel;
                 saleForm.ShowDialog();
             }
         }

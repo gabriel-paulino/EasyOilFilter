@@ -32,11 +32,11 @@ namespace EasyOilFilter.Presentation.Forms
 
             if (Mode == FormMode.Update)
             {
-                ButtonSave.Text = "Atualizar";
+                ButtonProcess.Text = "Atualizar";
                 FillFieldsWithOilDetails();
                 return;
             }
-            ButtonSave.Text = "Adicionar";
+            ButtonProcess.Text = "Adicionar";
         }
 
         private void FillFieldsWithOilDetails()

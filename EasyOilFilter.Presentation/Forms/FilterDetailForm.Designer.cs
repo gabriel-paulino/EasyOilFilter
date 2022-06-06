@@ -36,7 +36,7 @@
             this.TextBoxStockQuantity = new System.Windows.Forms.TextBox();
             this.LabelStockQuantity = new System.Windows.Forms.Label();
             this.ComboBoxType = new System.Windows.Forms.ComboBox();
-            this.ButtonSave = new System.Windows.Forms.Button();
+            this.ButtonProcess = new System.Windows.Forms.Button();
             this.TextBoxManufacturer = new System.Windows.Forms.TextBox();
             this.LabelManufacturer = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -106,14 +106,14 @@
             this.ComboBoxType.Size = new System.Drawing.Size(356, 27);
             this.ComboBoxType.TabIndex = 4;
             // 
-            // ButtonSave
+            // ButtonProcess
             // 
-            this.ButtonSave.Location = new System.Drawing.Point(27, 368);
-            this.ButtonSave.Name = "ButtonSave";
-            this.ButtonSave.Size = new System.Drawing.Size(90, 30);
-            this.ButtonSave.TabIndex = 6;
-            this.ButtonSave.UseVisualStyleBackColor = true;
-            this.ButtonSave.Click += new System.EventHandler(this.ButtonSave_Click);
+            this.ButtonProcess.Location = new System.Drawing.Point(27, 368);
+            this.ButtonProcess.Name = "ButtonProcess";
+            this.ButtonProcess.Size = new System.Drawing.Size(90, 30);
+            this.ButtonProcess.TabIndex = 6;
+            this.ButtonProcess.UseVisualStyleBackColor = true;
+            this.ButtonProcess.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // TextBoxManufacturer
             // 
@@ -138,7 +138,7 @@
             this.ClientSize = new System.Drawing.Size(417, 422);
             this.Controls.Add(this.TextBoxManufacturer);
             this.Controls.Add(this.LabelManufacturer);
-            this.Controls.Add(this.ButtonSave);
+            this.Controls.Add(this.ButtonProcess);
             this.Controls.Add(this.ComboBoxType);
             this.Controls.Add(this.LabelTipo);
             this.Controls.Add(this.TextBoxStockQuantity);
@@ -169,7 +169,7 @@
         private TextBox TextBoxStockQuantity;
         private Label LabelStockQuantity;
         private ComboBox ComboBoxType;
-        private Button ButtonSave;
+        private Button ButtonProcess;
         private TextBox TextBoxManufacturer;
         private Label LabelManufacturer;
     }
