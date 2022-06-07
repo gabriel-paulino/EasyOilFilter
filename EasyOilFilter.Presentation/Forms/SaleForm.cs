@@ -268,6 +268,12 @@ namespace EasyOilFilter.Presentation.Forms
         {
             var current = (List<SaleItemViewModel>)Grid.DataSource;
 
+            int lastRow = Grid.RowCount - 1;
+            Guid.TryParse(GetCellValue(lastRow, "ProductId").ToString(), out Guid productId);
+
+            if (productId == Guid.Empty)
+                return;
+
             Grid.DataSource = new
                 List<SaleItemViewModel>(current)
                 {
@@ -410,6 +416,9 @@ namespace EasyOilFilter.Presentation.Forms
 
             foreach (DataGridViewRow row in Grid.Rows)
             {
+                if (ShouldIgnoreRow(row.Index))
+                    break;
+
                 Guid.TryParse(row.Cells["ProductId"].Value?.ToString(), out Guid productId);
 
                 if (productId == Guid.Empty)
@@ -436,6 +445,22 @@ namespace EasyOilFilter.Presentation.Forms
             }
 
             return (saleItems, errorMessage);
+        }
+
+        private bool ShouldIgnoreRow(int row)
+        {
+            bool isLastRow = row == Grid.RowCount - 1;
+
+            if (!isLastRow)
+                return false;
+
+            Guid.TryParse(GetCellValue(row, "ProductId").ToString(), out Guid productId);
+            decimal.TryParse(GetCellValue(row, "Quantity").ToString(), out decimal quantity);
+
+            bool hasNoProductSelected = productId == Guid.Empty;
+            bool hasNoQuantityFilled = quantity == 0;
+
+            return hasNoProductSelected && hasNoQuantityFilled;
         }
 
         private void ResetSaleForm()
