@@ -33,7 +33,7 @@ namespace EasyOilFilter.Domain.Implementation
             var sales = await _saleRepository.Get(date);
                        
             return sales?.Any() ?? false
-                ? SaleViewModel.MapMany(sales)
+                ? SaleViewModel.MapMany(sales.OrderBy(sale => sale.Date))
                 : default;
         }
 

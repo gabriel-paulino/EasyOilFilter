@@ -20,6 +20,7 @@ CREATE TABLE Sale (
     Total decimal(19,4) not null,
 	Discount decimal(19,4),
 	Date date not null,
+	Time int not null,
 	Remarks varchar(150),
 	Status int not null
 );

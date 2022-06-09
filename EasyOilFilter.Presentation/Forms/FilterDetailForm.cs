@@ -123,7 +123,7 @@ namespace EasyOilFilter.Presentation.Forms
         {
             string message = string.Empty;
 
-            decimal price = decimal.Parse(TextBoxPrice.Text, NumberStyles.Currency);
+            decimal price = string.IsNullOrEmpty(TextBoxPrice.Text) ? 0 : decimal.Parse(TextBoxPrice.Text, NumberStyles.Currency);
             decimal.TryParse(TextBoxStockQuantity.Text.Replace('.', ','), out decimal stockQuantity);
 
             bool invalidPrice = price == 0 && Model.Price != 0;
@@ -152,7 +152,7 @@ namespace EasyOilFilter.Presentation.Forms
         private (AddFilterViewModel model, string message) GetAddFilterViewModel()
         {
             string message = string.Empty;
-            decimal price = decimal.Parse(TextBoxPrice.Text, NumberStyles.Currency);
+            decimal price = string.IsNullOrEmpty(TextBoxPrice.Text) ? 0 : decimal.Parse(TextBoxPrice.Text, NumberStyles.Currency);
             decimal.TryParse(TextBoxStockQuantity.Text.Replace('.', ','), out decimal stockQuantity);
 
             bool invalidPrice = price == 0 && Model.Price != 0;

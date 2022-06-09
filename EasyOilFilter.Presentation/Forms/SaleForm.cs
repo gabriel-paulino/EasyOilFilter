@@ -372,8 +372,8 @@ namespace EasyOilFilter.Presentation.Forms
 
             string description = TextBoxDescription.Text;
             string paymentMethod = ComboBoxPaymentMethod.SelectedItem?.ToString() ?? string.Empty;
-            decimal total = decimal.Parse(TextBoxTotal.Text, NumberStyles.Currency);
-            decimal discount = decimal.Parse(TextBoxDiscountValue.Text, NumberStyles.Currency);
+            decimal total = string.IsNullOrEmpty(TextBoxTotal.Text) ? 0 : decimal.Parse(TextBoxTotal.Text, NumberStyles.Currency);
+            decimal discount = string.IsNullOrEmpty(TextBoxDiscountValue.Text) ? 0 : decimal.Parse(TextBoxDiscountValue.Text, NumberStyles.Currency);
 
             bool isInvalidDescription = string.IsNullOrEmpty(description);
             bool isInvalidPaymentMethod = string.IsNullOrEmpty(paymentMethod);
@@ -404,7 +404,7 @@ namespace EasyOilFilter.Presentation.Forms
                 PaymentMethod = paymentMethod,
                 Total = total,
                 Discount = discount,
-                Date = DateTimePickerSaleDate.Value,
+                Date = SetCurrentTime(DateTimePickerSaleDate.Value),
                 Remarks = TextBoxRemarks.Text,
                 Items = items,
             }, string.Empty);
@@ -461,6 +461,16 @@ namespace EasyOilFilter.Presentation.Forms
             bool hasNoQuantityFilled = quantity == 0;
 
             return hasNoProductSelected && hasNoQuantityFilled;
+        }
+
+        private DateTime SetCurrentTime(DateTime date)
+        {
+            var now = DateTime.Now;
+
+            return new DateTime(
+                date.Year, date.Month, date.Day, 
+                now.Hour, now.Minute, now.Second
+                );
         }
 
         private void ResetSaleForm()

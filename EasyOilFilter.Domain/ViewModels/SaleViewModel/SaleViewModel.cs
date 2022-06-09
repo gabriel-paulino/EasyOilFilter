@@ -47,6 +47,7 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
                             total: model.Total,
                             discount: model.Discount,
                             date: model.Date,
+                            time: (int)model.Date.TimeOfDay.TotalMilliseconds,
                             remarks: model.Remarks,
                             status: EnumUtility.GetEnumByDescription<SaleStatus>(model.Status)
                             );

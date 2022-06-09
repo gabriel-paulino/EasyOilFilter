@@ -23,6 +23,7 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
                             paymentMethod: EnumUtility.GetEnumByDescription<PaymentMethod>(model.PaymentMethod),
                             discount: model.Discount,
                             date: model.Date,
+                            time: (int)model.Date.TimeOfDay.TotalMilliseconds,
                             remarks: model.Remarks,
                             items: items.Select(item => (SaleItem)item).ToList()
                             );

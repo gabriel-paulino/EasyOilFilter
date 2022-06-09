@@ -26,9 +26,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
             string command =
                 @"
                     INSERT INTO [Sale]
-                        ([Id], [Description], [PaymentMethod], [Total], [Discount], [Date], [Remarks], [Status]) 
+                        ([Id], [Description], [PaymentMethod], [Total], [Discount], [Date], [Time], [Remarks], [Status]) 
                     VALUES 
-                        (@Id, @Description, @PaymentMethod, @Total, @Discount, @Date, @Remarks, @Status)
+                        (@Id, @Description, @PaymentMethod, @Total, @Discount, @Date, @Time, @Remarks, @Status)
                 ";
 
             int rowsAffected = await _session.Connection.ExecuteAsync(command, new
@@ -39,6 +39,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 sale.Total,
                 sale.Discount,
                 sale.Date,
+                sale.Time,
                 sale.Remarks,
                 Status = (int)sale.Status
             },
@@ -85,6 +86,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     T0.[Total],
                     T0.[Discount],
                     T0.[Date],
+                    T0.[Time],
                     T0.[Remarks],
                     T0.[Status],
                     T1.[Id],
@@ -138,6 +140,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     T0.[Total],
                     T0.[Discount],
                     T0.[Date],
+                    T0.[Time],
                     T0.[Remarks],
                     T0.[Status],
                     T1.[Id],
