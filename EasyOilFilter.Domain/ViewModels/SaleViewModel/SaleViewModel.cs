@@ -49,7 +49,7 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
                             date: model.Date,
                             time: (int)model.Date.TimeOfDay.TotalMilliseconds,
                             remarks: model.Remarks,
-                            status: EnumUtility.GetEnumByDescription<SaleStatus>(model.Status)
+                            status: EnumUtility.GetEnumByDescription<DocumentStatus>(model.Status)
                             );
 
             foreach (var item in model.Items)

@@ -13,12 +13,12 @@ namespace EasyOilFilter.Domain.Entities
             Date = date;
             Time = time;
             Remarks = remarks;
-            Status = SaleStatus.Finished;
+            Status = DocumentStatus.Finished;
 
             _items = items;
         }
 
-        public Sale(Guid id, string description, PaymentMethod paymentMethod, decimal total, decimal discount, DateTime date, int time, string remarks, SaleStatus status)
+        public Sale(Guid id, string description, PaymentMethod paymentMethod, decimal total, decimal discount, DateTime date, int time, string remarks, DocumentStatus status)
         {
             Id = id;
             Description = description;
@@ -40,7 +40,7 @@ namespace EasyOilFilter.Domain.Entities
         public DateTime Date { get; private set; }
         public int Time { get; private set; }
         public string Remarks { get; private set; }
-        public SaleStatus Status { get; private set; }
+        public DocumentStatus Status { get; private set; }
         
         private List<SaleItem> _items;
         public IReadOnlyCollection<SaleItem> Items { get => _items.ToArray(); }

@@ -2,7 +2,7 @@
 
 namespace EasyOilFilter.Domain.Enums
 {
-    public enum SaleStatus
+    public enum DocumentStatus
     {
         [Description("Finalizada")]
         Finished,
