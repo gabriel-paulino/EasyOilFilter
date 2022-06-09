@@ -3,9 +3,9 @@ using EasyOilFilter.Domain.Enums;
 
 namespace EasyOilFilter.Domain.Entities
 {
-    public class GoodsReceipt : BaseEntity
+    public class Purchase : BaseEntity
     {
-        public GoodsReceipt(string provider, DateTime date, string remarks, List<GoodsReceiptItem> items)
+        public Purchase(string provider, DateTime date, string remarks, List<PurchaseItem> items)
         {
             Provider = provider;
             Date = date;
@@ -15,7 +15,7 @@ namespace EasyOilFilter.Domain.Entities
             _items = items;
         }
 
-        public GoodsReceipt(Guid id, string provider, decimal total, DateTime date, string remarks, DocumentStatus status)
+        public Purchase(Guid id, string provider, decimal total, DateTime date, string remarks, DocumentStatus status)
         {
             Id = id;
             Provider = provider;
@@ -24,7 +24,7 @@ namespace EasyOilFilter.Domain.Entities
             Remarks = remarks;
             Status = status;
 
-            _items = new List<GoodsReceiptItem>();
+            _items = new List<PurchaseItem>();
         }
 
         public string Provider { get; private set; }
@@ -33,15 +33,15 @@ namespace EasyOilFilter.Domain.Entities
         public string Remarks { get; private set; }
         public DocumentStatus Status { get; private set; }
 
-        private List<GoodsReceiptItem> _items;
-        public IReadOnlyCollection<GoodsReceiptItem> Items { get => _items.ToArray(); }
+        private List<PurchaseItem> _items;
+        public IReadOnlyCollection<PurchaseItem> Items { get => _items.ToArray(); }
 
         public void SetTotal(decimal total)
         {
             Total = total;
         }
 
-        public void AddItem(GoodsReceiptItem item)
+        public void AddItem(PurchaseItem item)
         {
             _items.Add(item);
         }

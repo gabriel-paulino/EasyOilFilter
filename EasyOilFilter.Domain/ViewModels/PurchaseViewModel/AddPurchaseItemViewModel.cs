@@ -2,9 +2,9 @@
 using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Domain.Shared.Utils;
 
-namespace EasyOilFilter.Domain.ViewModels.GoodsReceiptViewModel
+namespace EasyOilFilter.Domain.ViewModels.PurchaseViewModel
 {
-    public class AddGoodsReceiptItemViewModel
+    public class AddPurchaseItemViewModel
     {
         public Guid ProductId { get; set; }
         public string ItemDescription { get; set; }
@@ -14,7 +14,7 @@ namespace EasyOilFilter.Domain.ViewModels.GoodsReceiptViewModel
         public decimal TotalItem { get; set; }
 
 
-        public static implicit operator GoodsReceiptItem(AddGoodsReceiptItemViewModel model) =>
+        public static implicit operator PurchaseItem(AddPurchaseItemViewModel model) =>
             new(
                 productId: model.ProductId,
                 itemDescription: model.ItemDescription,

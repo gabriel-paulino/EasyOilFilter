@@ -3,12 +3,12 @@ using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Domain.Extensions;
 using EasyOilFilter.Domain.Shared.Utils;
 
-namespace EasyOilFilter.Domain.ViewModels.GoodsReceiptViewModel
+namespace EasyOilFilter.Domain.ViewModels.PurchaseViewModel
 {
-    public class GoodsReceiptItemViewModel
+    public class PurchaseItemViewModel
     {
         public Guid Id { get; set; }
-        public Guid GoodsReceiptId { get; set; }
+        public Guid PurchaseId { get; set; }
         public Guid ProductId { get; set; }
         public string ItemDescription { get; set; }
         public decimal Quantity { get; set; }
@@ -17,11 +17,11 @@ namespace EasyOilFilter.Domain.ViewModels.GoodsReceiptViewModel
         public decimal TotalItem { get; set; }
 
 
-        public static implicit operator GoodsReceiptItemViewModel(GoodsReceiptItem item) =>
+        public static implicit operator PurchaseItemViewModel(PurchaseItem item) =>
            new()
            {
                Id = item.Id,
-               GoodsReceiptId = item.GoodsReceiptId,
+               PurchaseId = item.PurchaseId,
                ProductId = item.ProductId,
                ItemDescription = item.ItemDescription,
                UnitOfMeasurement = item.UnitOfMeasurement.GetDescription(),
@@ -30,10 +30,10 @@ namespace EasyOilFilter.Domain.ViewModels.GoodsReceiptViewModel
                TotalItem = item.TotalItem
            };
 
-        public static implicit operator GoodsReceiptItem(GoodsReceiptItemViewModel model) =>
+        public static implicit operator PurchaseItem(PurchaseItemViewModel model) =>
             new(
                 id: model.Id,
-                goodsReceiptId: model.GoodsReceiptId,
+                purchaseId: model.PurchaseId,
                 productId: model.ProductId,
                 itemDescription: model.ItemDescription,
                 unitOfMeasurement: EnumUtility.GetEnumByDescription<UoM>(model.UnitOfMeasurement),
@@ -42,7 +42,7 @@ namespace EasyOilFilter.Domain.ViewModels.GoodsReceiptViewModel
                 totalItem: model.TotalItem
                 );
 
-        public static implicit operator GoodsReceiptItemViewModel(ProductViewModel model) =>
+        public static implicit operator PurchaseItemViewModel(ProductViewModel model) =>
             new()
             {
                 ProductId = Guid.Parse(model.Id),

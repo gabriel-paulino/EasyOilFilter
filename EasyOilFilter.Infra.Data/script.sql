@@ -35,3 +35,23 @@ CREATE TABLE SaleItem (
 	UnitaryPrice decimal(19,4) not null,
 	TotalItem decimal(19,4) not null
 );
+
+CREATE TABLE Purchase (
+    Id uniqueidentifier primary key,
+    Provider varchar(100) not null,
+    Total decimal(19,4) not null,
+	Date date not null,
+	Remarks varchar(150),
+	Status int not null
+);
+
+CREATE TABLE PurchaseItem (
+    Id uniqueidentifier primary key,
+    PurchaseId uniqueidentifier FOREIGN KEY REFERENCES Purchase(Id),
+	ProductId uniqueidentifier FOREIGN KEY REFERENCES Product(Id),
+	ItemDescription varchar(100),
+	UnitOfMeasurement int not null,
+	Quantity decimal(19,4) not null,
+	UnitaryPrice decimal(19,4) not null,
+	TotalItem decimal(19,4) not null
+);

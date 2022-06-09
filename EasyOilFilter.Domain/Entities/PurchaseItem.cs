@@ -3,9 +3,9 @@ using EasyOilFilter.Domain.Enums;
 
 namespace EasyOilFilter.Domain.Entities
 {
-    public class GoodsReceiptItem : BaseEntity
+    public class PurchaseItem : BaseEntity
     {
-        public GoodsReceiptItem(Guid productId, string itemDescription, UoM unitOfMeasurement, decimal quantity, decimal unitaryPrice, decimal totalItem)
+        public PurchaseItem(Guid productId, string itemDescription, UoM unitOfMeasurement, decimal quantity, decimal unitaryPrice, decimal totalItem)
         {
             ProductId = productId;
             ItemDescription = itemDescription;
@@ -15,10 +15,10 @@ namespace EasyOilFilter.Domain.Entities
             TotalItem = totalItem;
         }
 
-        public GoodsReceiptItem(Guid id, Guid goodsReceiptId, Guid productId, string itemDescription, UoM unitOfMeasurement, decimal quantity, decimal unitaryPrice, decimal totalItem)
+        public PurchaseItem(Guid id, Guid purchaseId, Guid productId, string itemDescription, UoM unitOfMeasurement, decimal quantity, decimal unitaryPrice, decimal totalItem)
         {
             Id = id;
-            GoodsReceiptId = goodsReceiptId;
+            PurchaseId = purchaseId;
             ProductId = productId;
             ItemDescription = itemDescription;
             UnitOfMeasurement = unitOfMeasurement;
@@ -27,7 +27,7 @@ namespace EasyOilFilter.Domain.Entities
             TotalItem = totalItem;
         }
 
-        public Guid GoodsReceiptId { get; private set; }
+        public Guid PurchaseId { get; private set; }
         public Guid ProductId { get; private set; }
         public string ItemDescription { get; private set; }
         public UoM UnitOfMeasurement { get; private set; }
@@ -35,9 +35,9 @@ namespace EasyOilFilter.Domain.Entities
         public decimal UnitaryPrice { get; private set; }
         public decimal TotalItem { get; private set; }
 
-        public void SetGoodsReceiptId(Guid goodsReceiptId)
+        public void SetPurchaseId(Guid purchaseId)
         {
-            GoodsReceiptId = goodsReceiptId;
+            PurchaseId = purchaseId;
         }
     }
 }

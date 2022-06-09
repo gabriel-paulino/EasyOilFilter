@@ -3,73 +3,73 @@ using EasyOilFilter.Domain.Contracts.Services;
 using EasyOilFilter.Domain.Contracts.UoW;
 using EasyOilFilter.Domain.Entities;
 using EasyOilFilter.Domain.Shared.Contexts;
-using EasyOilFilter.Domain.ViewModels.GoodsReceiptViewModel;
+using EasyOilFilter.Domain.ViewModels.PurchaseViewModel;
 
 namespace EasyOilFilter.Domain.Implementation
 {
-    public class GoodsReceiptService : IGoodsReceiptService
+    public class PurchaseService : IPurchaseService
     {
-        private readonly IGoodsReceiptRepository _goodsReceiptRepository;
+        private readonly IPurchaseRepository _purchaseRepository;
         private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly NotificationContext _notification;
 
-        public GoodsReceiptService(
-            IGoodsReceiptRepository goodsReceiptRepository,
+        public PurchaseService(
+            IPurchaseRepository goodsReceiptRepository,
             IProductRepository productRepository,
             IUnitOfWork unitOfWork,
             NotificationContext notification)
         {
-            _goodsReceiptRepository = goodsReceiptRepository;
+            _purchaseRepository = goodsReceiptRepository;
             _productRepository = productRepository;
             _unitOfWork = unitOfWork;
             _notification = notification;
         }
 
-        public void Dispose() => _goodsReceiptRepository.Dispose();
+        public void Dispose() => _purchaseRepository.Dispose();
 
-        public async Task<IEnumerable<GoodsReceiptViewModel>> Get(DateTime date)
+        public async Task<IEnumerable<PurchaseViewModel>> Get(DateTime date)
         {
-            var goodsReceipts = await _goodsReceiptRepository.Get(date);
+            var purchases = await _purchaseRepository.Get(date);
 
-            return goodsReceipts?.Any() ?? false
-                ? GoodsReceiptViewModel.MapMany(goodsReceipts)
+            return purchases?.Any() ?? false
+                ? PurchaseViewModel.MapMany(purchases)
                 : default;
         }
 
-        public async Task<(bool sucess, string message)> Create(AddGoodsReceiptViewModel model)
+        public async Task<(bool sucess, string message)> Create(AddPurchaseViewModel model)
         {
-            var goodsReceipt = (GoodsReceipt)model;
+            var purchase = (Purchase)model;
 
-            _notification.AddNotifications(goodsReceipt.Notifications);
+            _notification.AddNotifications(purchase.Notifications);
 
             if (!_notification.IsValid)
-                return (false, goodsReceipt.Notifications.FirstOrDefault().Message);
+                return (false, purchase.Notifications.FirstOrDefault().Message);
 
             _unitOfWork.BeginTransaction();
 
-            bool success = await AddHeader(goodsReceipt);
+            bool success = await AddHeader(purchase);
 
             if (!success)
             {
                 _unitOfWork.Rollback();
-                return (false, "Falha ao adicionar recebimento de mercadoria.");
+                return (false, "Falha ao adicionar compra.");
             }
 
-            success = await AddGoodsReceiptItems(goodsReceipt.Items);
+            success = await AddPurchaseItems(purchase.Items);
 
             if (!success)
             {
                 _unitOfWork.Rollback();
-                return (false, "Falha ao adicionar recebimento de mercadoria.");
+                return (false, "Falha ao adicionar compra.");
             }
 
-            var (successToReduceStock, errorMessage) = await ReduceStock(goodsReceipt.Items);
+            var (successToReduceStock, errorMessage) = await ReduceStock(purchase.Items);
 
             if (!successToReduceStock)
             {
                 _unitOfWork.Rollback();
-                return (false, $"Falha ao adicionar recebimento de mercadoria. Detalhes: {errorMessage}");
+                return (false, $"Falha ao adicionar compra. Detalhes: {errorMessage}");
             }
 
             _unitOfWork.Commit();
@@ -77,31 +77,31 @@ namespace EasyOilFilter.Domain.Implementation
             return (true, string.Empty);
         }
 
-        public async Task<(bool sucess, string message)> Cancel(GoodsReceiptViewModel model)
+        public async Task<(bool sucess, string message)> Cancel(PurchaseViewModel model)
         {
-            var goodsReceipt = (GoodsReceipt)model;
+            var purchase = (Purchase)model;
 
-            _notification.AddNotifications(goodsReceipt.Notifications);
+            _notification.AddNotifications(purchase.Notifications);
 
             if (!_notification.IsValid)
-                return (false, goodsReceipt.Notifications.FirstOrDefault().Message);
+                return (false, purchase.Notifications.FirstOrDefault().Message);
 
             _unitOfWork.BeginTransaction();
 
-            bool success = await Cancel(goodsReceipt.Id);
+            bool success = await Cancel(purchase.Id);
 
             if (!success)
             {
                 _unitOfWork.Rollback();
-                return (false, "Falha ao cancelar recebimento de mercadoria.");
+                return (false, "Falha ao cancelar compra.");
             }
 
-            var (successToReversalStock, errorMessage) = await ReversalStock(goodsReceipt.Items);
+            var (successToReversalStock, errorMessage) = await ReversalStock(purchase.Items);
 
             if (!successToReversalStock)
             {
                 _unitOfWork.Rollback();
-                return (false, $"Falha ao cancelar recebimento de mercadoria. Detalhes: {errorMessage}");
+                return (false, $"Falha ao cancelar compra. Detalhes: {errorMessage}");
             }
 
             _unitOfWork.Commit();
@@ -111,21 +111,21 @@ namespace EasyOilFilter.Domain.Implementation
 
         private async Task<bool> Cancel(Guid id)
         {
-            return await _goodsReceiptRepository.Cancel(id);
+            return await _purchaseRepository.Cancel(id);
         }
 
-        private async Task<bool> AddHeader(GoodsReceipt goodsReceipt)
+        private async Task<bool> AddHeader(Purchase purchase)
         {
-            return await _goodsReceiptRepository.AddHeader(goodsReceipt);
+            return await _purchaseRepository.AddHeader(purchase);
         }
 
-        private async Task<bool> AddGoodsReceiptItems(IEnumerable<GoodsReceiptItem> items)
+        private async Task<bool> AddPurchaseItems(IEnumerable<PurchaseItem> items)
         {
             bool success = true;
 
             foreach (var item in items)
             {
-                if (await _goodsReceiptRepository.AddItem(item))
+                if (await _purchaseRepository.AddItem(item))
                     continue;
                 else
                 {
@@ -137,7 +137,7 @@ namespace EasyOilFilter.Domain.Implementation
             return success;
         }
 
-        private async Task<(bool success, string errorMessage)> ReduceStock(IEnumerable<GoodsReceiptItem> items)
+        private async Task<(bool success, string errorMessage)> ReduceStock(IEnumerable<PurchaseItem> items)
         {
             bool success = true;
             string errorMessage = string.Empty;
@@ -174,7 +174,7 @@ namespace EasyOilFilter.Domain.Implementation
             return (success, errorMessage);
         }
 
-        private async Task<(bool success, string errorMessage)> ReversalStock(IEnumerable<GoodsReceiptItem> items)
+        private async Task<(bool success, string errorMessage)> ReversalStock(IEnumerable<PurchaseItem> items)
         {
             bool success = true;
             string errorMessage = string.Empty;

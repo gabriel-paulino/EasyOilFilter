@@ -6,26 +6,26 @@ using EasyOilFilter.Infra.Data.Session;
 
 namespace EasyOilFilter.Infra.Data.Repositories
 {
-    public class GoodsReceiptRepository : IGoodsReceiptRepository
+    public class PurchaseRepository : IPurchaseRepository
     {
         private readonly DbSession _session;
         private readonly bool _disposed = false;
 
-        public GoodsReceiptRepository(DbSession session)
+        public PurchaseRepository(DbSession session)
         {
             _session = session;
         }
 
-        ~GoodsReceiptRepository()
+        ~PurchaseRepository()
         {
             Dispose();
         }
 
-        public async Task<bool> AddHeader(GoodsReceipt goodsReceipt)
+        public async Task<bool> AddHeader(Purchase purchase)
         {
             string command =
                 @"
-                    INSERT INTO [GoodsReceipt]
+                    INSERT INTO [Purchase]
                         ([Id], [Provider], [Total], [Date], [Remarks], [Status]) 
                     VALUES 
                         (@Id, @Provider, @Total, @Date, @Remarks, @Status)
@@ -33,12 +33,12 @@ namespace EasyOilFilter.Infra.Data.Repositories
 
             int rowsAffected = await _session.Connection.ExecuteAsync(command, new
             {
-                goodsReceipt.Id,
-                goodsReceipt.Provider,
-                goodsReceipt.Total,
-                goodsReceipt.Date,
-                goodsReceipt.Remarks,
-                Status = (int)goodsReceipt.Status
+                purchase.Id,
+                purchase.Provider,
+                purchase.Total,
+                purchase.Date,
+                purchase.Remarks,
+                Status = (int)purchase.Status
             },
             _session.Transaction
             );
@@ -46,20 +46,20 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return rowsAffected == 1;
         }
 
-        public async Task<bool> AddItem(GoodsReceiptItem item)
+        public async Task<bool> AddItem(PurchaseItem item)
         {
             string command =
                 @"
-                    INSERT INTO [GoodsReceiptItem]
-                        ([Id], [GoodsReceiptId], [ProductId], [ItemDescription], [UnitOfMeasurement], [Quantity], [UnitaryPrice], [TotalItem]) 
+                    INSERT INTO [PurchaseItem]
+                        ([Id], [PurchaseId], [ProductId], [ItemDescription], [UnitOfMeasurement], [Quantity], [UnitaryPrice], [TotalItem]) 
                     VALUES 
-                        (@Id, @GoodsReceiptId, @ProductId, @ItemDescription, @UnitOfMeasurement, @Quantity, @UnitaryPrice, @TotalItem)
+                        (@Id, @PurchaseId, @ProductId, @ItemDescription, @UnitOfMeasurement, @Quantity, @UnitaryPrice, @TotalItem)
                 ";
 
             int rowsAffected = await _session.Connection.ExecuteAsync(command, new
             {
                 item.Id,
-                item.GoodsReceiptId,
+                item.PurchaseId,
                 item.ProductId,
                 item.ItemDescription,
                 UnitOfMeasurement = (int)item.UnitOfMeasurement,
@@ -73,7 +73,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return rowsAffected == 1;
         }
 
-        public async Task<IEnumerable<GoodsReceipt>> Get(DateTime date)
+        public async Task<IEnumerable<Purchase>> Get(DateTime date)
         {
             string query = @"
                 SELECT
@@ -84,35 +84,35 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     T0.[Remarks],
                     T0.[Status],
                     T1.[Id],
-                    T1.[GoodsReceiptId],
+                    T1.[PurchaseId],
                     T1.[ProductId],
                     T1.[ItemDescription],
                     T1.[UnitOfMeasurement],
                     T1.[Quantity],
                     T1.[UnitaryPrice],
                     T1.[TotalItem]
-                FROM [GoodsReceipt] T0
-                JOIN [GoodsReceiptItem] T1
-                    ON T0.[Id] = T1.[GoodsReceiptId]
+                FROM [Purchase] T0
+                JOIN [PurchaseItem] T1
+                    ON T0.[Id] = T1.[PurchaseId]
                 WHERE 
                     T0.[Date] = @Date AND
                     T0.[Status] = @Status
             ";
 
-            var goodsReceiptMap = new Dictionary<Guid, GoodsReceipt>();
+            var purchaseMap = new Dictionary<Guid, Purchase>();
 
-            await _session.Connection.QueryAsync<GoodsReceipt, GoodsReceiptItem, GoodsReceipt>(query,
-                map: (goodsReceipt, goodsReceiptItem) =>
+            await _session.Connection.QueryAsync<Purchase, PurchaseItem, Purchase>(query,
+                map: (purchase, purchaseItem) =>
                 {
-                    goodsReceiptItem.SetGoodsReceiptId(goodsReceipt.Id);
+                    purchaseItem.SetPurchaseId(purchase.Id);
 
-                    if (goodsReceiptMap.TryGetValue(goodsReceipt.Id, out GoodsReceipt? existingGoodsReceipt))
-                        goodsReceipt = existingGoodsReceipt;
+                    if (purchaseMap.TryGetValue(purchase.Id, out Purchase? existingPurchase))
+                        purchase = existingPurchase;
                     else
-                        goodsReceiptMap.Add(goodsReceipt.Id, goodsReceipt);
+                        purchaseMap.Add(purchase.Id, purchase);
 
-                    goodsReceipt.AddItem(goodsReceiptItem);
-                    return goodsReceipt;
+                    purchase.AddItem(purchaseItem);
+                    return purchase;
                 },
                 param: new
                 {
@@ -121,10 +121,10 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 }
             );
 
-            return goodsReceiptMap.Values;
+            return purchaseMap.Values;
         }
 
-        public async Task<GoodsReceipt?> Get(Guid id)
+        public async Task<Purchase?> Get(Guid id)
         {
             string query = @"
                 SELECT 
@@ -135,25 +135,25 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     T0.[Remarks],
                     T0.[Status],
                     T1.[Id],
-                    T1.[GoodsReceiptId],
+                    T1.[PurchaseId],
                     T1.[ProductId],
                     T1.[ItemDescription],
                     T1.[UnitOfMeasurement],
                     T1.[Quantity],
                     T1.[UnitaryPrice],
                     T1.[TotalItem]
-                FROM [GoodsReceipt] T0
-                JOIN [GoodsReceiptItem] T1
-                    ON T0.[Id] = T1.[GoodsReceiptId]
+                FROM [Purchase] T0
+                JOIN [PurchaseItem] T1
+                    ON T0.[Id] = T1.[PurchaseId]
                 WHERE 
                     T0.[Id] = @Id
             ";
 
-            var result = await _session.Connection.QueryAsync<GoodsReceipt, GoodsReceiptItem, GoodsReceipt>(query,
-                (goodsReceipt, goodsReceiptItem) =>
+            var result = await _session.Connection.QueryAsync<Purchase, PurchaseItem, Purchase>(query,
+                (purchase, purchaseItem) =>
                 {
-                    goodsReceipt.AddItem(goodsReceiptItem);
-                    return goodsReceipt;
+                    purchase.AddItem(purchaseItem);
+                    return purchase;
                 },
              param: new
              {
@@ -167,7 +167,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
         {
             string command =
                 @"
-                    UPDATE [GoodsReceipt] 
+                    UPDATE [Purchase] 
                     SET
                         [Status] = @Status
                     WHERE [Id] = @Id
