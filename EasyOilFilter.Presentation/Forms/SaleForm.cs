@@ -450,8 +450,9 @@ namespace EasyOilFilter.Presentation.Forms
         private bool ShouldIgnoreRow(int row)
         {
             bool isLastRow = row == Grid.RowCount - 1;
+            bool isFirstRow = row == 0;
 
-            if (!isLastRow)
+            if (!isLastRow || isFirstRow)
                 return false;
 
             Guid.TryParse(GetCellValue(row, "ProductId").ToString(), out Guid productId);

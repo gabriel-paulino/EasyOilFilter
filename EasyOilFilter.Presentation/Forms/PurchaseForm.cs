@@ -75,8 +75,8 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 string formattedValue = cell.FormattedValue?.ToString() ?? string.Empty;
 
-                decimal itemPrice = string.IsNullOrEmpty(formattedValue) 
-                    ? 0 
+                decimal itemPrice = string.IsNullOrEmpty(formattedValue)
+                    ? 0
                     : decimal.Parse(formattedValue, NumberStyles.Currency);
 
                 cell.Cancel = itemPrice <= 0;
@@ -326,7 +326,7 @@ namespace EasyOilFilter.Presentation.Forms
             .Value = value;
         }
 
-        private bool IsQuantityOrUnitaryPriceCell(DataGridViewCellValidatingEventArgs cell) 
+        private bool IsQuantityOrUnitaryPriceCell(DataGridViewCellValidatingEventArgs cell)
             => cell.ColumnIndex == 4 || cell.ColumnIndex == 6;
 
         private (AddPurchaseViewModel purchase, string errorMessage) GetAddPurchaseViewModel()
@@ -380,6 +380,10 @@ namespace EasyOilFilter.Presentation.Forms
                     errorMessage += $"A quantidade da linha {row.Index + 1} não é válida.{Environment.NewLine}";
 
                 decimal.TryParse(row.Cells["UnitaryPrice"].Value?.ToString(), out decimal unitaryPrice);
+
+                if (unitaryPrice <= 0)
+                    errorMessage += $"O preço uniário da linha {row.Index + 1} não foi informado.{Environment.NewLine}";
+
                 decimal.TryParse(row.Cells["TotalItem"].Value?.ToString(), out decimal totalItem);
 
                 purchaseItems.Add(
@@ -400,8 +404,9 @@ namespace EasyOilFilter.Presentation.Forms
         private bool ShouldIgnoreRow(int row)
         {
             bool isLastRow = row == Grid.RowCount - 1;
+            bool isFirstRow = row == 0;
 
-            if (!isLastRow)
+            if (!isLastRow || isFirstRow)
                 return false;
 
             Guid.TryParse(GetCellValue(row, "ProductId").ToString(), out Guid productId);
