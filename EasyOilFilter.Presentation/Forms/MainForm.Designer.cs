@@ -103,6 +103,7 @@
             this.ButtonPurchase.Text = "Compras";
             this.ButtonPurchase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ButtonPurchase.UseVisualStyleBackColor = true;
+            this.ButtonPurchase.Click += new System.EventHandler(this.ButtonPurchase_Click);
             // 
             // MainForm
             // 

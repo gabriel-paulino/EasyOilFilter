@@ -85,7 +85,7 @@ namespace EasyOilFilter.Presentation.Forms
             }
 
             if (isAdd)
-                SearchSales(saleDate);
+                SearchSales(saleDate.Date);
         }
 
         private async void SearchSales(DateTime date)

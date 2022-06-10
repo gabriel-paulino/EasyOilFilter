@@ -2,7 +2,7 @@
 
 namespace EasyOilFilter.Domain.Contracts.Services
 {
-    internal interface IPurchaseService : IDisposable
+    public interface IPurchaseService : IDisposable
     {
         Task<IEnumerable<PurchaseViewModel>> Get(DateTime date);
         Task<(bool sucess, string message)> Create(AddPurchaseViewModel model);

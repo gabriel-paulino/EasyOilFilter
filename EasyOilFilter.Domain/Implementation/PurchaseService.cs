@@ -64,9 +64,9 @@ namespace EasyOilFilter.Domain.Implementation
                 return (false, "Falha ao adicionar compra.");
             }
 
-            var (successToReduceStock, errorMessage) = await ReduceStock(purchase.Items);
+            var (successToIncreseStock, errorMessage) = await IncreseStock(purchase.Items);
 
-            if (!successToReduceStock)
+            if (!successToIncreseStock)
             {
                 _unitOfWork.Rollback();
                 return (false, $"Falha ao adicionar compra. Detalhes: {errorMessage}");
@@ -96,7 +96,7 @@ namespace EasyOilFilter.Domain.Implementation
                 return (false, "Falha ao cancelar compra.");
             }
 
-            var (successToReversalStock, errorMessage) = await ReversalStock(purchase.Items);
+            var (successToReversalStock, errorMessage) = await ReduceStock(purchase.Items);
 
             if (!successToReversalStock)
             {
@@ -174,7 +174,7 @@ namespace EasyOilFilter.Domain.Implementation
             return (success, errorMessage);
         }
 
-        private async Task<(bool success, string errorMessage)> ReversalStock(IEnumerable<PurchaseItem> items)
+        private async Task<(bool success, string errorMessage)> IncreseStock(IEnumerable<PurchaseItem> items)
         {
             bool success = true;
             string errorMessage = string.Empty;

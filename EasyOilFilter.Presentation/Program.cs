@@ -44,9 +44,11 @@ namespace EasyOilFilter.Presentation
 
             container.Register<IProductRepository, ProductRepository>(Lifestyle.Singleton);
             container.Register<ISaleRepository, SaleRepository>(Lifestyle.Singleton);
+            container.Register<IPurchaseRepository, PurchaseRepository>(Lifestyle.Singleton);
 
             container.Register<IProductService, ProductService>(Lifestyle.Singleton);
             container.Register<ISaleService, SaleService>(Lifestyle.Singleton);
+            container.Register<IPurchaseService, PurchaseService>(Lifestyle.Singleton);
 
             AutoRegisterWindowsForms(container);
 
