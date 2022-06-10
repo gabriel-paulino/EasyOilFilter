@@ -59,6 +59,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChooseFromList";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Selecione um item";
             this.Load += new System.EventHandler(this.SelectProductModalForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).EndInit();

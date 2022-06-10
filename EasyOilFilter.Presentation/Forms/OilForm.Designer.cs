@@ -263,6 +263,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "OilForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Lubrificantes";
             this.Load += new System.EventHandler(this.OilForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).EndInit();

@@ -152,6 +152,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "FilterDetailForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Filtro";
             this.Load += new System.EventHandler(this.FilterDetailForm_Load);
             this.ResumeLayout(false);
