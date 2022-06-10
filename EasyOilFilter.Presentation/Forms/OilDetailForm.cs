@@ -87,7 +87,7 @@ namespace EasyOilFilter.Presentation.Forms
 
             if (oils?.Any() ?? false)
             {
-                MessageBox.Show($"O lubrificante: {TextBoxName.Text} já está adicionado na base de dados.");
+                MessageBox.Show($"O lubrificante: {model.Name} já está adicionado na base de dados.");
                 return;
             }
 
@@ -95,12 +95,23 @@ namespace EasyOilFilter.Presentation.Forms
 
             if (result == default)
             {
-                MessageBox.Show($"Falha ao adicionar lubrificante: {TextBoxName.Text}.");
+                MessageBox.Show($"Falha ao adicionar lubrificante: {model.Name}.");
                 return;
             }
 
             IsAdd = true;
-            MessageBox.Show($"{model.OilType}: {TextBoxName.Text} adicionado com sucesso.");
+            MessageBox.Show($"Lubrificante {model.OilType}: {model.Name} adicionado com sucesso.");
+            ResetOilDetailForm();
+        }
+
+        private void ResetOilDetailForm()
+        {
+            TextBoxName.Clear();
+            TextBoxViscosity.Clear();
+            TextBoxPrice.Clear();
+            TextBoxStockQuantity.Clear();
+            ComboBoxType.SelectedIndex = (int)OilType.All;
+            ComboBoxUoM.SelectedIndex = -1;
         }
 
         private async void UpdateOil()

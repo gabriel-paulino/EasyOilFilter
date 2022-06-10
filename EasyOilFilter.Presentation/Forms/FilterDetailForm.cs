@@ -79,7 +79,7 @@ namespace EasyOilFilter.Presentation.Forms
 
             if (filters?.Any() ?? false)
             {
-                MessageBox.Show($"O filtro: {TextBoxCode.Text} já está adicionado na base de dados.");
+                MessageBox.Show($"O filtro: {model.Name} já está adicionado na base de dados.");
                 return;
             }
 
@@ -87,12 +87,22 @@ namespace EasyOilFilter.Presentation.Forms
 
             if (result == default)
             {
-                MessageBox.Show($"Falha ao adicionar filtro: {TextBoxCode.Text}.");
+                MessageBox.Show($"Falha ao adicionar filtro: {model.Name}.");
                 return;
             }
 
             IsAdd = true;
-            MessageBox.Show($"{model.FilterType}: {TextBoxCode.Text} adicionado com sucesso.");
+            MessageBox.Show($"Filtro de {model.FilterType}: {model.Name} adicionado com sucesso.");
+            ResetOilDetailForm();
+        }
+
+        private void ResetOilDetailForm()
+        {
+            TextBoxCode.Clear();
+            TextBoxManufacturer.Clear();
+            TextBoxPrice.Clear();
+            TextBoxStockQuantity.Clear();
+            ComboBoxType.SelectedIndex = (int)FilterType.All;
         }
 
         private async void UpdateFilter()
