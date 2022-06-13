@@ -12,6 +12,7 @@ namespace EasyOilFilter.Domain.Entities
         public ProductType Type { get; protected set; }
         public UoM UnitOfMeasurement { get; protected set; }
         public string Viscosity { get; protected set; }
+        public string Api { get; protected set; }
         public OilType OilType { get; protected set; }
         public string Manufacturer { get; protected set; }
         public FilterType FilterType { get; protected set; }

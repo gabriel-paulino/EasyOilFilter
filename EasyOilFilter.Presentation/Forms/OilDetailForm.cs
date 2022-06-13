@@ -43,6 +43,7 @@ namespace EasyOilFilter.Presentation.Forms
         {
             TextBoxName.Text = Model.Name;
             TextBoxViscosity.Text = Model.Viscosity;
+            TextBoxApi.Text = Model.Api;
             TextBoxPrice.Text = Model.Price.ToString("C2");
             TextBoxStockQuantity.Text = Model.StockQuantity.ToString("F2");
             ComboBoxType.SelectedIndex = (int)EnumUtility.GetEnumByDescription<OilType>(Model.OilType);
@@ -108,6 +109,7 @@ namespace EasyOilFilter.Presentation.Forms
         {
             TextBoxName.Clear();
             TextBoxViscosity.Clear();
+            TextBoxApi.Clear();
             TextBoxPrice.Clear();
             TextBoxStockQuantity.Clear();
             ComboBoxType.SelectedIndex = (int)OilType.All;
@@ -162,6 +164,7 @@ namespace EasyOilFilter.Presentation.Forms
                 Id = Model.Id,
                 Name = TextBoxName.Text,
                 Viscosity = TextBoxViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
+                Api = TextBoxApi.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
                 Price = price,
                 StockQuantity = stockQuantity,
                 OilType = ComboBoxType.SelectedItem.ToString(),
@@ -192,6 +195,7 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 Name = TextBoxName.Text,
                 Viscosity = TextBoxViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
+                Api = TextBoxApi.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
                 Price = price,
                 StockQuantity = stockQuantity,
                 OilType = ComboBoxType.SelectedItem.ToString(),
@@ -204,6 +208,7 @@ namespace EasyOilFilter.Presentation.Forms
             return
                 updatedOil.Name != Model.Name ||
                 updatedOil.Viscosity != Model.Viscosity ||
+                updatedOil.Api != Model.Api ||
                 updatedOil.StockQuantity != Model.StockQuantity ||
                 updatedOil.OilType != Model.OilType ||
                 updatedOil.UnitOfMeasurement != Model.UnitOfMeasurement ||

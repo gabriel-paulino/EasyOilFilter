@@ -41,6 +41,8 @@
             this.LabelViscosity = new System.Windows.Forms.Label();
             this.LabelUoM = new System.Windows.Forms.Label();
             this.ComboBoxUoM = new System.Windows.Forms.ComboBox();
+            this.TextBoxApi = new System.Windows.Forms.TextBox();
+            this.LabelApi = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // LabelName
@@ -62,7 +64,7 @@
             // LabelPrice
             // 
             this.LabelPrice.AutoSize = true;
-            this.LabelPrice.Location = new System.Drawing.Point(27, 119);
+            this.LabelPrice.Location = new System.Drawing.Point(27, 173);
             this.LabelPrice.Name = "LabelPrice";
             this.LabelPrice.Size = new System.Drawing.Size(45, 19);
             this.LabelPrice.TabIndex = 4;
@@ -70,15 +72,15 @@
             // 
             // TextBoxPrice
             // 
-            this.TextBoxPrice.Location = new System.Drawing.Point(27, 141);
+            this.TextBoxPrice.Location = new System.Drawing.Point(27, 195);
             this.TextBoxPrice.Name = "TextBoxPrice";
             this.TextBoxPrice.Size = new System.Drawing.Size(356, 27);
-            this.TextBoxPrice.TabIndex = 2;
+            this.TextBoxPrice.TabIndex = 3;
             // 
             // LabelTipo
             // 
             this.LabelTipo.AutoSize = true;
-            this.LabelTipo.Location = new System.Drawing.Point(27, 229);
+            this.LabelTipo.Location = new System.Drawing.Point(27, 283);
             this.LabelTipo.Name = "LabelTipo";
             this.LabelTipo.Size = new System.Drawing.Size(37, 19);
             this.LabelTipo.TabIndex = 8;
@@ -86,15 +88,15 @@
             // 
             // TextBoxStockQuantity
             // 
-            this.TextBoxStockQuantity.Location = new System.Drawing.Point(27, 197);
+            this.TextBoxStockQuantity.Location = new System.Drawing.Point(27, 251);
             this.TextBoxStockQuantity.Name = "TextBoxStockQuantity";
             this.TextBoxStockQuantity.Size = new System.Drawing.Size(356, 27);
-            this.TextBoxStockQuantity.TabIndex = 3;
+            this.TextBoxStockQuantity.TabIndex = 4;
             // 
             // LabelStockQuantity
             // 
             this.LabelStockQuantity.AutoSize = true;
-            this.LabelStockQuantity.Location = new System.Drawing.Point(27, 175);
+            this.LabelStockQuantity.Location = new System.Drawing.Point(27, 229);
             this.LabelStockQuantity.Name = "LabelStockQuantity";
             this.LabelStockQuantity.Size = new System.Drawing.Size(85, 19);
             this.LabelStockQuantity.TabIndex = 6;
@@ -103,17 +105,17 @@
             // ComboBoxType
             // 
             this.ComboBoxType.FormattingEnabled = true;
-            this.ComboBoxType.Location = new System.Drawing.Point(27, 251);
+            this.ComboBoxType.Location = new System.Drawing.Point(27, 305);
             this.ComboBoxType.Name = "ComboBoxType";
             this.ComboBoxType.Size = new System.Drawing.Size(356, 27);
-            this.ComboBoxType.TabIndex = 4;
+            this.ComboBoxType.TabIndex = 5;
             // 
             // ButtonProcess
             // 
-            this.ButtonProcess.Location = new System.Drawing.Point(27, 404);
+            this.ButtonProcess.Location = new System.Drawing.Point(27, 452);
             this.ButtonProcess.Name = "ButtonProcess";
             this.ButtonProcess.Size = new System.Drawing.Size(90, 30);
-            this.ButtonProcess.TabIndex = 6;
+            this.ButtonProcess.TabIndex = 7;
             this.ButtonProcess.UseVisualStyleBackColor = true;
             this.ButtonProcess.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
@@ -136,7 +138,7 @@
             // LabelUoM
             // 
             this.LabelUoM.AutoSize = true;
-            this.LabelUoM.Location = new System.Drawing.Point(27, 284);
+            this.LabelUoM.Location = new System.Drawing.Point(27, 338);
             this.LabelUoM.Name = "LabelUoM";
             this.LabelUoM.Size = new System.Drawing.Size(85, 19);
             this.LabelUoM.TabIndex = 10;
@@ -145,16 +147,34 @@
             // ComboBoxUoM
             // 
             this.ComboBoxUoM.FormattingEnabled = true;
-            this.ComboBoxUoM.Location = new System.Drawing.Point(27, 306);
+            this.ComboBoxUoM.Location = new System.Drawing.Point(27, 360);
             this.ComboBoxUoM.Name = "ComboBoxUoM";
             this.ComboBoxUoM.Size = new System.Drawing.Size(356, 27);
-            this.ComboBoxUoM.TabIndex = 5;
+            this.ComboBoxUoM.TabIndex = 6;
+            // 
+            // TextBoxApi
+            // 
+            this.TextBoxApi.Location = new System.Drawing.Point(27, 143);
+            this.TextBoxApi.Name = "TextBoxApi";
+            this.TextBoxApi.Size = new System.Drawing.Size(356, 27);
+            this.TextBoxApi.TabIndex = 2;
+            // 
+            // LabelApi
+            // 
+            this.LabelApi.AutoSize = true;
+            this.LabelApi.Location = new System.Drawing.Point(27, 121);
+            this.LabelApi.Name = "LabelApi";
+            this.LabelApi.Size = new System.Drawing.Size(30, 19);
+            this.LabelApi.TabIndex = 16;
+            this.LabelApi.Text = "API";
             // 
             // OilDetailForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 459);
+            this.ClientSize = new System.Drawing.Size(417, 502);
+            this.Controls.Add(this.TextBoxApi);
+            this.Controls.Add(this.LabelApi);
             this.Controls.Add(this.TextBoxViscosity);
             this.Controls.Add(this.LabelViscosity);
             this.Controls.Add(this.ButtonProcess);
@@ -196,5 +216,7 @@
         private Label LabelViscosity;
         private Label LabelUoM;
         private ComboBox ComboBoxUoM;
+        private TextBox TextBoxApi;
+        private Label LabelApi;
     }
 }

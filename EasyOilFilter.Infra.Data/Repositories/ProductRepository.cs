@@ -89,6 +89,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Type],
                     [UnitOfMeasurement],
                     [Viscosity],
+                    [Api],
                     [OilType],
                     [Manufacturer],
                     [FilterType]                   
@@ -325,9 +326,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
             string command =
                 @"
                     INSERT INTO [Product]
-                        ([Id], [Name], [Viscosity], [Price], [OilType], [Type], [UnitOfMeasurement], [StockQuantity]) 
+                        ([Id], [Name], [Viscosity], [Api], [Price], [OilType], [Type], [UnitOfMeasurement], [StockQuantity]) 
                     VALUES 
-                        (@Id, @Name, @Viscosity, @Price, @OilType, @Type, @UnitOfMeasurement, @StockQuantity)
+                        (@Id, @Name, @Viscosity, @Api, @Price, @OilType, @Type, @UnitOfMeasurement, @StockQuantity)
                 ";
 
             int rowsAffected = await _session.Connection.ExecuteAsync(command, new
@@ -335,6 +336,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 oil.Id,
                 oil.Name,
                 oil.Viscosity,
+                oil.Api,
                 oil.Price,
                 oil.StockQuantity,
                 OilType = (int)oil.OilType,
@@ -352,6 +354,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Viscosity],
+                    [Api],
                     [Price],
                     [StockQuantity],
                     [OilType],
@@ -380,6 +383,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Viscosity],
+                    [Api],
                     [Price],
                     [StockQuantity],
                     [OilType],
@@ -403,6 +407,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Viscosity],
+                    [Api],
                     [Price],
                     [StockQuantity],
                     [OilType],
@@ -430,6 +435,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Viscosity],
+                    [Api],
                     [Price],
                     [StockQuantity],
                     [OilType],
@@ -455,6 +461,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Viscosity],
+                    [Api],
                     [Price],
                     [StockQuantity],
                     [OilType],
@@ -490,6 +497,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Viscosity],
+                    [Api],
                     [Price],
                     [StockQuantity],
                     [OilType],
@@ -517,6 +525,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Viscosity],
+                    [Api],
                     [Price],
                     [StockQuantity],
                     [OilType],
@@ -600,6 +609,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Type],
                     [UnitOfMeasurement],
                     [Viscosity],
+                    [Api],
                     [OilType],
                     [Manufacturer],
                     [FilterType]                   

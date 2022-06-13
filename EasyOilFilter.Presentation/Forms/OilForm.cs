@@ -109,6 +109,7 @@ namespace EasyOilFilter.Presentation.Forms
                 Id = id,
                 Name = DataGridView.CurrentRow.Cells["Name"].Value.ToString(),
                 Viscosity = DataGridView.CurrentRow.Cells["Viscosity"].Value.ToString(),
+                Api = DataGridView.CurrentRow.Cells["Api"].Value.ToString(),
                 Price = price,
                 StockQuantity = stockQuantity,
                 OilType = DataGridView.CurrentRow.Cells["OilType"].Value.ToString(),
@@ -201,16 +202,17 @@ namespace EasyOilFilter.Presentation.Forms
             DataGridView.Columns["Id"].Visible = false;
             DataGridView.Columns["Name"].HeaderText = "Lubrificante";
             DataGridView.Columns["Viscosity"].HeaderText = "Viscosidade";
+            DataGridView.Columns["Api"].HeaderText = "API";
             DataGridView.Columns["Price"].HeaderText = "Preço";
             DataGridView.Columns["StockQuantity"].HeaderText = "Estoque";
             DataGridView.Columns["OilType"].HeaderText = "Tipo";
             DataGridView.Columns["UnitOfMeasurement"].HeaderText = "Embalagem";
             DataGridView.Columns["Price"].DefaultCellStyle.Format = "C2";
             DataGridView.Columns["StockQuantity"].DefaultCellStyle.Format = "F2";
-            DataGridView.Columns["Name"].MinimumWidth = 190;
-            DataGridView.Columns["Price"].MinimumWidth = 100;
-            DataGridView.Columns["StockQuantity"].MinimumWidth = 100;
-            DataGridView.Columns["OilType"].MinimumWidth = 100;
+            DataGridView.Columns["Name"].MinimumWidth = 165;
+            DataGridView.Columns["Price"].MinimumWidth = 90;
+            DataGridView.Columns["StockQuantity"].MinimumWidth = 90;
+            DataGridView.Columns["OilType"].MinimumWidth = 90;
             DataGridView.AutoResizeColumns();
         }
     }

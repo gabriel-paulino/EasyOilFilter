@@ -4,6 +4,7 @@ CREATE TABLE Product (
     Id uniqueidentifier primary key,
     Name varchar(100) not null,
     Viscosity varchar(10),
+	Api varchar(5),
 	Manufacturer varchar(15),
     Price decimal(19,4) not null,
 	Type int not null,
@@ -28,7 +29,7 @@ CREATE TABLE Sale (
 CREATE TABLE SaleItem (
     Id uniqueidentifier primary key,
     SaleId uniqueidentifier FOREIGN KEY REFERENCES Sale(Id),
-	ProductId uniqueidentifier FOREIGN KEY REFERENCES Product(Id),
+	ProductId uniqueidentifier FOREIGN KEY REFERENCES Product(Id) ON DELETE SET NULL,
 	ItemDescription varchar(100),
 	UnitOfMeasurement int not null,
 	Quantity decimal(19,4) not null,
@@ -48,7 +49,7 @@ CREATE TABLE Purchase (
 CREATE TABLE PurchaseItem (
     Id uniqueidentifier primary key,
     PurchaseId uniqueidentifier FOREIGN KEY REFERENCES Purchase(Id),
-	ProductId uniqueidentifier FOREIGN KEY REFERENCES Product(Id),
+	ProductId uniqueidentifier FOREIGN KEY REFERENCES Product(Id) ON DELETE SET NULL,
 	ItemDescription varchar(100),
 	UnitOfMeasurement int not null,
 	Quantity decimal(19,4) not null,
