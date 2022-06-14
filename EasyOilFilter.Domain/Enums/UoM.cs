@@ -4,6 +4,8 @@ namespace EasyOilFilter.Domain.Enums
 {
     public enum UoM
     {
+        [Description("")]
+        None,
         [Description("Litro")]
         Liter,
         [Description("Balde")]

@@ -17,7 +17,7 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
         Task<IEnumerable<Filter>> Get(FilterType type);
         Task<bool> Create(Filter filter);
         Task<bool> Update(Filter filter);
-        Task<bool> UpdatePrice(Guid id, decimal price);
+        Task<bool> UpdateDefaultPrice(Guid id, decimal defaultPrice);
         Task<bool> SetStockQuantity(Guid id, decimal stockQuantity);
 
         Task<IEnumerable<Oil>> GetAllOils();

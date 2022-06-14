@@ -24,12 +24,12 @@ namespace EasyOilFilter.Presentation.Forms
 
             var oils = await _productService.GetAllOils();
             if (oils?.Any() ?? false)
-                DataGridView.DataSource = oils.ToList();      
+                DataGridView.DataSource = oils.ToList();
         }
 
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
-            SearchLubs();   
+            SearchLubs();
         }
 
         private void CheckBoxChangePricePercentage_CheckedChanged(object sender, EventArgs e)
@@ -101,19 +101,23 @@ namespace EasyOilFilter.Presentation.Forms
         private void DataGridView_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             Guid.TryParse(DataGridView.CurrentRow.Cells["Id"].Value.ToString(), out Guid id);
-            decimal.TryParse(DataGridView.CurrentRow.Cells["Price"].Value.ToString(), out decimal price);
+            decimal.TryParse(DataGridView.CurrentRow.Cells["DefaultPrice"].Value.ToString(), out decimal defaultPrice);
+            decimal.TryParse(DataGridView.CurrentRow.Cells["AlternativePrice"].Value.ToString(), out decimal alternativePrice);
             decimal.TryParse(DataGridView.CurrentRow.Cells["StockQuantity"].Value.ToString(), out decimal stockQuantity);
 
             OilViewModel selectedOilModel = new()
             {
                 Id = id,
                 Name = DataGridView.CurrentRow.Cells["Name"].Value.ToString(),
-                Viscosity = DataGridView.CurrentRow.Cells["Viscosity"].Value.ToString(),
-                Api = DataGridView.CurrentRow.Cells["Api"].Value.ToString(),
-                Price = price,
+                Viscosity = DataGridView.CurrentRow.Cells["Viscosity"].Value?.ToString() ?? string.Empty,
+                Api = DataGridView.CurrentRow.Cells["Api"].Value?.ToString() ?? string.Empty,
+                DefaultPrice = defaultPrice,
+                AlternativePrice = alternativePrice,
                 StockQuantity = stockQuantity,
                 OilType = DataGridView.CurrentRow.Cells["OilType"].Value.ToString(),
-                UnitOfMeasurement = DataGridView.CurrentRow.Cells["UnitOfMeasurement"].Value.ToString()
+                DefaultUoM = DataGridView.CurrentRow.Cells["DefaultUoM"].Value.ToString(),
+                AlternativeUoM = DataGridView.CurrentRow.Cells["AlternativeUoM"].Value.ToString(),
+                HasAlternative = (bool)DataGridView.CurrentRow.Cells["HasAlternative"].Value,
             };
 
             bool isUpdated = false;
@@ -200,17 +204,21 @@ namespace EasyOilFilter.Presentation.Forms
             DataGridView.DataSource = new List<OilViewModel>();
             DataGridView.ReadOnly = true;
             DataGridView.Columns["Id"].Visible = false;
+            DataGridView.Columns["HasAlternative"].Visible = false;
             DataGridView.Columns["Name"].HeaderText = "Lubrificante";
             DataGridView.Columns["Viscosity"].HeaderText = "Viscosidade";
             DataGridView.Columns["Api"].HeaderText = "API";
-            DataGridView.Columns["Price"].HeaderText = "Preço";
+            DataGridView.Columns["DefaultPrice"].HeaderText = "Preço";
+            DataGridView.Columns["DefaultUoM"].HeaderText = "Embalagem";
             DataGridView.Columns["StockQuantity"].HeaderText = "Estoque";
+            DataGridView.Columns["AlternativePrice"].HeaderText = "Preço alternativo";
+            DataGridView.Columns["AlternativeUoM"].HeaderText = "Embalagem alternativa";
             DataGridView.Columns["OilType"].HeaderText = "Tipo";
-            DataGridView.Columns["UnitOfMeasurement"].HeaderText = "Embalagem";
-            DataGridView.Columns["Price"].DefaultCellStyle.Format = "C2";
+            DataGridView.Columns["DefaultPrice"].DefaultCellStyle.Format = "C2";
+            DataGridView.Columns["AlternativePrice"].DefaultCellStyle.Format = "C2";
             DataGridView.Columns["StockQuantity"].DefaultCellStyle.Format = "F2";
             DataGridView.Columns["Name"].MinimumWidth = 165;
-            DataGridView.Columns["Price"].MinimumWidth = 90;
+            DataGridView.Columns["DefaultPrice"].MinimumWidth = 90;
             DataGridView.Columns["StockQuantity"].MinimumWidth = 90;
             DataGridView.Columns["OilType"].MinimumWidth = 90;
             DataGridView.AutoResizeColumns();

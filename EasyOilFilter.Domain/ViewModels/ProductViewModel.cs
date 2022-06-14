@@ -24,10 +24,10 @@ namespace EasyOilFilter.Domain.ViewModels
             {
                 Id = product.Id.ToString(),
                 Name = product.Name,
-                Price = product.Price,
+                Price = product.DefaultPrice,
                 StockQuantity = product.StockQuantity,
                 Type = product.Type.GetDescription(),
-                UnitOfMeasurement = product.UnitOfMeasurement.GetDescription(),
+                UnitOfMeasurement = product.DefaultUoM.GetDescription(),
                 Viscosity = product?.Viscosity ?? string.Empty,
                 OilType = product?.OilType.GetDescription() ?? string.Empty,
                 Manufacturer = product?.Manufacturer ?? string.Empty,

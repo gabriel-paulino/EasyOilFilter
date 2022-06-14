@@ -30,8 +30,8 @@
         {
             this.LabelName = new System.Windows.Forms.Label();
             this.TextBoxName = new System.Windows.Forms.TextBox();
-            this.LabelPrice = new System.Windows.Forms.Label();
-            this.TextBoxPrice = new System.Windows.Forms.TextBox();
+            this.LabelDefaultPrice = new System.Windows.Forms.Label();
+            this.TextBoxDefaultPrice = new System.Windows.Forms.TextBox();
             this.LabelTipo = new System.Windows.Forms.Label();
             this.TextBoxStockQuantity = new System.Windows.Forms.TextBox();
             this.LabelStockQuantity = new System.Windows.Forms.Label();
@@ -39,10 +39,15 @@
             this.ButtonProcess = new System.Windows.Forms.Button();
             this.TextBoxViscosity = new System.Windows.Forms.TextBox();
             this.LabelViscosity = new System.Windows.Forms.Label();
-            this.LabelUoM = new System.Windows.Forms.Label();
-            this.ComboBoxUoM = new System.Windows.Forms.ComboBox();
+            this.LabelDefaultUoM = new System.Windows.Forms.Label();
+            this.ComboBoxDefaultUoM = new System.Windows.Forms.ComboBox();
             this.TextBoxApi = new System.Windows.Forms.TextBox();
             this.LabelApi = new System.Windows.Forms.Label();
+            this.ButtonNewUoM = new System.Windows.Forms.Button();
+            this.ComboBoxAlternativeUoM = new System.Windows.Forms.ComboBox();
+            this.LabelAlternativeUoM = new System.Windows.Forms.Label();
+            this.TextBoxAlternativePrice = new System.Windows.Forms.TextBox();
+            this.LabelAlternativePrice = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // LabelName
@@ -61,26 +66,26 @@
             this.TextBoxName.Size = new System.Drawing.Size(356, 27);
             this.TextBoxName.TabIndex = 0;
             // 
-            // LabelPrice
+            // LabelDefaultPrice
             // 
-            this.LabelPrice.AutoSize = true;
-            this.LabelPrice.Location = new System.Drawing.Point(27, 173);
-            this.LabelPrice.Name = "LabelPrice";
-            this.LabelPrice.Size = new System.Drawing.Size(45, 19);
-            this.LabelPrice.TabIndex = 4;
-            this.LabelPrice.Text = "Preço";
+            this.LabelDefaultPrice.AutoSize = true;
+            this.LabelDefaultPrice.Location = new System.Drawing.Point(27, 290);
+            this.LabelDefaultPrice.Name = "LabelDefaultPrice";
+            this.LabelDefaultPrice.Size = new System.Drawing.Size(45, 19);
+            this.LabelDefaultPrice.TabIndex = 4;
+            this.LabelDefaultPrice.Text = "Preço";
             // 
-            // TextBoxPrice
+            // TextBoxDefaultPrice
             // 
-            this.TextBoxPrice.Location = new System.Drawing.Point(27, 195);
-            this.TextBoxPrice.Name = "TextBoxPrice";
-            this.TextBoxPrice.Size = new System.Drawing.Size(356, 27);
-            this.TextBoxPrice.TabIndex = 3;
+            this.TextBoxDefaultPrice.Location = new System.Drawing.Point(27, 312);
+            this.TextBoxDefaultPrice.Name = "TextBoxDefaultPrice";
+            this.TextBoxDefaultPrice.Size = new System.Drawing.Size(356, 27);
+            this.TextBoxDefaultPrice.TabIndex = 5;
             // 
             // LabelTipo
             // 
             this.LabelTipo.AutoSize = true;
-            this.LabelTipo.Location = new System.Drawing.Point(27, 283);
+            this.LabelTipo.Location = new System.Drawing.Point(27, 232);
             this.LabelTipo.Name = "LabelTipo";
             this.LabelTipo.Size = new System.Drawing.Size(37, 19);
             this.LabelTipo.TabIndex = 8;
@@ -88,15 +93,15 @@
             // 
             // TextBoxStockQuantity
             // 
-            this.TextBoxStockQuantity.Location = new System.Drawing.Point(27, 251);
+            this.TextBoxStockQuantity.Location = new System.Drawing.Point(27, 200);
             this.TextBoxStockQuantity.Name = "TextBoxStockQuantity";
             this.TextBoxStockQuantity.Size = new System.Drawing.Size(356, 27);
-            this.TextBoxStockQuantity.TabIndex = 4;
+            this.TextBoxStockQuantity.TabIndex = 3;
             // 
             // LabelStockQuantity
             // 
             this.LabelStockQuantity.AutoSize = true;
-            this.LabelStockQuantity.Location = new System.Drawing.Point(27, 229);
+            this.LabelStockQuantity.Location = new System.Drawing.Point(27, 178);
             this.LabelStockQuantity.Name = "LabelStockQuantity";
             this.LabelStockQuantity.Size = new System.Drawing.Size(85, 19);
             this.LabelStockQuantity.TabIndex = 6;
@@ -105,14 +110,14 @@
             // ComboBoxType
             // 
             this.ComboBoxType.FormattingEnabled = true;
-            this.ComboBoxType.Location = new System.Drawing.Point(27, 305);
+            this.ComboBoxType.Location = new System.Drawing.Point(27, 254);
             this.ComboBoxType.Name = "ComboBoxType";
             this.ComboBoxType.Size = new System.Drawing.Size(356, 27);
-            this.ComboBoxType.TabIndex = 5;
+            this.ComboBoxType.TabIndex = 4;
             // 
             // ButtonProcess
             // 
-            this.ButtonProcess.Location = new System.Drawing.Point(27, 452);
+            this.ButtonProcess.Location = new System.Drawing.Point(27, 558);
             this.ButtonProcess.Name = "ButtonProcess";
             this.ButtonProcess.Size = new System.Drawing.Size(90, 30);
             this.ButtonProcess.TabIndex = 7;
@@ -135,22 +140,23 @@
             this.LabelViscosity.TabIndex = 14;
             this.LabelViscosity.Text = "Viscosidade";
             // 
-            // LabelUoM
+            // LabelDefaultUoM
             // 
-            this.LabelUoM.AutoSize = true;
-            this.LabelUoM.Location = new System.Drawing.Point(27, 338);
-            this.LabelUoM.Name = "LabelUoM";
-            this.LabelUoM.Size = new System.Drawing.Size(85, 19);
-            this.LabelUoM.TabIndex = 10;
-            this.LabelUoM.Text = "Embalagem";
+            this.LabelDefaultUoM.AutoSize = true;
+            this.LabelDefaultUoM.Location = new System.Drawing.Point(27, 345);
+            this.LabelDefaultUoM.Name = "LabelDefaultUoM";
+            this.LabelDefaultUoM.Size = new System.Drawing.Size(134, 19);
+            this.LabelDefaultUoM.TabIndex = 10;
+            this.LabelDefaultUoM.Text = "Embalagem padrão";
             // 
-            // ComboBoxUoM
+            // ComboBoxDefaultUoM
             // 
-            this.ComboBoxUoM.FormattingEnabled = true;
-            this.ComboBoxUoM.Location = new System.Drawing.Point(27, 360);
-            this.ComboBoxUoM.Name = "ComboBoxUoM";
-            this.ComboBoxUoM.Size = new System.Drawing.Size(356, 27);
-            this.ComboBoxUoM.TabIndex = 6;
+            this.ComboBoxDefaultUoM.FormattingEnabled = true;
+            this.ComboBoxDefaultUoM.Location = new System.Drawing.Point(27, 367);
+            this.ComboBoxDefaultUoM.Name = "ComboBoxDefaultUoM";
+            this.ComboBoxDefaultUoM.Size = new System.Drawing.Size(356, 27);
+            this.ComboBoxDefaultUoM.TabIndex = 6;
+            this.ComboBoxDefaultUoM.SelectionChangeCommitted += new System.EventHandler(this.ComboBoxDefaultUoM_SelectionChangeCommitted);
             // 
             // TextBoxApi
             // 
@@ -168,24 +174,78 @@
             this.LabelApi.TabIndex = 16;
             this.LabelApi.Text = "API";
             // 
+            // ButtonNewUoM
+            // 
+            this.ButtonNewUoM.Location = new System.Drawing.Point(276, 558);
+            this.ButtonNewUoM.Name = "ButtonNewUoM";
+            this.ButtonNewUoM.Size = new System.Drawing.Size(107, 30);
+            this.ButtonNewUoM.TabIndex = 8;
+            this.ButtonNewUoM.Text = "+ Embalagem";
+            this.ButtonNewUoM.UseVisualStyleBackColor = true;
+            this.ButtonNewUoM.Click += new System.EventHandler(this.ButtonNewUoM_Click);
+            // 
+            // ComboBoxAlternativeUoM
+            // 
+            this.ComboBoxAlternativeUoM.FormattingEnabled = true;
+            this.ComboBoxAlternativeUoM.ItemHeight = 19;
+            this.ComboBoxAlternativeUoM.Location = new System.Drawing.Point(27, 481);
+            this.ComboBoxAlternativeUoM.Name = "ComboBoxAlternativeUoM";
+            this.ComboBoxAlternativeUoM.Size = new System.Drawing.Size(356, 27);
+            this.ComboBoxAlternativeUoM.TabIndex = 20;
+            this.ComboBoxAlternativeUoM.Visible = false;
+            this.ComboBoxAlternativeUoM.SelectionChangeCommitted += new System.EventHandler(this.ComboBoxAlternativeUoM_SelectionChangeCommitted);
+            // 
+            // LabelAlternativeUoM
+            // 
+            this.LabelAlternativeUoM.AutoSize = true;
+            this.LabelAlternativeUoM.Location = new System.Drawing.Point(27, 459);
+            this.LabelAlternativeUoM.Name = "LabelAlternativeUoM";
+            this.LabelAlternativeUoM.Size = new System.Drawing.Size(159, 19);
+            this.LabelAlternativeUoM.TabIndex = 21;
+            this.LabelAlternativeUoM.Text = "Embalagem alternativa";
+            this.LabelAlternativeUoM.Visible = false;
+            // 
+            // TextBoxAlternativePrice
+            // 
+            this.TextBoxAlternativePrice.Location = new System.Drawing.Point(27, 426);
+            this.TextBoxAlternativePrice.Name = "TextBoxAlternativePrice";
+            this.TextBoxAlternativePrice.Size = new System.Drawing.Size(356, 27);
+            this.TextBoxAlternativePrice.TabIndex = 9;
+            this.TextBoxAlternativePrice.Visible = false;
+            // 
+            // LabelAlternativePrice
+            // 
+            this.LabelAlternativePrice.AutoSize = true;
+            this.LabelAlternativePrice.Location = new System.Drawing.Point(27, 404);
+            this.LabelAlternativePrice.Name = "LabelAlternativePrice";
+            this.LabelAlternativePrice.Size = new System.Drawing.Size(45, 19);
+            this.LabelAlternativePrice.TabIndex = 19;
+            this.LabelAlternativePrice.Text = "Preço";
+            this.LabelAlternativePrice.Visible = false;
+            // 
             // OilDetailForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 502);
+            this.ClientSize = new System.Drawing.Size(417, 600);
+            this.Controls.Add(this.ComboBoxAlternativeUoM);
+            this.Controls.Add(this.LabelAlternativeUoM);
+            this.Controls.Add(this.TextBoxAlternativePrice);
+            this.Controls.Add(this.LabelAlternativePrice);
+            this.Controls.Add(this.ButtonNewUoM);
             this.Controls.Add(this.TextBoxApi);
             this.Controls.Add(this.LabelApi);
             this.Controls.Add(this.TextBoxViscosity);
             this.Controls.Add(this.LabelViscosity);
             this.Controls.Add(this.ButtonProcess);
-            this.Controls.Add(this.ComboBoxUoM);
-            this.Controls.Add(this.LabelUoM);
+            this.Controls.Add(this.ComboBoxDefaultUoM);
+            this.Controls.Add(this.LabelDefaultUoM);
             this.Controls.Add(this.ComboBoxType);
             this.Controls.Add(this.LabelTipo);
             this.Controls.Add(this.TextBoxStockQuantity);
             this.Controls.Add(this.LabelStockQuantity);
-            this.Controls.Add(this.TextBoxPrice);
-            this.Controls.Add(this.LabelPrice);
+            this.Controls.Add(this.TextBoxDefaultPrice);
+            this.Controls.Add(this.LabelDefaultPrice);
             this.Controls.Add(this.TextBoxName);
             this.Controls.Add(this.LabelName);
             this.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -205,8 +265,8 @@
 
         private Label LabelName;
         private TextBox TextBoxName;
-        private Label LabelPrice;
-        private TextBox TextBoxPrice;
+        private Label LabelDefaultPrice;
+        private TextBox TextBoxDefaultPrice;
         private Label LabelTipo;
         private TextBox TextBoxStockQuantity;
         private Label LabelStockQuantity;
@@ -214,9 +274,14 @@
         private Button ButtonProcess;
         private TextBox TextBoxViscosity;
         private Label LabelViscosity;
-        private Label LabelUoM;
-        private ComboBox ComboBoxUoM;
+        private Label LabelDefaultUoM;
+        private ComboBox ComboBoxDefaultUoM;
         private TextBox TextBoxApi;
         private Label LabelApi;
+        private Button ButtonNewUoM;
+        private ComboBox ComboBoxAlternativeUoM;
+        private Label LabelAlternativeUoM;
+        private TextBox TextBoxAlternativePrice;
+        private Label LabelAlternativePrice;
     }
 }

@@ -6,12 +6,15 @@ CREATE TABLE Product (
     Viscosity varchar(10),
 	Api varchar(5),
 	Manufacturer varchar(15),
-    Price decimal(19,4) not null,
+    DefaultPrice decimal(19,4) not null,
+    AlternativePrice decimal(19,4),
 	Type int not null,
 	OilType int,
 	FilterType int,
-	UnitOfMeasurement int not null,
-	StockQuantity decimal(19,4) not null
+	DefaultUoM int not null,
+	AlternativeUoM int,
+	StockQuantity decimal(19,4) not null,
+	HasAlternative bit
 );
 
 CREATE TABLE Sale (

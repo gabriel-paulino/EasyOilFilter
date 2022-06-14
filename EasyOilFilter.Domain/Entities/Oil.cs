@@ -5,9 +5,9 @@ namespace EasyOilFilter.Domain.Entities
 {
     public class Oil : Product
     {
-        public Oil(Guid id, string name, string viscosity, string api, decimal price, decimal stockQuantity, OilType oilType, UoM unitOfMeasurement)
+        public Oil(Guid id, string name, string viscosity, string api, decimal defaultPrice, decimal alternativePrice, decimal stockQuantity, OilType oilType, UoM defaultUoM, UoM alternativeUoM, bool hasAlternative)
         {
-            AddNotifications(GetContract(name, viscosity, api, price, stockQuantity, oilType, unitOfMeasurement));
+            AddNotifications(GetContract(name, viscosity, api, defaultPrice, stockQuantity, oilType, defaultUoM));
 
             if (IsValid)
             {
@@ -15,41 +15,47 @@ namespace EasyOilFilter.Domain.Entities
                 Name = name;
                 Viscosity = viscosity;
                 Api = api;
-                Price = price;
+                DefaultPrice = defaultPrice;
+                DefaultUoM = defaultUoM;
+                AlternativePrice = alternativePrice;
+                AlternativeUoM = alternativeUoM;
                 StockQuantity = stockQuantity;
                 OilType = oilType;
-                UnitOfMeasurement = unitOfMeasurement;
+                HasAlternative = hasAlternative;   
             }
         }
 
-        public Oil(string name, string viscosity, string api, decimal price, decimal stockQuantity, OilType oilType, UoM unitOfMeasurement)
+        public Oil(string name, string viscosity, string api, decimal defaultPrice, decimal alternativePrice, decimal stockQuantity, OilType oilType, UoM defaultUoM, UoM alternativeUoM)
         {
-            AddNotifications(GetContract(name, viscosity, api, price, stockQuantity, oilType, unitOfMeasurement));
+            AddNotifications(GetContract(name, viscosity, api, defaultPrice, stockQuantity, oilType, defaultUoM));
 
             if (IsValid)
             {
                 Name = name;
                 Viscosity = viscosity;
                 Api = api;
-                Price = price;
+                DefaultPrice = defaultPrice;
+                AlternativePrice = alternativePrice;
                 StockQuantity = stockQuantity;
                 OilType = oilType;
-                UnitOfMeasurement = unitOfMeasurement;
+                DefaultUoM = defaultUoM;
+                AlternativeUoM = alternativeUoM;
                 Type = ProductType.Oil;
+                HasAlternative = IsAlternative(alternativePrice, alternativeUoM);
             }
         }
 
-        public void ChangePriceByAbsoluteValue(decimal absoluteValue)
+        public void ChangeDefaultPriceByAbsoluteValue(decimal absoluteValue)
         {
-            Price += absoluteValue;
+            DefaultPrice += absoluteValue;
         }
 
-        public void ChangePriceByPercentage(decimal percentage)
+        public void ChangeDefaultPriceByPercentage(decimal percentage)
         {
-            Price = (1 + percentage / 100) * Price;
+            DefaultPrice = (1 + percentage / 100) * DefaultPrice;
         }
 
-        private static Contract<Oil> GetContract(string name, string viscosity, string api, decimal price, decimal stockQuantity, OilType type, UoM unitOfMeasurement) =>
+        private static Contract<Oil> GetContract(string name, string viscosity, string api, decimal defaultPrice, decimal stockQuantity, OilType type, UoM defaultUoM) =>
             new Contract<Oil>()
                 .IsLowerThan(name, 100, "Name", "O nome do lubrificante não pode ter mais do que 100 caracteres.")
                 .IsGreaterThan(name, 2, "Name", "O nome do lubrificante deve ter pelo menos 2 caracteres.")
@@ -57,8 +63,13 @@ namespace EasyOilFilter.Domain.Entities
                 .IsLowerThan(api, 5, "Api", "A API do lubrificante não pode ter mais do que 5 caracteres.")
                 .IsGreaterThan(viscosity, 2, "Viscosity", "A viscosidade do lubrificante deve ter pelo menos 2 caracteres.")
                 .IsBetween((int)type, 1, 5, "Type", "O tipo do lubrificante deve ser informado.")
-                .IsBetween((int)unitOfMeasurement, 0, 2, "UnitOfMeasurement", "A unidade de medida do lubrificante deve ser preenchida.")
-                .IsBetween(price, 1, 1000, "Price", "O preço do lubrificante deve ser pelo menos R$ 1 e não maior que R$ 1000.")
+                .IsBetween((int)defaultUoM, 0, 2, "DefaultUoM", "A embalagem padrão do lubrificante deve ser preenchida.")
+                .IsBetween(defaultPrice, 1, 1000, "DefaultPrice", "O preço do lubrificante deve ser pelo menos R$ 1 e não maior que R$ 1000.")
                 .IsGreaterThan(stockQuantity, 0, "StockQuantity", "A quantidade em estoque do lubrificante deve ser maior que 0.");
+
+        private bool IsAlternative(decimal alternativePrice, UoM alternativeUoM)
+        {
+            return alternativePrice > 0 && alternativeUoM != UoM.None;
+        }
     }
 }

@@ -42,7 +42,7 @@ namespace EasyOilFilter.Presentation.Forms
         {
             TextBoxCode.Text = Model.Name;
             TextBoxManufacturer.Text = Model.Manufacturer;
-            TextBoxPrice.Text = Model.Price.ToString("C2");
+            TextBoxPrice.Text = Model.DefaultPrice.ToString("C2");
             TextBoxStockQuantity.Text = Model.StockQuantity.ToString("F2");
             ComboBoxType.SelectedIndex = (int)EnumUtility.GetEnumByDescription<FilterType>(Model.FilterType);
         }
@@ -73,8 +73,11 @@ namespace EasyOilFilter.Presentation.Forms
             var (model, message) = GetAddFilterViewModel();
 
             if (!string.IsNullOrEmpty(message))
+            {
                 MessageBox.Show(message);
-
+                return;
+            }
+                
             var filters = await _productService.GetFiltersByName(model.Name);
 
             if (filters?.Any() ?? false)
@@ -110,7 +113,10 @@ namespace EasyOilFilter.Presentation.Forms
             var (model, message) = GetFilterViewModel();
 
             if (!string.IsNullOrEmpty(message))
+            {
                 MessageBox.Show(message);
+                return;
+            }               
 
             bool anyChange = HasChangedAnyField(model);
 
@@ -131,60 +137,73 @@ namespace EasyOilFilter.Presentation.Forms
 
         private (FilterViewModel model, string message) GetFilterViewModel()
         {
-            string message = string.Empty;
-
-            decimal price = string.IsNullOrEmpty(TextBoxPrice.Text) ? 0 : decimal.Parse(TextBoxPrice.Text, NumberStyles.Currency);
-            decimal.TryParse(TextBoxStockQuantity.Text.Replace('.', ','), out decimal stockQuantity);
-
-            bool invalidPrice = price == 0 && Model.Price != 0;
-            bool invalidStockQuantity = stockQuantity == 0 && Model.StockQuantity != 0;
-
-            if (invalidPrice)
-                message = $"O valor do campo 'Preço' é inválido.{Environment.NewLine}";
-
-            if (invalidStockQuantity)
-                message += $"O valor do campo 'Em estoque' é inválido.{Environment.NewLine}";
+            string message = GetValidateFormMessage();
 
             if (!string.IsNullOrEmpty(message))
-                message += "Preencha com um valor numérico.";
+                return (new FilterViewModel(), message);
 
             return (new FilterViewModel()
             {
                 Id = Model.Id,
                 Name = TextBoxCode.Text,
                 Manufacturer = TextBoxManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: true),
-                Price = price,
-                StockQuantity = stockQuantity,
+                DefaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxPrice),
+                StockQuantity = decimal.Parse(TextBoxStockQuantity.Text.Replace('.', ',')),
                 FilterType = ComboBoxType.SelectedItem.ToString()
             }, message);
         }
 
         private (AddFilterViewModel model, string message) GetAddFilterViewModel()
         {
-            string message = string.Empty;
-            decimal price = string.IsNullOrEmpty(TextBoxPrice.Text) ? 0 : decimal.Parse(TextBoxPrice.Text, NumberStyles.Currency);
-            decimal.TryParse(TextBoxStockQuantity.Text.Replace('.', ','), out decimal stockQuantity);
-
-            bool invalidPrice = price == 0 && Model.Price != 0;
-            bool invalidStockQuantity = stockQuantity == 0 && Model.StockQuantity != 0;
-
-            if (invalidPrice)
-                message = $"O valor do campo 'Preço' é inválido.{Environment.NewLine}";
-
-            if (invalidStockQuantity)
-                message += $"O valor do campo 'Em estoque' é inválido.{Environment.NewLine}";
+            string message = GetValidateFormMessage();
 
             if (!string.IsNullOrEmpty(message))
-                message += "Preencha com um valor numérico.";
+                return (new AddFilterViewModel(), message);
 
             return (new AddFilterViewModel()
             {
                 Name = TextBoxCode.Text,
                 Manufacturer = TextBoxManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: true),
-                Price = price,
-                StockQuantity = stockQuantity,
-                FilterType = ComboBoxType.SelectedItem.ToString()
+                DefaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxPrice),
+                StockQuantity = decimal.Parse(TextBoxStockQuantity.Text.Replace('.', ',')),
+                FilterType = ComboBoxType.SelectedItem?.ToString() ?? string.Empty
             }, message);
+        }
+
+        private decimal GetDecimalValueCurrencyStyleOnTextBox(TextBox textBox)
+        {
+            decimal value = string.IsNullOrEmpty(textBox.Text)
+                ? 0.0m
+                : decimal.Parse(textBox.Text, NumberStyles.Currency);
+
+            return value;
+        }
+
+        private string GetValidateFormMessage()
+        {
+            string validationMessage = string.Empty;
+            decimal defaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxPrice);
+            decimal.TryParse(TextBoxStockQuantity.Text.Replace('.', ','), out decimal stockQuantity);
+
+            bool invalidDefaultPrice = defaultPrice == 0.0m;
+            bool invalidStockQuantity = stockQuantity == 0;
+
+            if (string.IsNullOrEmpty(TextBoxCode.Text))
+                validationMessage += $"O preenchimento do campo 'Código' é obrigatório.{Environment.NewLine}";
+
+            if (string.IsNullOrEmpty(TextBoxManufacturer.Text))
+                validationMessage += $"O preenchimento do campo 'Fabricante' é obrigatório.{Environment.NewLine}";
+
+            if (string.IsNullOrEmpty(ComboBoxType.SelectedItem?.ToString()))
+                validationMessage += $"O preenchimento do campo 'Tipo' é obrigatório.{Environment.NewLine}";
+
+            if (invalidDefaultPrice)
+                validationMessage += $"O valor do campo 'Preço' é inválido.{Environment.NewLine}";
+
+            if (invalidStockQuantity)
+                validationMessage += $"O valor do campo 'Em estoque' é inválido.{Environment.NewLine}";
+
+            return validationMessage;
         }
 
         private bool HasChangedAnyField(FilterViewModel updatedFilter)
@@ -194,7 +213,7 @@ namespace EasyOilFilter.Presentation.Forms
                 updatedFilter.Manufacturer != Model.Manufacturer ||
                 updatedFilter.StockQuantity != Model.StockQuantity ||
                 updatedFilter.FilterType != Model.FilterType ||
-                updatedFilter.Price != Model.Price;
+                updatedFilter.DefaultPrice != Model.DefaultPrice;
         }
     }
 }

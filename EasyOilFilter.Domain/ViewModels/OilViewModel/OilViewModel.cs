@@ -11,10 +11,13 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
         public string Name { get; set; }
         public string Viscosity { get; set; }
         public string Api { get; set; }
-        public decimal Price { get; set; }
+        public decimal DefaultPrice { get; set; }
+        public decimal AlternativePrice { get; set; }
         public decimal StockQuantity { get; set; }
         public string OilType { get; set; }
-        public string UnitOfMeasurement { get; set; }
+        public string DefaultUoM { get; set; }
+        public string AlternativeUoM { get; set; }
+        public bool HasAlternative { get; set; }
 
         public static implicit operator OilViewModel(Oil oil) =>
            new()
@@ -23,10 +26,13 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
                Name = oil.Name,
                Viscosity = oil.Viscosity,
                Api = oil.Api,
-               Price = oil.Price,
+               DefaultPrice = oil.DefaultPrice,
+               AlternativePrice = oil?.AlternativePrice ?? 0.0m,
                StockQuantity = oil.StockQuantity,
                OilType = oil.OilType.GetDescription(),
-               UnitOfMeasurement = oil.UnitOfMeasurement.GetDescription(),
+               DefaultUoM = oil.DefaultUoM.GetDescription(),
+               AlternativeUoM = oil?.AlternativeUoM.GetDescription() ?? string.Empty,
+               HasAlternative = oil?.HasAlternative ?? false,
            };
 
         public static implicit operator Oil(OilViewModel model) =>
@@ -35,10 +41,13 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
                 name: model.Name,
                 viscosity: model.Viscosity,
                 api: model.Api,
-                price: model.Price,
+                defaultPrice: model.DefaultPrice,
+                alternativePrice: model.AlternativePrice,
                 stockQuantity: model.StockQuantity,
                 oilType: EnumUtility.GetEnumByDescription<OilType>(model.OilType),
-                unitOfMeasurement: EnumUtility.GetEnumByDescription<UoM>(model.UnitOfMeasurement)
+                defaultUoM: EnumUtility.GetEnumByDescription<UoM>(model.DefaultUoM),
+                alternativeUoM: EnumUtility.GetEnumByDescription<UoM>(model.AlternativeUoM),
+                hasAlternative: model?.HasAlternative ?? false
                 );
 
         public static IEnumerable<OilViewModel> MapMany(IEnumerable<Oil> oils) =>

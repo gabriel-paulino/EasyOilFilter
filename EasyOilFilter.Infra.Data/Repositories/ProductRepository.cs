@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using EasyOilFilter.Domain.Contracts.Repositories;
 using EasyOilFilter.Domain.Entities;
-using EasyOilFilter.Domain.Entities.Base;
 using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Infra.Data.Session;
 
@@ -27,9 +26,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
             string command =
                 @"
                     INSERT INTO [Product]
-                        ([Id], [Name], [Manufacturer], [Price], [FilterType], [Type], [UnitOfMeasurement], [StockQuantity]) 
+                        ([Id], [Name], [Manufacturer], [DefaultPrice], [FilterType], [Type], [DefaultUoM], [StockQuantity]) 
                     VALUES 
-                        (@Id, @Name, @Manufacturer, @Price, @FilterType, @Type, @UnitOfMeasurement, @StockQuantity)
+                        (@Id, @Name, @Manufacturer, @DefaultPrice, @FilterType, @Type, @DefaultUoM, @StockQuantity)
                 ";
 
             int rowsAffected = await _session.Connection.ExecuteAsync(command, new
@@ -37,11 +36,11 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 filter.Id,
                 filter.Name,
                 filter.Manufacturer,
-                filter.Price,
+                filter.DefaultPrice,
                 filter.StockQuantity,
                 FilterType = (int)filter.FilterType,
                 Type = (int)filter.Type,
-                UnitOfMeasurement = (int)filter.UnitOfMeasurement
+                DefaultUoM = (int)filter.DefaultUoM
             });
 
             return rowsAffected == 1;
@@ -61,14 +60,17 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 SELECT
                     [Id],
                     [Name],                 
-                    [Price],
+                    [DefaultPrice],
+                    [AlternativePrice],
                     [StockQuantity],
                     [Type],
-                    [UnitOfMeasurement],
+                    [DefaultUoM],
+                    [AlternativeUoM],
                     [Viscosity],
                     [OilType],
                     [Manufacturer],
-                    [FilterType]                   
+                    [FilterType],
+                    [HasAlternative]
                 FROM 
                     [Product]
             ";
@@ -84,15 +86,18 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 SELECT
                     [Id],
                     [Name],                 
-                    [Price],
+                    [DefaultPrice],
+                    [AlternativePrice],
                     [StockQuantity],
                     [Type],
-                    [UnitOfMeasurement],
+                    [DefaultUoM],
+                    [AlternativeUoM],
                     [Viscosity],
                     [Api],
                     [OilType],
                     [Manufacturer],
-                    [FilterType]                   
+                    [FilterType],
+                    [HasAlternative]
                 FROM 
                     [Product]
                 WHERE
@@ -114,7 +119,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Manufacturer],
-                    [Price],
+                    [DefaultPrice],
                     [StockQuantity],
                     [FilterType]
                 FROM 
@@ -141,7 +146,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Manufacturer],
-                    [Price],
+                    [DefaultPrice],
                     [StockQuantity],
                     [FilterType]
                 FROM 
@@ -175,7 +180,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Manufacturer],
-                    [Price],
+                    [DefaultPrice],
                     [StockQuantity],
                     [FilterType]
                 FROM 
@@ -197,7 +202,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Manufacturer],
-                    [Price],
+                    [DefaultPrice],
                     [StockQuantity],
                     [FilterType]
                 FROM 
@@ -223,7 +228,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Manufacturer],
-                    [Price],
+                    [DefaultPrice],
                     [StockQuantity],
                     [FilterType]
                 FROM 
@@ -247,7 +252,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Manufacturer],
-                    [Price],
+                    [DefaultPrice],
                     [StockQuantity],
                     [FilterType]
                 FROM 
@@ -273,7 +278,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Id],
                     [Name],
                     [Manufacturer],
-                    [Price],
+                    [DefaultPrice],
                     [StockQuantity],
                     [FilterType]
                 FROM 
@@ -300,7 +305,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     SET
                         [Name] = @Name,
                         [Manufacturer] = @Manufacturer,
-                        [Price] = @Price,
+                        [DefaultPrice] = @DefaultPrice,
                         [StockQuantity] = @StockQuantity,
                         [FilterType] = @FilterType
                     WHERE [Id] = @Id
@@ -311,7 +316,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 filter.Id,
                 filter.Name,
                 filter.Manufacturer,
-                filter.Price,
+                filter.DefaultPrice,
                 filter.StockQuantity,
                 FilterType = (int)filter.FilterType,
             },
@@ -326,9 +331,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
             string command =
                 @"
                     INSERT INTO [Product]
-                        ([Id], [Name], [Viscosity], [Api], [Price], [OilType], [Type], [UnitOfMeasurement], [StockQuantity]) 
+                        ([Id], [Name], [Viscosity], [Api], [DefaultPrice], [AlternativePrice], [OilType], [Type], [DefaultUoM], [AlternativeUoM], [StockQuantity], [HasAlternative]) 
                     VALUES 
-                        (@Id, @Name, @Viscosity, @Api, @Price, @OilType, @Type, @UnitOfMeasurement, @StockQuantity)
+                        (@Id, @Name, @Viscosity, @Api, @DefaultPrice, @AlternativePrice, @OilType, @Type, @DefaultUoM, @AlternativeUoM, @StockQuantity, @HasAlternative)
                 ";
 
             int rowsAffected = await _session.Connection.ExecuteAsync(command, new
@@ -337,11 +342,14 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 oil.Name,
                 oil.Viscosity,
                 oil.Api,
-                oil.Price,
+                oil.DefaultPrice,
+                oil.AlternativePrice,
                 oil.StockQuantity,
                 OilType = (int)oil.OilType,
                 Type = (int)oil.Type,
-                UnitOfMeasurement = (int)oil.UnitOfMeasurement
+                DefaultUoM = (int)oil.DefaultUoM,
+                AlternativeUoM = (int)oil.AlternativeUoM,
+                HasAlternative = oil.HasAlternative
             });
 
             return rowsAffected == 1;
@@ -355,10 +363,13 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Api],
-                    [Price],
+                    [DefaultPrice],
+                    [AlternativePrice],                   
                     [StockQuantity],
                     [OilType],
-                    [UnitOfMeasurement]
+                    [DefaultUoM],
+                    [AlternativeUoM],
+                    [HasAlternative]
                 FROM 
                     [Product]
                 WHERE
@@ -384,10 +395,13 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Api],
-                    [Price],
+                    [DefaultPrice],
+                    [AlternativePrice],
                     [StockQuantity],
                     [OilType],
-                    [UnitOfMeasurement]
+                    [DefaultUoM],
+                    [AlternativeUoM],
+                    [HasAlternative]
                 FROM 
                     [Product]
                 WHERE
@@ -408,10 +422,13 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Api],
-                    [Price],
+                    [DefaultPrice],
+                    [AlternativePrice],
                     [StockQuantity],
                     [OilType],
-                    [UnitOfMeasurement]
+                    [DefaultUoM],
+                    [AlternativeUoM],
+                    [HasAlternative]
                 FROM 
                     [Product]
                 WHERE
@@ -436,10 +453,13 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Api],
-                    [Price],
+                    [DefaultPrice],
+                    [AlternativePrice],
                     [StockQuantity],
                     [OilType],
-                    [UnitOfMeasurement]
+                    [DefaultUoM],
+                    [AlternativeUoM],
+                    [HasAlternative]
                 FROM 
                     [Product]
                 WHERE
@@ -462,10 +482,13 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Api],
-                    [Price],
+                    [DefaultPrice],
+                    [AlternativePrice],
                     [StockQuantity],
                     [OilType],
-                    [UnitOfMeasurement]
+                    [DefaultUoM],
+                    [AlternativeUoM],
+                    [HasAlternative]
                 FROM 
                     [Product]
                 /**where**/
@@ -498,10 +521,13 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Api],
-                    [Price],
+                    [DefaultPrice],
+                    [AlternativePrice],
                     [StockQuantity],
                     [OilType],
-                    [UnitOfMeasurement]
+                    [DefaultUoM],
+                    [AlternativeUoM],
+                    [HasAlternative]
                 FROM 
                     [Product]
                 WHERE
@@ -526,10 +552,13 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Name],
                     [Viscosity],
                     [Api],
-                    [Price],
+                    [DefaultPrice],
+                    [AlternativePrice],
                     [StockQuantity],
                     [OilType],
-                    [UnitOfMeasurement]
+                    [DefaultUoM],
+                    [AlternativeUoM],
+                    [HasAlternative]
                 FROM 
                     [Product]
                 WHERE
@@ -554,10 +583,13 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     SET
                         [Name] = @Name,
                         [Viscosity] = @Viscosity,
-                        [Price] = @Price,
+                        [DefaultPrice] = @DefaultPrice,
+                        [AlternativePrice] = @AlternativePrice,
                         [StockQuantity] = @StockQuantity,
                         [OilType] = @OilType,
-                        [UnitOfMeasurement] = @UnitOfMeasurement
+                        [DefaultUoM] = @DefaultUoM,
+                        [AlternativeUoM] = @AlternativeUoM,
+                        [HasAlternative] = @HasAlternative
                     WHERE [Id] = @Id
                 ";
 
@@ -566,10 +598,13 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 oil.Id,
                 oil.Name,
                 oil.Viscosity,
-                oil.Price,
+                oil.DefaultPrice,
+                oil.AlternativePrice,
                 oil.StockQuantity,
                 OilType = (int)oil.OilType,
-                UnitOfMeasurement = (int)oil.UnitOfMeasurement,
+                DefaultUoM = (int)oil.DefaultUoM,
+                AlternativeUoM = (int)oil.AlternativeUoM,
+                HasAlternative = oil.HasAlternative,
             },
             _session.Transaction
             );
@@ -577,20 +612,20 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return rowsAffected == 1;
         }
 
-        public async Task<bool> UpdatePrice(Guid id, decimal price)
+        public async Task<bool> UpdateDefaultPrice(Guid id, decimal defaultPrice)
         {
             string command =
                 @"
                     UPDATE [Product] 
                     SET
-                        [Price] = @Price
+                        [DefaultPrice] = @DefaultPrice
                     WHERE [Id] = @Id
                 ";
 
             int rowsAffected = await _session.Connection.ExecuteAsync(command, new
             {
                 Id = id,
-                Price = price
+                DefaultPrice = defaultPrice
             },
             _session.Transaction
             );
@@ -604,15 +639,18 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 SELECT
                     [Id],
                     [Name],                 
-                    [Price],
+                    [DefaultPrice],
+                    [AlternativePrice],
                     [StockQuantity],
                     [Type],
-                    [UnitOfMeasurement],
+                    [DefaultUoM],
+                    [AlternativeUoM],
                     [Viscosity],
                     [Api],
                     [OilType],
                     [Manufacturer],
-                    [FilterType]                   
+                    [FilterType],
+                    [HasAlternative]
                 FROM 
                     [Product]
                 WHERE

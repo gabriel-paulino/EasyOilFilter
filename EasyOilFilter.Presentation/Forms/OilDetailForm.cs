@@ -44,10 +44,17 @@ namespace EasyOilFilter.Presentation.Forms
             TextBoxName.Text = Model.Name;
             TextBoxViscosity.Text = Model.Viscosity;
             TextBoxApi.Text = Model.Api;
-            TextBoxPrice.Text = Model.Price.ToString("C2");
+            TextBoxDefaultPrice.Text = Model.DefaultPrice.ToString("C2");
             TextBoxStockQuantity.Text = Model.StockQuantity.ToString("F2");
             ComboBoxType.SelectedIndex = (int)EnumUtility.GetEnumByDescription<OilType>(Model.OilType);
-            ComboBoxUoM.SelectedIndex = (int)EnumUtility.GetEnumByDescription<UoM>(Model.UnitOfMeasurement);
+            ComboBoxDefaultUoM.SelectedIndex = (int)EnumUtility.GetEnumByDescription<UoM>(Model.DefaultUoM);
+
+            if (Model.HasAlternative)
+            {
+                SetAlternativeComponentsVisible(true);
+                TextBoxAlternativePrice.Text = Model.AlternativePrice.ToString("C2");
+                ComboBoxAlternativeUoM.SelectedIndex = (int)EnumUtility.GetEnumByDescription<UoM>(Model.AlternativeUoM);
+            }
         }
 
         private void LoadOilTypeComboBox()
@@ -59,7 +66,10 @@ namespace EasyOilFilter.Presentation.Forms
         private void LoadUoMComboBox()
         {
             foreach (var type in EnumUtility.EnumToList<UoM>())
-                ComboBoxUoM.Items.Add(type.GetDescription());
+            {
+                ComboBoxDefaultUoM.Items.Add(type.GetDescription());
+                ComboBoxAlternativeUoM.Items.Add(type.GetDescription());
+            }            
         }
 
         private void ButtonSave_Click(object sender, EventArgs e)
@@ -82,8 +92,11 @@ namespace EasyOilFilter.Presentation.Forms
             var (model, message) = GetAddOilViewModel();
 
             if (!string.IsNullOrEmpty(message))
+            {
                 MessageBox.Show(message);
-
+                return;
+            }
+                
             var oils = await _productService.GetOilsByName(model.Name);
 
             if (oils?.Any() ?? false)
@@ -110,10 +123,12 @@ namespace EasyOilFilter.Presentation.Forms
             TextBoxName.Clear();
             TextBoxViscosity.Clear();
             TextBoxApi.Clear();
-            TextBoxPrice.Clear();
+            TextBoxDefaultPrice.Clear();
+            TextBoxAlternativePrice.Clear();
             TextBoxStockQuantity.Clear();
             ComboBoxType.SelectedIndex = (int)OilType.All;
-            ComboBoxUoM.SelectedIndex = -1;
+            ComboBoxDefaultUoM.SelectedIndex = -1;
+            ComboBoxAlternativeUoM.SelectedIndex = -1;
         }
 
         private async void UpdateOil()
@@ -121,8 +136,11 @@ namespace EasyOilFilter.Presentation.Forms
             var (model, message) = GetOilViewModel();
 
             if (!string.IsNullOrEmpty(message))
+            {
                 MessageBox.Show(message);
-
+                return;
+            }
+                
             bool anyChange = HasChangedAnyField(model);
 
             if (!anyChange)
@@ -142,22 +160,10 @@ namespace EasyOilFilter.Presentation.Forms
 
         private (OilViewModel model, string message) GetOilViewModel()
         {
-            string message = string.Empty;
-
-            decimal price = string.IsNullOrEmpty(TextBoxPrice.Text) ? 0 : decimal.Parse(TextBoxPrice.Text, NumberStyles.Currency);
-            decimal.TryParse(TextBoxStockQuantity.Text.Replace('.', ','), out decimal stockQuantity);
-
-            bool invalidPrice = price == 0 && Model.Price != 0;
-            bool invalidStockQuantity = stockQuantity == 0 && Model.StockQuantity != 0;
-
-            if (invalidPrice)
-                message = $"O valor do campo 'Preço' é inválido.{Environment.NewLine}";
-
-            if (invalidStockQuantity)
-                message += $"O valor do campo 'Em estoque' é inválido.{Environment.NewLine}";
+            string message = GetValidateFormMessage();
 
             if (!string.IsNullOrEmpty(message))
-                message += "Preencha com um valor numérico.";
+                return (new OilViewModel(), message);
 
             return (new OilViewModel()
             {
@@ -165,42 +171,96 @@ namespace EasyOilFilter.Presentation.Forms
                 Name = TextBoxName.Text,
                 Viscosity = TextBoxViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
                 Api = TextBoxApi.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
-                Price = price,
-                StockQuantity = stockQuantity,
-                OilType = ComboBoxType.SelectedItem.ToString(),
-                UnitOfMeasurement = ComboBoxUoM.SelectedItem.ToString()
+                DefaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxDefaultPrice),
+                AlternativePrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxAlternativePrice),
+                StockQuantity = decimal.Parse(TextBoxStockQuantity.Text.Replace('.', ',')),
+                OilType = ComboBoxType.SelectedItem?.ToString(),
+                DefaultUoM = ComboBoxDefaultUoM.SelectedItem?.ToString(),
+                AlternativeUoM = ComboBoxAlternativeUoM.SelectedItem?.ToString() ?? string.Empty,
+                HasAlternative = GetDecimalValueCurrencyStyleOnTextBox(TextBoxAlternativePrice) > 0.0m
             }, message);
         }
 
         private (AddOilViewModel model, string message) GetAddOilViewModel()
         {
-            string message = string.Empty;
-
-            decimal price = string.IsNullOrEmpty(TextBoxPrice.Text) ? 0 : decimal.Parse(TextBoxPrice.Text, NumberStyles.Currency);
-            decimal.TryParse(TextBoxStockQuantity.Text.Replace('.', ','), out decimal stockQuantity);
-
-            bool invalidPrice = price == 0 && Model.Price != 0;
-            bool invalidStockQuantity = stockQuantity == 0 && Model.StockQuantity != 0;
-
-            if (invalidPrice)
-                message = $"O valor do campo 'Preço' é inválido.{Environment.NewLine}";
-
-            if (invalidStockQuantity)
-                message += $"O valor do campo 'Em estoque' é inválido.{Environment.NewLine}";
-
+            string message = GetValidateFormMessage();
+            
             if (!string.IsNullOrEmpty(message))
-                message += "Preencha com um valor numérico.";
+                return (new AddOilViewModel(), message);
 
             return (new AddOilViewModel()
             {
                 Name = TextBoxName.Text,
                 Viscosity = TextBoxViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
                 Api = TextBoxApi.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
-                Price = price,
-                StockQuantity = stockQuantity,
-                OilType = ComboBoxType.SelectedItem.ToString(),
-                UnitOfMeasurement = ComboBoxUoM.SelectedItem.ToString()
+                DefaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxDefaultPrice),
+                AlternativePrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxAlternativePrice),
+                StockQuantity = decimal.Parse(TextBoxStockQuantity.Text.Replace('.', ',')),
+                OilType = ComboBoxType.SelectedItem?.ToString(),
+                DefaultUoM = ComboBoxDefaultUoM.SelectedItem?.ToString(),
+                AlternativeUoM = ComboBoxAlternativeUoM.SelectedItem?.ToString() ?? string.Empty
             }, message);
+        }
+
+        private decimal GetDecimalValueCurrencyStyleOnTextBox(TextBox textBox)
+        {
+            decimal value = string.IsNullOrEmpty(textBox.Text) 
+                ? 0.0m 
+                : decimal.Parse(textBox.Text, NumberStyles.Currency);
+
+            return value;
+        }
+
+        private string GetValidateFormMessage()
+        {
+            string validationMessage = string.Empty;
+            decimal defaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxDefaultPrice);
+            decimal.TryParse(TextBoxStockQuantity.Text.Replace('.', ','), out decimal stockQuantity);
+
+            bool invalidDefaultPrice = defaultPrice == 0.0m;
+            bool invalidStockQuantity = stockQuantity == 0;
+
+            if (string.IsNullOrEmpty(TextBoxName.Text))
+                validationMessage += $"O preenchimento do campo 'Nome' é obrigatório.{Environment.NewLine}";
+
+            if (string.IsNullOrEmpty(TextBoxViscosity.Text))
+                validationMessage += $"O preenchimento do campo 'Viscosidade' é obrigatório.{Environment.NewLine}";
+
+            if (string.IsNullOrEmpty(TextBoxApi.Text))
+                validationMessage += $"O preenchimento do campo 'API' é obrigatório.{Environment.NewLine}";
+
+            if (string.IsNullOrEmpty(ComboBoxType.SelectedItem?.ToString()))
+                validationMessage += $"O preenchimento do campo 'Tipo' é obrigatório.{Environment.NewLine}";
+
+            if (string.IsNullOrEmpty(ComboBoxDefaultUoM.SelectedItem?.ToString()))
+                validationMessage += $"O preenchimento do campo 'Embalagem padrão' é obrigatório.{Environment.NewLine}";
+
+            if (invalidDefaultPrice)
+                validationMessage = $"O valor do campo 'Preço' é inválido.{Environment.NewLine}";
+
+            if (invalidStockQuantity)
+                validationMessage += $"O valor do campo 'Em estoque' é inválido.{Environment.NewLine}";
+
+            if (ComboBoxAlternativeUoM.Visible && TextBoxAlternativePrice.Visible)
+            {
+                decimal alternativePrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxAlternativePrice);
+                bool invalidSecondPrice = alternativePrice == 0.0m;
+
+                if (invalidSecondPrice)
+                    validationMessage = $"O valor do campo 'Preço' é inválido.{Environment.NewLine}";
+
+                if (string.IsNullOrEmpty(ComboBoxAlternativeUoM.SelectedItem?.ToString()))
+                    validationMessage += $"O preenchimento do campo 'Embalagem alternativa' é obrigatório.{Environment.NewLine}";
+
+                bool defaultUoMIsEqualAlternativeUoM =
+                    (ComboBoxDefaultUoM.SelectedItem?.ToString() ?? string.Empty) ==
+                    (ComboBoxAlternativeUoM.SelectedItem?.ToString() ?? string.Empty);
+
+                if (defaultUoMIsEqualAlternativeUoM)
+                    validationMessage += $" O preenchimento do campo 'Embalagem padrão' deve ser diferente da 'Embalagem alternativa'.{Environment.NewLine}";
+            }
+
+            return validationMessage;
         }
 
         private bool HasChangedAnyField(OilViewModel updatedOil)
@@ -211,8 +271,44 @@ namespace EasyOilFilter.Presentation.Forms
                 updatedOil.Api != Model.Api ||
                 updatedOil.StockQuantity != Model.StockQuantity ||
                 updatedOil.OilType != Model.OilType ||
-                updatedOil.UnitOfMeasurement != Model.UnitOfMeasurement ||
-                updatedOil.Price != Model.Price;
+                updatedOil.DefaultUoM != Model.DefaultUoM ||
+                updatedOil.AlternativeUoM != Model.AlternativeUoM ||
+                updatedOil.DefaultPrice != Model.DefaultPrice ||
+                updatedOil.AlternativePrice != Model.AlternativePrice;
+        }
+
+        private void ButtonNewUoM_Click(object sender, EventArgs e)
+        {
+            SetAlternativeComponentsVisible(true);           
+        }
+
+        private void SetAlternativeComponentsVisible(bool isVisible)
+        {
+            LabelAlternativePrice.Visible = isVisible;
+            LabelAlternativeUoM.Visible = isVisible;
+            TextBoxAlternativePrice.Visible = isVisible;
+            ComboBoxAlternativeUoM.Visible = isVisible;
+            ButtonNewUoM.Enabled = !isVisible;
+        }
+
+        private void ComboBoxDefaultUoM_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            string selectedValue = ComboBoxDefaultUoM.SelectedItem?.ToString() ?? string.Empty;
+
+            if (string.IsNullOrEmpty(selectedValue))
+                return;
+
+            LabelDefaultPrice.Text = $"Preço ({selectedValue})";
+        }
+
+        private void ComboBoxAlternativeUoM_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            string selectedValue = ComboBoxAlternativeUoM.SelectedItem?.ToString() ?? string.Empty;
+
+            if (string.IsNullOrEmpty(selectedValue))
+                return;
+
+            LabelAlternativePrice.Text = $"Preço ({selectedValue})";
         }
     }
 }

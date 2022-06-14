@@ -10,7 +10,7 @@ namespace EasyOilFilter.Domain.ViewModels.FilterViewModel
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Manufacturer { get; set; }
-        public decimal Price { get; set; }
+        public decimal DefaultPrice { get; set; }
         public decimal StockQuantity { get; set; }
         public string FilterType { get; set; }
 
@@ -20,7 +20,7 @@ namespace EasyOilFilter.Domain.ViewModels.FilterViewModel
                Id = filter.Id,
                Name = filter.Name,
                Manufacturer = filter.Manufacturer,
-               Price = filter.Price,
+               DefaultPrice = filter.DefaultPrice,
                StockQuantity = filter.StockQuantity,
                FilterType = filter.FilterType.GetDescription(),
            };
@@ -30,7 +30,7 @@ namespace EasyOilFilter.Domain.ViewModels.FilterViewModel
                 id: model.Id,
                 name: model.Name,
                 manufacturer: model.Manufacturer,
-                price: model.Price,
+                defaultPrice: model.DefaultPrice,
                 stockQuantity: model.StockQuantity,
                 filterType: EnumUtility.GetEnumByDescription<FilterType>(model.FilterType)
                 );

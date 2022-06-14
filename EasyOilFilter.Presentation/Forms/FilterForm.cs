@@ -100,7 +100,7 @@ namespace EasyOilFilter.Presentation.Forms
         private void DataGridView_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             Guid.TryParse(DataGridView.CurrentRow.Cells["Id"].Value.ToString(), out Guid id);
-            decimal.TryParse(DataGridView.CurrentRow.Cells["Price"].Value.ToString(), out decimal price);
+            decimal.TryParse(DataGridView.CurrentRow.Cells["DefaultPrice"].Value.ToString(), out decimal price);
             decimal.TryParse(DataGridView.CurrentRow.Cells["StockQuantity"].Value.ToString(), out decimal stockQuantity);
 
             FilterViewModel selectedFilterModel = new()
@@ -108,7 +108,7 @@ namespace EasyOilFilter.Presentation.Forms
                 Id = id,
                 Name = DataGridView.CurrentRow.Cells["Name"].Value.ToString(),
                 Manufacturer = DataGridView.CurrentRow.Cells["Manufacturer"].Value.ToString(),
-                Price = price,
+                DefaultPrice = price,
                 StockQuantity = stockQuantity,
                 FilterType = DataGridView.CurrentRow.Cells["FilterType"].Value.ToString()
             };
@@ -199,14 +199,14 @@ namespace EasyOilFilter.Presentation.Forms
             DataGridView.Columns["Id"].Visible = false;
             DataGridView.Columns["Name"].HeaderText = "Código";
             DataGridView.Columns["Manufacturer"].HeaderText = "Fabricante";
-            DataGridView.Columns["Price"].HeaderText = "Preço";
+            DataGridView.Columns["DefaultPrice"].HeaderText = "Preço";
             DataGridView.Columns["StockQuantity"].HeaderText = "Estoque";
             DataGridView.Columns["FilterType"].HeaderText = "Tipo";
-            DataGridView.Columns["Price"].DefaultCellStyle.Format = "C2";
+            DataGridView.Columns["DefaultPrice"].DefaultCellStyle.Format = "C2";
             DataGridView.Columns["StockQuantity"].DefaultCellStyle.Format = "F2";
             DataGridView.Columns["Name"].MinimumWidth = 215;
             DataGridView.Columns["Manufacturer"].MinimumWidth = 200;
-            DataGridView.Columns["Price"].MinimumWidth = 100;
+            DataGridView.Columns["DefaultPrice"].MinimumWidth = 100;
             DataGridView.Columns["StockQuantity"].MinimumWidth = 100;
             DataGridView.Columns["FilterType"].MinimumWidth = 100;
             DataGridView.AutoResizeColumns();

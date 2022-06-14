@@ -54,8 +54,8 @@ namespace EasyOilFilter.Domain.Implementation
 
             foreach (var filter in filters)
             {
-                filter.ChangePriceByAbsoluteValue(absoluteValue);
-                if (await _productRepository.UpdatePrice(filter.Id, filter.Price)) continue;
+                filter.ChangeDefaultPriceByAbsoluteValue(absoluteValue);
+                if (await _productRepository.UpdateDefaultPrice(filter.Id, filter.DefaultPrice)) continue;
                 else
                 {
                     sucess = false;
@@ -87,8 +87,8 @@ namespace EasyOilFilter.Domain.Implementation
 
             foreach (var filter in filters)
             {
-                filter.ChangePriceByPercentage(percentage);
-                if (await _productRepository.UpdatePrice(filter.Id, filter.Price)) continue;
+                filter.ChangeDefaultPriceByPercentage(percentage);
+                if (await _productRepository.UpdateDefaultPrice(filter.Id, filter.DefaultPrice)) continue;
                 else
                 {
                     sucess = false;
@@ -324,8 +324,8 @@ namespace EasyOilFilter.Domain.Implementation
 
             foreach (var oil in oils)
             {
-                oil.ChangePriceByAbsoluteValue(absoluteValue);
-                if (await _productRepository.UpdatePrice(oil.Id, oil.Price)) continue;
+                oil.ChangeDefaultPriceByAbsoluteValue(absoluteValue);
+                if (await _productRepository.UpdateDefaultPrice(oil.Id, oil.DefaultPrice)) continue;
                 else
                 {
                     sucess = false;
@@ -357,8 +357,8 @@ namespace EasyOilFilter.Domain.Implementation
 
             foreach (var oil in oils)
             {
-                oil.ChangePriceByPercentage(percentage);
-                if (await _productRepository.UpdatePrice(oil.Id, oil.Price)) continue;
+                oil.ChangeDefaultPriceByPercentage(percentage);
+                if (await _productRepository.UpdateDefaultPrice(oil.Id, oil.DefaultPrice)) continue;
                 else
                 {
                     sucess = false;

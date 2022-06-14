@@ -7,6 +7,8 @@ namespace EasyOilFilter.Domain.Enums
         [Description("Lubrificante")]
         Oil,
         [Description("Filtro")]
-        Filter
+        Filter, 
+        [Description("Outro")]
+        Other   
     }
 }
