@@ -9,10 +9,10 @@ namespace EasyOilFilter.Domain.Enums
         [Description("Litro")]
         Liter,
         [Description("Balde")]
-        Bucket,
+        Bucket,       
+        [Description("Unidade")]
+        Unity,
         [Description("Outro")]
         Other,
-        [Description("Unidade")]
-        Unity
     }
 }

@@ -106,7 +106,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
 
             var products = await _session.Connection.QueryAsync<Product>(query, new
             {
-                Name = $"{name}%"
+                Name = $"%{name}%"
             });
 
             return products.OrderByDescending(filter => filter.Name);
@@ -159,10 +159,10 @@ namespace EasyOilFilter.Infra.Data.Repositories
             builder.Where("[Type] = @Type", new { Type = (int)ProductType.Filter });
 
             if (!string.IsNullOrEmpty(name))
-                builder.Where("[Name] LIKE @Name", new { Name = $"{name}%" });
+                builder.Where("[Name] LIKE @Name", new { Name = $"%{name}%" });
 
             if (!string.IsNullOrEmpty(manufacturer))
-                builder.Where("[Manufacturer] LIKE @Manufacturer", new { Manufacturer = $"{manufacturer}%" });
+                builder.Where("[Manufacturer] LIKE @Manufacturer", new { Manufacturer = $"%{manufacturer}%" });
 
             if (type != FilterType.All)
                 builder.Where("[FilterType] = @FilterType", new { FilterType = type });
@@ -265,7 +265,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             var filters = await _session.Connection.QueryAsync<Filter>(query, new
             {
                 Type = (int)ProductType.Filter,
-                Name = $"{name}%"
+                Name = $"%{name}%"
             });
 
             return filters.OrderByDescending(filter => filter.Name);
@@ -291,7 +291,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             var filters = await _session.Connection.QueryAsync<Filter>(query, new
             {
                 Type = (int)ProductType.Filter,
-                Manufacturer = $"{manufacturer}%"
+                Manufacturer = $"%{manufacturer}%"
             });
 
             return filters.OrderByDescending(filter => filter.Name);
@@ -499,10 +499,10 @@ namespace EasyOilFilter.Infra.Data.Repositories
             builder.Where("[Type] = @Type", new { Type = (int)ProductType.Oil });
 
             if (!string.IsNullOrEmpty(name))
-                builder.Where("[Name] LIKE @Name", new { Name = $"{name}%" });
+                builder.Where("[Name] LIKE @Name", new { Name = $"%{name}%" });
 
             if (!string.IsNullOrEmpty(viscosity))
-                builder.Where("[Viscosity] LIKE @Viscosity", new { Viscosity = $"{viscosity}%" });
+                builder.Where("[Viscosity] LIKE @Viscosity", new { Viscosity = $"%{viscosity}%" });
 
             if (type != OilType.All)
                 builder.Where("[OilType] = @OilType", new { OilType = type });
@@ -538,7 +538,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             var oils = await _session.Connection.QueryAsync<Oil>(query, new
             {
                 Type = (int)ProductType.Oil,
-                Name = $"{name}%"
+                Name = $"%{name}%"
             }
             );
             return oils.OrderByDescending(oil => oil.Name);
@@ -569,7 +569,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             var oils = await _session.Connection.QueryAsync<Oil>(query, new
             {
                 Type = (int)ProductType.Oil,
-                Viscosity = $"{viscosity}%"
+                Viscosity = $"%{viscosity}%"
             }
             );
             return oils.OrderByDescending(oil => oil.Name);

@@ -64,7 +64,7 @@
             this.DataGridView.Name = "DataGridView";
             this.DataGridView.ReadOnly = true;
             this.DataGridView.RowTemplate.Height = 25;
-            this.DataGridView.Size = new System.Drawing.Size(758, 280);
+            this.DataGridView.Size = new System.Drawing.Size(795, 280);
             this.DataGridView.TabIndex = 0;
             this.DataGridView.RowHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_RowHeaderMouseDoubleClick);
             // 
@@ -73,7 +73,7 @@
             this.ButtonSearch.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ButtonSearch.Image = ((System.Drawing.Image)(resources.GetObject("ButtonSearch.Image")));
             this.ButtonSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonSearch.Location = new System.Drawing.Point(662, 53);
+            this.ButtonSearch.Location = new System.Drawing.Point(699, 53);
             this.ButtonSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.ButtonSearch.Name = "ButtonSearch";
             this.ButtonSearch.Size = new System.Drawing.Size(90, 30);
@@ -86,20 +86,20 @@
             // labelName
             // 
             this.labelName.AutoSize = true;
-            this.labelName.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelName.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labelName.Location = new System.Drawing.Point(11, 34);
             this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(47, 19);
+            this.labelName.Size = new System.Drawing.Size(56, 19);
             this.labelName.TabIndex = 2;
-            this.labelName.Text = "Nome";
+            this.labelName.Text = "Código";
             // 
             // labelType
             // 
             this.labelType.AutoSize = true;
-            this.labelType.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelType.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labelType.Location = new System.Drawing.Point(489, 34);
             this.labelType.Name = "labelType";
-            this.labelType.Size = new System.Drawing.Size(37, 19);
+            this.labelType.Size = new System.Drawing.Size(39, 19);
             this.labelType.TabIndex = 4;
             this.labelType.Text = "Tipo";
             // 
@@ -109,14 +109,15 @@
             this.ComboType.FormattingEnabled = true;
             this.ComboType.Location = new System.Drawing.Point(489, 56);
             this.ComboType.Name = "ComboType";
-            this.ComboType.Size = new System.Drawing.Size(120, 27);
+            this.ComboType.Size = new System.Drawing.Size(139, 27);
             this.ComboType.TabIndex = 5;
             // 
             // TextName
             // 
+            this.TextName.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.TextName.Location = new System.Drawing.Point(11, 59);
             this.TextName.Name = "TextName";
-            this.TextName.Size = new System.Drawing.Size(239, 23);
+            this.TextName.Size = new System.Drawing.Size(239, 27);
             this.TextName.TabIndex = 7;
             // 
             // GroupBoxSearch
@@ -131,7 +132,7 @@
             this.GroupBoxSearch.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.GroupBoxSearch.Location = new System.Drawing.Point(14, 12);
             this.GroupBoxSearch.Name = "GroupBoxSearch";
-            this.GroupBoxSearch.Size = new System.Drawing.Size(758, 98);
+            this.GroupBoxSearch.Size = new System.Drawing.Size(795, 98);
             this.GroupBoxSearch.TabIndex = 8;
             this.GroupBoxSearch.TabStop = false;
             this.GroupBoxSearch.Text = "Pesquisar";
@@ -139,18 +140,19 @@
             // labelManufacturer
             // 
             this.labelManufacturer.AutoSize = true;
-            this.labelManufacturer.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelManufacturer.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labelManufacturer.Location = new System.Drawing.Point(306, 34);
             this.labelManufacturer.Name = "labelManufacturer";
-            this.labelManufacturer.Size = new System.Drawing.Size(77, 19);
+            this.labelManufacturer.Size = new System.Drawing.Size(81, 19);
             this.labelManufacturer.TabIndex = 3;
             this.labelManufacturer.Text = "Fabricante";
             // 
             // TextManufacturer
             // 
+            this.TextManufacturer.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.TextManufacturer.Location = new System.Drawing.Point(306, 59);
             this.TextManufacturer.Name = "TextManufacturer";
-            this.TextManufacturer.Size = new System.Drawing.Size(138, 23);
+            this.TextManufacturer.Size = new System.Drawing.Size(138, 27);
             this.TextManufacturer.TabIndex = 6;
             // 
             // GroupBoxUtils
@@ -164,33 +166,36 @@
             this.GroupBoxUtils.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.GroupBoxUtils.Location = new System.Drawing.Point(14, 420);
             this.GroupBoxUtils.Name = "GroupBoxUtils";
-            this.GroupBoxUtils.Size = new System.Drawing.Size(758, 130);
+            this.GroupBoxUtils.Size = new System.Drawing.Size(795, 130);
             this.GroupBoxUtils.TabIndex = 9;
             this.GroupBoxUtils.TabStop = false;
             this.GroupBoxUtils.Text = "Alterar preço de todos filtros";
             // 
             // TextBoxChangePriceValue
             // 
-            this.TextBoxChangePriceValue.Location = new System.Drawing.Point(187, 83);
+            this.TextBoxChangePriceValue.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.TextBoxChangePriceValue.Location = new System.Drawing.Point(227, 80);
             this.TextBoxChangePriceValue.Name = "TextBoxChangePriceValue";
             this.TextBoxChangePriceValue.PlaceholderText = "Preencher no formato: 5,75";
-            this.TextBoxChangePriceValue.Size = new System.Drawing.Size(165, 23);
+            this.TextBoxChangePriceValue.Size = new System.Drawing.Size(187, 27);
             this.TextBoxChangePriceValue.TabIndex = 10;
             // 
             // TextBoxChangePricePercentage
             // 
-            this.TextBoxChangePricePercentage.Location = new System.Drawing.Point(187, 30);
+            this.TextBoxChangePricePercentage.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.TextBoxChangePricePercentage.Location = new System.Drawing.Point(227, 32);
             this.TextBoxChangePricePercentage.Name = "TextBoxChangePricePercentage";
             this.TextBoxChangePricePercentage.PlaceholderText = "Preencher no formato: 3,25";
-            this.TextBoxChangePricePercentage.Size = new System.Drawing.Size(165, 23);
+            this.TextBoxChangePricePercentage.Size = new System.Drawing.Size(187, 27);
             this.TextBoxChangePricePercentage.TabIndex = 9;
             // 
             // CheckBoxChangePriceValue
             // 
             this.CheckBoxChangePriceValue.AutoSize = true;
+            this.CheckBoxChangePriceValue.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CheckBoxChangePriceValue.Location = new System.Drawing.Point(12, 85);
             this.CheckBoxChangePriceValue.Name = "CheckBoxChangePriceValue";
-            this.CheckBoxChangePriceValue.Size = new System.Drawing.Size(170, 19);
+            this.CheckBoxChangePriceValue.Size = new System.Drawing.Size(193, 23);
             this.CheckBoxChangePriceValue.TabIndex = 8;
             this.CheckBoxChangePriceValue.Text = "Alterar por valor absoluto";
             this.CheckBoxChangePriceValue.UseVisualStyleBackColor = true;
@@ -201,7 +206,7 @@
             this.ButtonChangePriceValue.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ButtonChangePriceValue.Image = ((System.Drawing.Image)(resources.GetObject("ButtonChangePriceValue.Image")));
             this.ButtonChangePriceValue.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonChangePriceValue.Location = new System.Drawing.Point(383, 77);
+            this.ButtonChangePriceValue.Location = new System.Drawing.Point(449, 80);
             this.ButtonChangePriceValue.Name = "ButtonChangePriceValue";
             this.ButtonChangePriceValue.Size = new System.Drawing.Size(110, 30);
             this.ButtonChangePriceValue.TabIndex = 6;
@@ -213,9 +218,10 @@
             // CheckBoxChangePricePercentage
             // 
             this.CheckBoxChangePricePercentage.AutoSize = true;
+            this.CheckBoxChangePricePercentage.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CheckBoxChangePricePercentage.Location = new System.Drawing.Point(12, 34);
             this.CheckBoxChangePricePercentage.Name = "CheckBoxChangePricePercentage";
-            this.CheckBoxChangePricePercentage.Size = new System.Drawing.Size(160, 19);
+            this.CheckBoxChangePricePercentage.Size = new System.Drawing.Size(186, 23);
             this.CheckBoxChangePricePercentage.TabIndex = 5;
             this.CheckBoxChangePricePercentage.Text = "Alterar por porcentagem";
             this.CheckBoxChangePricePercentage.UseVisualStyleBackColor = true;
@@ -226,7 +232,7 @@
             this.ButtonChangePricePercentage.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ButtonChangePricePercentage.Image = ((System.Drawing.Image)(resources.GetObject("ButtonChangePricePercentage.Image")));
             this.ButtonChangePricePercentage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonChangePricePercentage.Location = new System.Drawing.Point(383, 26);
+            this.ButtonChangePricePercentage.Location = new System.Drawing.Point(449, 29);
             this.ButtonChangePricePercentage.Name = "ButtonChangePricePercentage";
             this.ButtonChangePricePercentage.Size = new System.Drawing.Size(110, 30);
             this.ButtonChangePricePercentage.TabIndex = 3;
@@ -240,7 +246,7 @@
             this.ButtonAddOil.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ButtonAddOil.Image = ((System.Drawing.Image)(resources.GetObject("ButtonAddOil.Image")));
             this.ButtonAddOil.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonAddOil.Location = new System.Drawing.Point(676, 589);
+            this.ButtonAddOil.Location = new System.Drawing.Point(719, 599);
             this.ButtonAddOil.Name = "ButtonAddOil";
             this.ButtonAddOil.Size = new System.Drawing.Size(90, 30);
             this.ButtonAddOil.TabIndex = 0;
@@ -253,7 +259,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(785, 641);
+            this.ClientSize = new System.Drawing.Size(821, 641);
             this.Controls.Add(this.GroupBoxUtils);
             this.Controls.Add(this.GroupBoxSearch);
             this.Controls.Add(this.DataGridView);

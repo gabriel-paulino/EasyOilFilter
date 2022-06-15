@@ -18,6 +18,14 @@ namespace EasyOilFilter.Domain.Enums
         Sediment,
         [Description("Ar condicionado")]
         AirConditioning,
+        [Description("Água")]
+        Water,
+        [Description("Ar interno")]
+        SafeAir,
+        [Description("Hidráulico")]
+        Hydraulic,
+        [Description("Desumidificador")]
+        Dessumidificador,
         [Description("Outro")]
         Other
     }

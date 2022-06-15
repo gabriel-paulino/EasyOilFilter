@@ -11,11 +11,11 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
         public string Name { get; set; }
         public string Viscosity { get; set; }
         public string Api { get; set; }
-        public decimal DefaultPrice { get; set; }
-        public decimal AlternativePrice { get; set; }
-        public decimal StockQuantity { get; set; }
         public string OilType { get; set; }
+        public decimal DefaultPrice { get; set; }
         public string DefaultUoM { get; set; }
+        public decimal StockQuantity { get; set; }        
+        public decimal AlternativePrice { get; set; }
         public string AlternativeUoM { get; set; }
         public bool HasAlternative { get; set; }
 
@@ -26,11 +26,11 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
                Name = oil.Name,
                Viscosity = oil.Viscosity,
                Api = oil.Api,
-               DefaultPrice = oil.DefaultPrice,
-               AlternativePrice = oil?.AlternativePrice ?? 0.0m,
-               StockQuantity = oil.StockQuantity,
                OilType = oil.OilType.GetDescription(),
+               DefaultPrice = oil.DefaultPrice,
                DefaultUoM = oil.DefaultUoM.GetDescription(),
+               StockQuantity = oil.StockQuantity,
+               AlternativePrice = oil?.AlternativePrice ?? 0.0m,
                AlternativeUoM = oil?.AlternativeUoM.GetDescription() ?? string.Empty,
                HasAlternative = oil?.HasAlternative ?? false,
            };

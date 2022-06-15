@@ -60,7 +60,7 @@ namespace EasyOilFilter.Domain.Entities
                 .IsLowerThan(name, 100, "Name", "O nome do lubrificante não pode ter mais do que 100 caracteres.")
                 .IsGreaterThan(name, 2, "Name", "O nome do lubrificante deve ter pelo menos 2 caracteres.")
                 .IsLowerThan(viscosity, 10, "Viscosity", "A viscosidade do lubrificante não pode ter mais do que 10 caracteres.")
-                .IsLowerThan(api, 5, "Api", "A API do lubrificante não pode ter mais do que 5 caracteres.")
+                .IsLowerThan(api, 10, "Api", "A API do lubrificante não pode ter mais do que 10 caracteres.")
                 .IsGreaterThan(viscosity, 2, "Viscosity", "A viscosidade do lubrificante deve ter pelo menos 2 caracteres.")
                 .IsBetween((int)type, 1, 5, "Type", "O tipo do lubrificante deve ser informado.")
                 .IsBetween((int)defaultUoM, 0, 2, "DefaultUoM", "A embalagem padrão do lubrificante deve ser preenchida.")

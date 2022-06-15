@@ -208,7 +208,7 @@ namespace EasyOilFilter.Presentation.Forms
             DataGridView.Columns["Manufacturer"].MinimumWidth = 200;
             DataGridView.Columns["DefaultPrice"].MinimumWidth = 100;
             DataGridView.Columns["StockQuantity"].MinimumWidth = 100;
-            DataGridView.Columns["FilterType"].MinimumWidth = 100;
+            DataGridView.Columns["FilterType"].MinimumWidth = 120;
             DataGridView.AutoResizeColumns();
         }
     }
