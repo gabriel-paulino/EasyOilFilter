@@ -10,7 +10,7 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
         Task<IEnumerable<Product>> Get(IEnumerable<Guid> ids);
         Task<IEnumerable<Filter>> GetAllFilters();
         Task<IEnumerable<Filter>> GetFilters(int page, int quantity);
-        Task<IEnumerable<Filter>> Get(string name = "", string manufacturer = "", FilterType type = FilterType.All);
+        Task<IEnumerable<Filter>> Get(string name = "", string manufacturer = "", FilterType type = FilterType.None);
         Task<Filter> GetFilter(Guid id);
         Task<IEnumerable<Filter>> GetFiltersByName(string name);
         Task<IEnumerable<Filter>> GetByManufacturer(string manufacturer);
@@ -22,7 +22,7 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
 
         Task<IEnumerable<Oil>> GetAllOils();
         Task<IEnumerable<Oil>> GetOils(int page, int quantity);
-        Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", OilType type = OilType.All);
+        Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", OilType type = OilType.None);
         Task<Oil> GetOil(Guid id);
         Task<IEnumerable<Oil>> GetOilsByName(string name);
         Task<IEnumerable<Oil>> GetByViscosity(string viscosity);

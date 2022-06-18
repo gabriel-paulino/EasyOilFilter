@@ -20,7 +20,7 @@ namespace EasyOilFilter.Domain.Entities
             HasAlternative = hasAlternative;
         }
 
-        public Oil(string name, string viscosity, string api, decimal defaultPrice, decimal alternativePrice, decimal stockQuantity, OilType oilType, UoM defaultUoM, UoM alternativeUoM)
+        public Oil(string name, string viscosity, string api, decimal defaultPrice, decimal alternativePrice, decimal stockQuantity, OilType oilType, UoM defaultUoM, UoM alternativeUoM, bool hasAlternative)
         {
             AddNotifications(GetContract(name, viscosity, api, defaultPrice, stockQuantity, oilType, defaultUoM));
 
@@ -36,7 +36,7 @@ namespace EasyOilFilter.Domain.Entities
                 DefaultUoM = defaultUoM;
                 AlternativeUoM = alternativeUoM;
                 Type = ProductType.Oil;
-                HasAlternative = IsAlternative(alternativePrice, alternativeUoM);
+                HasAlternative = hasAlternative;
             }
         }
 
@@ -61,10 +61,5 @@ namespace EasyOilFilter.Domain.Entities
                 .IsBetween((int)defaultUoM, 0, 2, "DefaultUoM", "A embalagem padrão do lubrificante deve ser preenchida.")
                 .IsBetween(defaultPrice, 1, 1000, "DefaultPrice", "O preço do lubrificante deve ser pelo menos R$ 1 e não maior que R$ 1000.")
                 .IsGreaterThan(stockQuantity, 0, "StockQuantity", "A quantidade em estoque do lubrificante deve ser maior que 0.");
-
-        private bool IsAlternative(decimal alternativePrice, UoM alternativeUoM)
-        {
-            return alternativePrice > 0 && alternativeUoM != UoM.None;
-        }
     }
 }

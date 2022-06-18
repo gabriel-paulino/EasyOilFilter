@@ -48,10 +48,11 @@ namespace EasyOilFilter.Presentation.Forms
             TextBoxStockQuantity.Text = Model.StockQuantity.ToString("F2");
             ComboBoxType.SelectedIndex = (int)EnumUtility.GetEnumByDescription<OilType>(Model.OilType);
             ComboBoxDefaultUoM.SelectedIndex = (int)EnumUtility.GetEnumByDescription<UoM>(Model.DefaultUoM);
+            CheckBoxAlternative.Checked = Model.HasAlternative;
 
             if (Model.HasAlternative)
             {
-                SetAlternativeComponentsVisible(true);
+                SetAlternativeComponentsVisible(true);               
                 TextBoxAlternativePrice.Text = Model.AlternativePrice.ToString("C2");
                 ComboBoxAlternativeUoM.SelectedIndex = (int)EnumUtility.GetEnumByDescription<UoM>(Model.AlternativeUoM);
             }
@@ -126,7 +127,7 @@ namespace EasyOilFilter.Presentation.Forms
             TextBoxDefaultPrice.Clear();
             TextBoxAlternativePrice.Clear();
             TextBoxStockQuantity.Clear();
-            ComboBoxType.SelectedIndex = (int)OilType.All;
+            ComboBoxType.SelectedIndex = (int)OilType.None;
             ComboBoxDefaultUoM.SelectedIndex = -1;
             ComboBoxAlternativeUoM.SelectedIndex = -1;
         }
@@ -171,13 +172,13 @@ namespace EasyOilFilter.Presentation.Forms
                 Name = TextBoxName.Text,
                 Viscosity = TextBoxViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
                 Api = TextBoxApi.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
-                DefaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxDefaultPrice),
-                AlternativePrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxAlternativePrice),
+                DefaultPrice = GetDecimalValueOnTextBox(TextBoxDefaultPrice),
+                AlternativePrice = GetDecimalValueOnTextBox(TextBoxAlternativePrice),
                 StockQuantity = decimal.Parse(TextBoxStockQuantity.Text.Replace('.', ',')),
                 OilType = ComboBoxType.SelectedItem?.ToString(),
                 DefaultUoM = ComboBoxDefaultUoM.SelectedItem?.ToString(),
                 AlternativeUoM = ComboBoxAlternativeUoM.SelectedItem?.ToString() ?? string.Empty,
-                HasAlternative = GetDecimalValueCurrencyStyleOnTextBox(TextBoxAlternativePrice) > 0.0m
+                HasAlternative = CheckBoxAlternative.Checked
             }, message);
         }
 
@@ -193,28 +194,26 @@ namespace EasyOilFilter.Presentation.Forms
                 Name = TextBoxName.Text,
                 Viscosity = TextBoxViscosity.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
                 Api = TextBoxApi.Text.FixTextToManageDataBaseResult(allowWithSpaces: false),
-                DefaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxDefaultPrice),
-                AlternativePrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxAlternativePrice),
+                DefaultPrice = GetDecimalValueOnTextBox(TextBoxDefaultPrice),
+                AlternativePrice = GetDecimalValueOnTextBox(TextBoxAlternativePrice),
                 StockQuantity = decimal.Parse(TextBoxStockQuantity.Text.Replace('.', ',')),
                 OilType = ComboBoxType.SelectedItem?.ToString(),
                 DefaultUoM = ComboBoxDefaultUoM.SelectedItem?.ToString(),
-                AlternativeUoM = ComboBoxAlternativeUoM.SelectedItem?.ToString() ?? string.Empty
+                AlternativeUoM = ComboBoxAlternativeUoM.SelectedItem?.ToString() ?? string.Empty,
+                HasAlternative = CheckBoxAlternative.Checked
             }, message);
         }
 
-        private decimal GetDecimalValueCurrencyStyleOnTextBox(TextBox textBox)
+        private decimal GetDecimalValueOnTextBox(TextBox textBox)
         {
-            decimal value = string.IsNullOrEmpty(textBox.Text) 
-                ? 0.0m 
-                : decimal.Parse(textBox.Text, NumberStyles.Currency);
-
+            decimal.TryParse(textBox.Text.Replace("R$",string.Empty), out decimal value);
             return value;
         }
 
         private string GetValidateFormMessage()
         {
             string validationMessage = string.Empty;
-            decimal defaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxDefaultPrice);
+            decimal defaultPrice = GetDecimalValueOnTextBox(TextBoxDefaultPrice);
             decimal.TryParse(TextBoxStockQuantity.Text.Replace('.', ','), out decimal stockQuantity);
 
             bool invalidDefaultPrice = defaultPrice == 0.0m;
@@ -233,7 +232,7 @@ namespace EasyOilFilter.Presentation.Forms
                 validationMessage += $"O preenchimento do campo 'Tipo' é obrigatório.{Environment.NewLine}";
 
             if (string.IsNullOrEmpty(ComboBoxDefaultUoM.SelectedItem?.ToString()))
-                validationMessage += $"O preenchimento do campo 'Embalagem padrão' é obrigatório.{Environment.NewLine}";
+                validationMessage += $"O preenchimento do campo 'Embalagem' é obrigatório.{Environment.NewLine}";
 
             if (invalidDefaultPrice)
                 validationMessage = $"O valor do campo 'Preço' é inválido.{Environment.NewLine}";
@@ -241,9 +240,9 @@ namespace EasyOilFilter.Presentation.Forms
             if (invalidStockQuantity)
                 validationMessage += $"O valor do campo 'Em estoque' é inválido.{Environment.NewLine}";
 
-            if (ComboBoxAlternativeUoM.Visible && TextBoxAlternativePrice.Visible)
+            if (CheckBoxAlternative.Checked)
             {
-                decimal alternativePrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxAlternativePrice);
+                decimal alternativePrice = GetDecimalValueOnTextBox(TextBoxAlternativePrice);
                 bool invalidSecondPrice = alternativePrice == 0.0m;
 
                 if (invalidSecondPrice)
@@ -257,7 +256,7 @@ namespace EasyOilFilter.Presentation.Forms
                     (ComboBoxAlternativeUoM.SelectedItem?.ToString() ?? string.Empty);
 
                 if (defaultUoMIsEqualAlternativeUoM)
-                    validationMessage += $" O preenchimento do campo 'Embalagem padrão' deve ser diferente da 'Embalagem alternativa'.{Environment.NewLine}";
+                    validationMessage += $" O valor do campo 'Embalagem' deve ser diferente da 'Embalagem alternativa'.{Environment.NewLine}";
             }
 
             return validationMessage;
@@ -277,9 +276,9 @@ namespace EasyOilFilter.Presentation.Forms
                 updatedOil.AlternativePrice != Model.AlternativePrice;
         }
 
-        private void ButtonNewUoM_Click(object sender, EventArgs e)
+        private void CheckBoxAlternative_CheckedChanged(object sender, EventArgs e)
         {
-            SetAlternativeComponentsVisible(true);           
+            SetAlternativeComponentsVisible(CheckBoxAlternative.Checked);
         }
 
         private void SetAlternativeComponentsVisible(bool isVisible)
@@ -288,7 +287,6 @@ namespace EasyOilFilter.Presentation.Forms
             LabelAlternativeUoM.Visible = isVisible;
             TextBoxAlternativePrice.Visible = isVisible;
             ComboBoxAlternativeUoM.Visible = isVisible;
-            ButtonNewUoM.Enabled = !isVisible;
         }
 
         private void ComboBoxDefaultUoM_SelectionChangeCommitted(object sender, EventArgs e)

@@ -6,6 +6,6 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
     {
         public string Name { get; set; } = string.Empty;
         public string Viscosity { get; set; } = string.Empty;
-        public OilType OilType { get; set; } = OilType.All;
+        public OilType OilType { get; set; } = OilType.None;
     }
 }

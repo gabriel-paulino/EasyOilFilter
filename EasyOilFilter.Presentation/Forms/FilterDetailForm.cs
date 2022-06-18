@@ -105,7 +105,7 @@ namespace EasyOilFilter.Presentation.Forms
             TextBoxManufacturer.Clear();
             TextBoxPrice.Clear();
             TextBoxStockQuantity.Clear();
-            ComboBoxType.SelectedIndex = (int)FilterType.All;
+            ComboBoxType.SelectedIndex = (int)FilterType.None;
         }
 
         private async void UpdateFilter()
@@ -147,7 +147,7 @@ namespace EasyOilFilter.Presentation.Forms
                 Id = Model.Id,
                 Name = TextBoxCode.Text,
                 Manufacturer = TextBoxManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: true),
-                DefaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxPrice),
+                DefaultPrice = GetDecimalValueOnTextBox(TextBoxPrice),
                 StockQuantity = decimal.Parse(TextBoxStockQuantity.Text.Replace('.', ',')),
                 FilterType = ComboBoxType.SelectedItem.ToString()
             }, message);
@@ -164,25 +164,22 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 Name = TextBoxCode.Text,
                 Manufacturer = TextBoxManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: true),
-                DefaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxPrice),
+                DefaultPrice = GetDecimalValueOnTextBox(TextBoxPrice),
                 StockQuantity = decimal.Parse(TextBoxStockQuantity.Text.Replace('.', ',')),
                 FilterType = ComboBoxType.SelectedItem?.ToString() ?? string.Empty
             }, message);
         }
 
-        private decimal GetDecimalValueCurrencyStyleOnTextBox(TextBox textBox)
+        private decimal GetDecimalValueOnTextBox(TextBox textBox)
         {
-            decimal value = string.IsNullOrEmpty(textBox.Text)
-                ? 0.0m
-                : decimal.Parse(textBox.Text, NumberStyles.Currency);
-
+            decimal.TryParse(textBox.Text.Replace("R$", string.Empty), out decimal value);
             return value;
         }
 
         private string GetValidateFormMessage()
         {
             string validationMessage = string.Empty;
-            decimal defaultPrice = GetDecimalValueCurrencyStyleOnTextBox(TextBoxPrice);
+            decimal defaultPrice = GetDecimalValueOnTextBox(TextBoxPrice);
             decimal.TryParse(TextBoxStockQuantity.Text.Replace('.', ','), out decimal stockQuantity);
 
             bool invalidDefaultPrice = defaultPrice == 0.0m;

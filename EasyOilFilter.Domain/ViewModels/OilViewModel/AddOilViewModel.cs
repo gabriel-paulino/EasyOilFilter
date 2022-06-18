@@ -15,6 +15,7 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
         public string OilType { get; set; }
         public string DefaultUoM { get; set; }
         public string AlternativeUoM { get; set; }
+        public bool HasAlternative { get; set; }
 
         public static implicit operator Oil(AddOilViewModel model) =>
             new(
@@ -26,7 +27,8 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
                 stockQuantity: model.StockQuantity,
                 oilType: EnumUtility.GetEnumByDescription<OilType>(model.OilType),
                 defaultUoM: EnumUtility.GetEnumByDescription<UoM>(model.DefaultUoM),
-                alternativeUoM: EnumUtility.GetEnumByDescription<UoM>(model.AlternativeUoM)
+                alternativeUoM: EnumUtility.GetEnumByDescription<UoM>(model.AlternativeUoM),
+                hasAlternative: model.HasAlternative
                 );
     }
 }

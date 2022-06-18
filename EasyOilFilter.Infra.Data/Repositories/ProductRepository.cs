@@ -139,7 +139,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             });
         }
 
-        public async Task<IEnumerable<Filter>> Get(string name = "", string manufacturer = "", FilterType type = FilterType.All)
+        public async Task<IEnumerable<Filter>> Get(string name = "", string manufacturer = "", FilterType type = FilterType.None)
         {
             string query = @"
                 SELECT
@@ -164,7 +164,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             if (!string.IsNullOrEmpty(manufacturer))
                 builder.Where("[Manufacturer] LIKE @Manufacturer", new { Manufacturer = $"%{manufacturer}%" });
 
-            if (type != FilterType.All)
+            if (type != FilterType.None)
                 builder.Where("[FilterType] = @FilterType", new { FilterType = type });
 
             var templete = builder.AddTemplate(query);
@@ -474,7 +474,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return oils.OrderByDescending(oil => oil.Name);
         }
 
-        public async Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", OilType type = OilType.All)
+        public async Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", OilType type = OilType.None)
         {
             string query = @"
                 SELECT
@@ -504,7 +504,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             if (!string.IsNullOrEmpty(viscosity))
                 builder.Where("[Viscosity] LIKE @Viscosity", new { Viscosity = $"%{viscosity}%" });
 
-            if (type != OilType.All)
+            if (type != OilType.None)
                 builder.Where("[OilType] = @OilType", new { OilType = type });
 
             var templete = builder.AddTemplate(query);

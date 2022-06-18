@@ -43,11 +43,11 @@
             this.ComboBoxDefaultUoM = new System.Windows.Forms.ComboBox();
             this.TextBoxApi = new System.Windows.Forms.TextBox();
             this.LabelApi = new System.Windows.Forms.Label();
-            this.ButtonNewUoM = new System.Windows.Forms.Button();
             this.ComboBoxAlternativeUoM = new System.Windows.Forms.ComboBox();
             this.LabelAlternativeUoM = new System.Windows.Forms.Label();
             this.TextBoxAlternativePrice = new System.Windows.Forms.TextBox();
             this.LabelAlternativePrice = new System.Windows.Forms.Label();
+            this.CheckBoxAlternative = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // LabelName
@@ -117,7 +117,7 @@
             // 
             // ButtonProcess
             // 
-            this.ButtonProcess.Location = new System.Drawing.Point(27, 558);
+            this.ButtonProcess.Location = new System.Drawing.Point(27, 588);
             this.ButtonProcess.Name = "ButtonProcess";
             this.ButtonProcess.Size = new System.Drawing.Size(90, 30);
             this.ButtonProcess.TabIndex = 7;
@@ -145,9 +145,9 @@
             this.LabelDefaultUoM.AutoSize = true;
             this.LabelDefaultUoM.Location = new System.Drawing.Point(27, 345);
             this.LabelDefaultUoM.Name = "LabelDefaultUoM";
-            this.LabelDefaultUoM.Size = new System.Drawing.Size(134, 19);
+            this.LabelDefaultUoM.Size = new System.Drawing.Size(85, 19);
             this.LabelDefaultUoM.TabIndex = 10;
-            this.LabelDefaultUoM.Text = "Embalagem padrão";
+            this.LabelDefaultUoM.Text = "Embalagem";
             // 
             // ComboBoxDefaultUoM
             // 
@@ -174,21 +174,11 @@
             this.LabelApi.TabIndex = 16;
             this.LabelApi.Text = "API";
             // 
-            // ButtonNewUoM
-            // 
-            this.ButtonNewUoM.Location = new System.Drawing.Point(276, 558);
-            this.ButtonNewUoM.Name = "ButtonNewUoM";
-            this.ButtonNewUoM.Size = new System.Drawing.Size(107, 30);
-            this.ButtonNewUoM.TabIndex = 8;
-            this.ButtonNewUoM.Text = "+ Embalagem";
-            this.ButtonNewUoM.UseVisualStyleBackColor = true;
-            this.ButtonNewUoM.Click += new System.EventHandler(this.ButtonNewUoM_Click);
-            // 
             // ComboBoxAlternativeUoM
             // 
             this.ComboBoxAlternativeUoM.FormattingEnabled = true;
             this.ComboBoxAlternativeUoM.ItemHeight = 19;
-            this.ComboBoxAlternativeUoM.Location = new System.Drawing.Point(27, 481);
+            this.ComboBoxAlternativeUoM.Location = new System.Drawing.Point(27, 503);
             this.ComboBoxAlternativeUoM.Name = "ComboBoxAlternativeUoM";
             this.ComboBoxAlternativeUoM.Size = new System.Drawing.Size(356, 27);
             this.ComboBoxAlternativeUoM.TabIndex = 20;
@@ -198,7 +188,7 @@
             // LabelAlternativeUoM
             // 
             this.LabelAlternativeUoM.AutoSize = true;
-            this.LabelAlternativeUoM.Location = new System.Drawing.Point(27, 459);
+            this.LabelAlternativeUoM.Location = new System.Drawing.Point(27, 481);
             this.LabelAlternativeUoM.Name = "LabelAlternativeUoM";
             this.LabelAlternativeUoM.Size = new System.Drawing.Size(159, 19);
             this.LabelAlternativeUoM.TabIndex = 21;
@@ -207,7 +197,7 @@
             // 
             // TextBoxAlternativePrice
             // 
-            this.TextBoxAlternativePrice.Location = new System.Drawing.Point(27, 426);
+            this.TextBoxAlternativePrice.Location = new System.Drawing.Point(27, 448);
             this.TextBoxAlternativePrice.Name = "TextBoxAlternativePrice";
             this.TextBoxAlternativePrice.Size = new System.Drawing.Size(356, 27);
             this.TextBoxAlternativePrice.TabIndex = 9;
@@ -216,23 +206,34 @@
             // LabelAlternativePrice
             // 
             this.LabelAlternativePrice.AutoSize = true;
-            this.LabelAlternativePrice.Location = new System.Drawing.Point(27, 404);
+            this.LabelAlternativePrice.Location = new System.Drawing.Point(27, 426);
             this.LabelAlternativePrice.Name = "LabelAlternativePrice";
             this.LabelAlternativePrice.Size = new System.Drawing.Size(45, 19);
             this.LabelAlternativePrice.TabIndex = 19;
             this.LabelAlternativePrice.Text = "Preço";
             this.LabelAlternativePrice.Visible = false;
             // 
+            // CheckBoxAlternative
+            // 
+            this.CheckBoxAlternative.AutoSize = true;
+            this.CheckBoxAlternative.Location = new System.Drawing.Point(27, 400);
+            this.CheckBoxAlternative.Name = "CheckBoxAlternative";
+            this.CheckBoxAlternative.Size = new System.Drawing.Size(220, 23);
+            this.CheckBoxAlternative.TabIndex = 22;
+            this.CheckBoxAlternative.Text = "Preço/embalagem alternativo";
+            this.CheckBoxAlternative.UseVisualStyleBackColor = true;
+            this.CheckBoxAlternative.CheckedChanged += new System.EventHandler(this.CheckBoxAlternative_CheckedChanged);
+            // 
             // OilDetailForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(417, 600);
+            this.ClientSize = new System.Drawing.Size(417, 632);
+            this.Controls.Add(this.CheckBoxAlternative);
             this.Controls.Add(this.ComboBoxAlternativeUoM);
             this.Controls.Add(this.LabelAlternativeUoM);
             this.Controls.Add(this.TextBoxAlternativePrice);
             this.Controls.Add(this.LabelAlternativePrice);
-            this.Controls.Add(this.ButtonNewUoM);
             this.Controls.Add(this.TextBoxApi);
             this.Controls.Add(this.LabelApi);
             this.Controls.Add(this.TextBoxViscosity);
@@ -278,10 +279,10 @@
         private ComboBox ComboBoxDefaultUoM;
         private TextBox TextBoxApi;
         private Label LabelApi;
-        private Button ButtonNewUoM;
         private ComboBox ComboBoxAlternativeUoM;
         private Label LabelAlternativeUoM;
         private TextBox TextBoxAlternativePrice;
         private Label LabelAlternativePrice;
+        private CheckBox CheckBoxAlternative;
     }
 }

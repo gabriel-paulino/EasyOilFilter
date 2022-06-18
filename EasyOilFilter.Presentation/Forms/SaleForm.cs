@@ -42,7 +42,7 @@ namespace EasyOilFilter.Presentation.Forms
                 ButtonProcessSale.Text = "Adicionar";
 
                 SetDateTimePicker(DateTime.Today);
-                SelectPaymentMethod(PaymentMethod.All);
+                SelectPaymentMethod(PaymentMethod.None);
                 DisableFooterFields();
 
                 return;
@@ -569,7 +569,7 @@ namespace EasyOilFilter.Presentation.Forms
             TextBoxDiscountValue.Clear();
             TextBoxDiscountPercentage.Clear();
             TextBoxRemarks.Clear();
-            ComboBoxPaymentMethod.SelectedIndex = (int)PaymentMethod.All;
+            ComboBoxPaymentMethod.SelectedIndex = (int)PaymentMethod.None;
             SetDateTimePicker(DateTime.Today);
             Grid.DataSource = new List<SaleItemViewModel>() { new SaleItemViewModel() };
         }

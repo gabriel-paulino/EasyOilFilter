@@ -5,7 +5,7 @@ namespace EasyOilFilter.Domain.Enums
     public enum OilType
     {
         [Description("")]
-        All,
+        None,
         [Description("Mineral")]
         Mineral,
         [Description("Semissintético")]

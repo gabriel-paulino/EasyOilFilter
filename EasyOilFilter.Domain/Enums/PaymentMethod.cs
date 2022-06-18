@@ -5,7 +5,7 @@ namespace EasyOilFilter.Domain.Enums
     public enum PaymentMethod
     {
         [Description("")]
-        All,
+        None,
         [Description("Dinheiro")]
         Money,
         [Description("Pix")]
