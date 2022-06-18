@@ -7,17 +7,12 @@ namespace EasyOilFilter.Domain.Entities
     {
         public Filter(Guid id, string name, string manufacturer, decimal defaultPrice, decimal stockQuantity, FilterType filterType)
         {
-            AddNotifications(GetContract(name, manufacturer, defaultPrice, stockQuantity, filterType));
-
-            if (IsValid)
-            {
-                Id = id;
-                Name = name;
-                Manufacturer = manufacturer;
-                DefaultPrice = defaultPrice;
-                StockQuantity = stockQuantity;
-                FilterType = filterType;
-            }
+            Id = id;
+            Name = name;
+            Manufacturer = manufacturer;
+            DefaultPrice = defaultPrice;
+            StockQuantity = stockQuantity;
+            FilterType = filterType;
         }
 
         public Filter(string name, string manufacturer, decimal defaultPrice, decimal stockQuantity, FilterType filterType)

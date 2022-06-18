@@ -20,14 +20,22 @@ namespace EasyOilFilter.Domain.Entities
         public bool HasAlternative { get; protected set; }
 
 
-        public void ReduceStock(decimal soldAmount)
+        public void ReduceStock(decimal quantity, UoM uom)
         {
-            StockQuantity -= soldAmount;
+            StockQuantity -= GetQuantityInDefaultUoM(quantity, uom);
         }
 
-        public void IncreseStock(decimal soldAmount)
+        public void IncreseStock(decimal quantity, UoM uom)
         {
-            StockQuantity += soldAmount;
+            StockQuantity += GetQuantityInDefaultUoM(quantity, uom);
+        }
+
+        public decimal GetQuantityInDefaultUoM(decimal quantity, UoM uom)
+        {
+            if (uom == AlternativeUoM)
+                quantity /= 20;
+
+            return quantity;
         }
     }
 }

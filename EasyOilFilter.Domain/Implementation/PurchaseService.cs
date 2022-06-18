@@ -139,66 +139,46 @@ namespace EasyOilFilter.Domain.Implementation
 
         private async Task<(bool success, string errorMessage)> ReduceStock(IEnumerable<PurchaseItem> items)
         {
-            bool success = true;
-            string errorMessage = string.Empty;
-
             var products = await _productRepository.Get(items.Select(x => x.ProductId));
 
             foreach (var product in products)
             {
-                decimal soldAmount = items.FirstOrDefault(item => item.ProductId == product.Id).Quantity;
+                var canceledPurchaseItem = items.FirstOrDefault(item => item.ProductId == product.Id);
 
-                if (soldAmount > product.StockQuantity)
-                {
-                    success = false;
-                    errorMessage =
+                if (canceledPurchaseItem.Quantity > product.StockQuantity)
+                    return (false,
                         $"Falha ao abater estoque do produto '{product.Name}'. " +
-                        $"Quantidade decai para valor negativo.";
+                        $"Quantidade decai para valor negativo.");
 
-                    break;
-                }
-
-                product.ReduceStock(soldAmount);
+                product.ReduceStock(canceledPurchaseItem.Quantity, canceledPurchaseItem.UnitOfMeasurement);
 
                 if (await _productRepository.SetStockQuantity(product.Id, product.StockQuantity))
                     continue;
                 else
-                {
-                    success = false;
-                    errorMessage = $"Falha ao atualizar estoque. Produto '{product.Name}'.";
+                    return (false, $"Falha ao decrementar estoque. Produto '{product.Name}'.");
 
-                    break;
-                }
             }
 
-            return (success, errorMessage);
+            return (true, string.Empty);
         }
 
         private async Task<(bool success, string errorMessage)> IncreseStock(IEnumerable<PurchaseItem> items)
         {
-            bool success = true;
-            string errorMessage = string.Empty;
-
             var products = await _productRepository.Get(items.Select(x => x.ProductId));
 
             foreach (var product in products)
             {
-                decimal soldAmount = items.FirstOrDefault(item => item.ProductId == product.Id).Quantity;
+                var purchasedItem = items.FirstOrDefault(item => item.ProductId == product.Id);
 
-                product.IncreseStock(soldAmount);
+                product.IncreseStock(purchasedItem.Quantity, purchasedItem.UnitOfMeasurement);
 
                 if (await _productRepository.SetStockQuantity(product.Id, product.StockQuantity))
                     continue;
                 else
-                {
-                    success = false;
-                    errorMessage = $"Falha ao estornar estoque. Produto '{product.Name}'.";
-
-                    break;
-                }
+                    return (false, $"Falha ao incrementar estoque. Produto '{product.Name}'.");
             }
 
-            return (success, errorMessage);
+            return (true, string.Empty);
         }
     }
 }

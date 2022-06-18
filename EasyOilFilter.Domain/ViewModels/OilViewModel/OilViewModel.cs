@@ -34,7 +34,7 @@ namespace EasyOilFilter.Domain.ViewModels.OilViewModel
                 AlternativePrice = oil?.AlternativePrice ?? 0.0m,
                 AlternativeUoM = oil?.AlternativeUoM.GetDescription() ?? string.Empty,
                 HasAlternative = oil.HasAlternative,
-                PriceUoM = $"{oil.DefaultPrice:C2} ({oil.DefaultUoM.GetDescription()})" +
+                PriceUoM = $"{oil.DefaultPrice:C2} {(oil.HasAlternative ? $"({oil.DefaultUoM.GetDescription()})" : string.Empty)}" +
                     $@"{(oil.HasAlternative
                         ? $" / {oil.AlternativePrice:C2} ({oil.AlternativeUoM.GetDescription()})"
                         : string.Empty)

@@ -31,7 +31,7 @@ namespace EasyOilFilter.Domain.Implementation
         public async Task<IEnumerable<SaleViewModel>> Get(DateTime date)
         {
             var sales = await _saleRepository.Get(date);
-                       
+
             return sales?.Any() ?? false
                 ? SaleViewModel.MapMany(sales.OrderBy(sale => sale.Date))
                 : default;
@@ -50,11 +50,11 @@ namespace EasyOilFilter.Domain.Implementation
 
             bool success = await AddHeader(sale);
 
-            if(!success)
+            if (!success)
             {
                 _unitOfWork.Rollback();
                 return (false, "Falha ao adicionar venda.");
-            }    
+            }
 
             success = await AddSaleItems(sale.Items);
 
@@ -139,66 +139,53 @@ namespace EasyOilFilter.Domain.Implementation
 
         private async Task<(bool success, string errorMessage)> ReduceStock(IEnumerable<SaleItem> items)
         {
-            bool success = true;
-            string errorMessage = string.Empty;
-
             var products = await _productRepository.Get(items.Select(x => x.ProductId));
 
             foreach (var product in products)
             {
-                decimal soldAmount = items.FirstOrDefault(item => item.ProductId == product.Id).Quantity;
-                
-                if(soldAmount > product.StockQuantity)
+                var soldItems = items.Where(item => item.ProductId == product.Id);
+
+                foreach (var soldItem in soldItems)
                 {
-                    success = false;
-                    errorMessage = 
-                        $"Falha ao abater estoque do produto '{product.Name}'. " +
-                        $"Quantidade decai para valor negativo.";
+                    decimal quantitySoldInDefaultUoM = product.GetQuantityInDefaultUoM(soldItem.Quantity, soldItem.UnitOfMeasurement);
 
-                    break;
-                }
+                    if (quantitySoldInDefaultUoM > product.StockQuantity)
+                        return (false,
+                            $"Falha ao abater estoque do produto '{product.Name}'. " +
+                            $"Quantidade decai para valor negativo.");
 
-                product.ReduceStock(soldAmount);
+                    product.ReduceStock(soldItem.Quantity, soldItem.UnitOfMeasurement);
 
-                if (await _productRepository.SetStockQuantity(product.Id, product.StockQuantity))
-                    continue;
-                else
-                {
-                    success = false;
-                    errorMessage = $"Falha ao atualizar estoque. Produto '{product.Name}'.";
-
-                    break;
+                    if (await _productRepository.SetStockQuantity(product.Id, product.StockQuantity))
+                        continue;
+                    else
+                        return (false, $"Falha ao decrementar estoque. Produto '{product.Name}'.");
                 }
             }
 
-            return (success, errorMessage);
+            return (true, string.Empty);
         }
 
         private async Task<(bool success, string errorMessage)> ReversalStock(IEnumerable<SaleItem> items)
         {
-            bool success = true;
-            string errorMessage = string.Empty;
-
             var products = await _productRepository.Get(items.Select(x => x.ProductId));
 
             foreach (var product in products)
             {
-                decimal soldAmount = items.FirstOrDefault(item => item.ProductId == product.Id).Quantity;
+                var canceledSoldItems = items.Where(item => item.ProductId == product.Id);
 
-                product.IncreseStock(soldAmount);
-
-                if (await _productRepository.SetStockQuantity(product.Id, product.StockQuantity))
-                    continue;
-                else
+                foreach (var canceledSoldItem in canceledSoldItems)
                 {
-                    success = false;
-                    errorMessage = $"Falha ao estornar estoque. Produto '{product.Name}'.";
+                    product.IncreseStock(canceledSoldItem.Quantity, canceledSoldItem.UnitOfMeasurement);
 
-                    break;
+                    if (await _productRepository.SetStockQuantity(product.Id, product.StockQuantity))
+                        continue;
+                    else
+                        return (false, $"Falha ao incrementar estoque. Produto '{product.Name}'.");
                 }
             }
 
-            return (success, errorMessage);
+            return (true, string.Empty);
         }
     }
 }

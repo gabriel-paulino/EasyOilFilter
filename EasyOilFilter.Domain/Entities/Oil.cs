@@ -7,22 +7,17 @@ namespace EasyOilFilter.Domain.Entities
     {
         public Oil(Guid id, string name, string viscosity, string api, decimal defaultPrice, decimal alternativePrice, decimal stockQuantity, OilType oilType, UoM defaultUoM, UoM alternativeUoM, bool hasAlternative)
         {
-            AddNotifications(GetContract(name, viscosity, api, defaultPrice, stockQuantity, oilType, defaultUoM));
-
-            if (IsValid)
-            {
-                Id = id;
-                Name = name;
-                Viscosity = viscosity;
-                Api = api;
-                DefaultPrice = defaultPrice;
-                DefaultUoM = defaultUoM;
-                AlternativePrice = alternativePrice;
-                AlternativeUoM = alternativeUoM;
-                StockQuantity = stockQuantity;
-                OilType = oilType;
-                HasAlternative = hasAlternative;   
-            }
+            Id = id;
+            Name = name;
+            Viscosity = viscosity;
+            Api = api;
+            DefaultPrice = defaultPrice;
+            DefaultUoM = defaultUoM;
+            AlternativePrice = alternativePrice;
+            AlternativeUoM = alternativeUoM;
+            StockQuantity = stockQuantity;
+            OilType = oilType;
+            HasAlternative = hasAlternative;
         }
 
         public Oil(string name, string viscosity, string api, decimal defaultPrice, decimal alternativePrice, decimal stockQuantity, OilType oilType, UoM defaultUoM, UoM alternativeUoM)
