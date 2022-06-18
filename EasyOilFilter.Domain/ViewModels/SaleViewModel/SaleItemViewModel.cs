@@ -41,14 +41,5 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
                 unitaryPrice: model.UnitaryPrice,
                 totalItem: model.TotalItem
                 );
-
-        public static implicit operator SaleItemViewModel(ProductViewModel model) =>
-            new()
-            {
-                ProductId = Guid.Parse(model.Id),
-                ItemDescription = model.Name,
-                UnitOfMeasurement = model.DefaultUoM,
-                UnitaryPrice = model.DefaultPrice,
-            };
     }
 }

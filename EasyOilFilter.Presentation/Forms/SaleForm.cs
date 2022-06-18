@@ -85,7 +85,8 @@ namespace EasyOilFilter.Presentation.Forms
         {
             if (IsItemQuantityCell(cell))
             {
-                cell.Cancel = !decimal.TryParse(cell.FormattedValue.ToString(), out decimal _);
+                bool hasParsed = decimal.TryParse(cell.FormattedValue.ToString(), out decimal quantity);
+                cell.Cancel = !hasParsed || quantity <= 0;
             }
             else if (IsItemUnitOfMeasurementCell(cell))
             {

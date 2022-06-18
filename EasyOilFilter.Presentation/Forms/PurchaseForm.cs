@@ -73,13 +73,9 @@ namespace EasyOilFilter.Presentation.Forms
         {
             if (IsQuantityOrUnitaryPriceCell(cell))
             {
-                string formattedValue = cell.FormattedValue?.ToString() ?? string.Empty;
-
-                decimal itemPrice = string.IsNullOrEmpty(formattedValue)
-                    ? 0
-                    : decimal.Parse(formattedValue, NumberStyles.Currency);
-
-                cell.Cancel = itemPrice <= 0;
+                string userInput = cell.FormattedValue.ToString()?.Replace("R$", string.Empty) ?? string.Empty;
+                bool hasParsed = decimal.TryParse(userInput, out decimal quantity);
+                cell.Cancel = !hasParsed || quantity <= 0;
             }
         }
 
@@ -237,7 +233,7 @@ namespace EasyOilFilter.Presentation.Forms
             }
 
             else if (products.Count() == 1)
-                SetPurchaseItemOnGrid(rowIndex, (PurchaseItemViewModel)products.FirstOrDefault());
+                SetPurchaseItemOnGrid(rowIndex, products.First());
         }
 
         private void AddNewEmptyLineOnGrid()
@@ -303,11 +299,11 @@ namespace EasyOilFilter.Presentation.Forms
             }
         }
 
-        private void SetPurchaseItemOnGrid(int rowIndex, PurchaseItemViewModel selectedProduct)
+        private void SetPurchaseItemOnGrid(int rowIndex, ProductViewModel selectedProduct)
         {
-            SetCellValue(rowIndex, "ProductId", selectedProduct.ProductId);
-            SetCellValue(rowIndex, "ItemDescription", selectedProduct.ItemDescription);
-            SetCellValue(rowIndex, "UnitOfMeasurement", selectedProduct.UnitOfMeasurement);
+            SetCellValue(rowIndex, "ProductId", selectedProduct.Id);
+            SetCellValue(rowIndex, "ItemDescription", selectedProduct.Name);
+            SetCellValue(rowIndex, "UnitOfMeasurement", selectedProduct.DefaultUoM);
         }
 
         private object GetCellValue(int rowIndex, string column)
