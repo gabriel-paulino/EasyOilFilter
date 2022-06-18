@@ -117,12 +117,20 @@ namespace EasyOilFilter.Presentation.Forms
             if (selectedSaleModel is null)
                 return;
 
+            bool isCanceled = false;
+            DateTime saleDate = DateTimePickerSearch.Value;
+
             using (var saleForm = new SaleForm(_saleService, _productService))
             {
                 saleForm.Model = selectedSaleModel;
                 saleForm.Mode = FormMode.OnlyReadCanCancel;
                 saleForm.ShowDialog();
+                isCanceled = saleForm.IsCanceled;
+                saleDate = saleForm.Date;
             }
+
+            if (isCanceled)
+                SearchSales(saleDate.Date);
         }
     }
 }

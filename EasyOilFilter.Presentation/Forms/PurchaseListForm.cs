@@ -128,7 +128,7 @@ namespace EasyOilFilter.Presentation.Forms
             }
 
             if (isCanceled)
-                SearchPurchases(purchaseDate);
+                SearchPurchases(purchaseDate.Date);
         }
     }
 }
