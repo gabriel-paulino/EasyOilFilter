@@ -4,6 +4,7 @@ using EasyOilFilter.Domain.Extensions;
 using EasyOilFilter.Domain.Shared.Utils;
 using EasyOilFilter.Domain.ViewModels;
 using EasyOilFilter.Domain.ViewModels.SaleViewModel;
+using EasyOilFilter.Presentation.Dto;
 using EasyOilFilter.Presentation.Enums;
 using System.ComponentModel;
 using System.Globalization;
@@ -14,6 +15,8 @@ namespace EasyOilFilter.Presentation.Forms
     {
         private readonly ISaleService _saleService;
         private readonly IProductService _productService;
+        private List<ProductValidUomDto> _validsUoM = new List<ProductValidUomDto>();
+
         public SaleViewModel Model { get; set; }
         public FormMode Mode { get; set; }
         public bool IsAdd { get; private set; }
@@ -84,6 +87,16 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 cell.Cancel = !decimal.TryParse(cell.FormattedValue.ToString(), out decimal _);
             }
+            else if (IsItemUnitOfMeasurementCell(cell))
+            {
+                var validsUoM = GetValidsUom(cell.RowIndex);
+                bool isValidUoM = validsUoM.Contains(cell.FormattedValue?.ToString() ?? string.Empty);
+
+                cell.Cancel = !isValidUoM;
+
+                if (!isValidUoM)
+                    MessageBox.Show($"Preencha essa célula com {string.Join(" ou ", validsUoM.ToArray())}", "Aviso");
+            }
         }
 
         private void DataGridView_CellValidated(object sender, DataGridViewCellEventArgs cell)
@@ -99,9 +112,28 @@ namespace EasyOilFilter.Presentation.Forms
                     UpdateTotalItem(cell.RowIndex);
                     UpdateTotal();
                     break;
+                case 5:
+                    FillUnitaryPriceOnItem(cell.RowIndex);
+                    UpdateTotalItem(cell.RowIndex);
+                    UpdateTotal();
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void FillUnitaryPriceOnItem(int rowIndex)
+        {
+            var validsUoMRelatedPrice = GetValidsUomPrice(rowIndex);
+
+            if (validsUoMRelatedPrice is null)
+                return;
+
+            string uom = (string)GetCellValue(rowIndex, "UnitOfMeasurement");
+
+            decimal price = validsUoMRelatedPrice?.FirstOrDefault(x => x.UoM == uom)?.Price ?? 0.0m;
+
+            SetCellValue(rowIndex, "UnitaryPrice", price);
         }
 
         private void Grid_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -234,7 +266,6 @@ namespace EasyOilFilter.Presentation.Forms
             Grid.Columns["TotalItem"].MinimumWidth = 110;
             Grid.Columns["TotalItem"].ReadOnly = true;
             Grid.Columns["UnitaryPrice"].ReadOnly = true;
-            Grid.Columns["UnitOfMeasurement"].ReadOnly = true;
             Grid.AutoResizeColumns();
         }
 
@@ -298,7 +329,7 @@ namespace EasyOilFilter.Presentation.Forms
             SetTotalSale(totalItems);
         }
 
-        public decimal GetTotalItems()
+        private decimal GetTotalItems()
         {
             decimal totalItems = 0.0m;
 
@@ -342,9 +373,57 @@ namespace EasyOilFilter.Presentation.Forms
         {
             SetCellValue(rowIndex, "ProductId", selectedProduct.Id);
             SetCellValue(rowIndex, "ItemDescription", selectedProduct.Name);
+
+            SetValidsUoMInProduct(selectedProduct);
+
+            if (selectedProduct.HasAlternative)
+                return;
+
             SetCellValue(rowIndex, "UnitOfMeasurement", selectedProduct.DefaultUoM);
             SetCellValue(rowIndex, "UnitaryPrice", selectedProduct.DefaultPrice);
         }
+
+        private void SetValidsUoMInProduct(ProductViewModel product)
+        {
+            var validUoM = new List<UoMPriceDto>() 
+            {
+                new UoMPriceDto(
+                    uom: product.DefaultUoM,
+                    price: product.DefaultPrice) 
+            };
+
+            if (product.HasAlternative)
+                validUoM.Add(new UoMPriceDto(
+                    uom: product.AlternativeUoM,
+                    price: product.AlternativePrice));
+
+            _validsUoM.Add(
+                new ProductValidUomDto()
+                {
+                    Id = product.Id,
+                    ValidsUoMPrice = validUoM
+                });
+        }
+
+        private List<UoMPriceDto> GetValidsUomPrice(int rowIndex)
+        {
+            string productId = GetCellValue(rowIndex, "ProductId")?.ToString() ?? Guid.Empty.ToString();
+
+            var productDto = _validsUoM.FirstOrDefault(product => product.Id == productId);
+
+            return productDto?.ValidsUoMPrice ?? new List<UoMPriceDto>();
+        }
+
+        private List<string> GetValidsUom(int rowIndex)
+        {
+            var validsUoMPrice = GetValidsUomPrice(rowIndex);
+
+            if (validsUoMPrice is null)
+                return new List<string>();
+
+            return validsUoMPrice.Select(uom => uom.UoM).ToList();
+        }
+
 
         private object GetCellValue(int rowIndex, string column)
         {
@@ -363,6 +442,7 @@ namespace EasyOilFilter.Presentation.Forms
         }
 
         private bool IsItemQuantityCell(DataGridViewCellValidatingEventArgs cell) => cell.ColumnIndex == 4;
+        private bool IsItemUnitOfMeasurementCell(DataGridViewCellValidatingEventArgs cell) => cell.ColumnIndex == 5;
 
         private (AddSaleViewModel sale, string errorMessage) GetAddSaleViewModel()
         {
@@ -420,14 +500,23 @@ namespace EasyOilFilter.Presentation.Forms
                 Guid.TryParse(row.Cells["ProductId"].Value?.ToString(), out Guid productId);
 
                 if (productId == Guid.Empty)
-                    errorMessage += $"O produto da linha {row.Index + 1} não foi selecionado.{Environment.NewLine}";
+                    errorMessage += $"O 'Item' da linha {row.Index + 1} não foi selecionado.{Environment.NewLine}";
 
                 decimal.TryParse(row.Cells["Quantity"].Value?.ToString(), out decimal quantity);
 
                 if (quantity <= 0)
-                    errorMessage += $"A quantidade da linha {row.Index + 1} não é válida.{Environment.NewLine}";
+                    errorMessage += $"A 'Quantidade' da linha {row.Index + 1} não é válida.{Environment.NewLine}";
+
+                string uom = row.Cells["UnitOfMeasurement"].Value?.ToString() ?? string.Empty;
+
+                if (string.IsNullOrEmpty(uom))
+                    errorMessage += $"A 'Embalagem' da linha {row.Index + 1} não é válida.{Environment.NewLine}";
 
                 decimal.TryParse(row.Cells["UnitaryPrice"].Value?.ToString(), out decimal unitaryPrice);
+
+                if (unitaryPrice <= 0)
+                    errorMessage += $"O 'Preço unitário' da linha {row.Index + 1} não é válido.{Environment.NewLine}";
+
                 decimal.TryParse(row.Cells["TotalItem"].Value?.ToString(), out decimal totalItem);
 
                 saleItems.Add(
@@ -435,7 +524,7 @@ namespace EasyOilFilter.Presentation.Forms
                     {
                         ProductId = productId,
                         ItemDescription = row.Cells["ItemDescription"].Value?.ToString(),
-                        UnitOfMeasurement = row.Cells["UnitOfMeasurement"].Value?.ToString(),
+                        UnitOfMeasurement = uom,
                         Quantity = quantity,
                         UnitaryPrice = unitaryPrice,
                         TotalItem = totalItem
@@ -467,7 +556,7 @@ namespace EasyOilFilter.Presentation.Forms
             var now = DateTime.Now;
 
             return new DateTime(
-                date.Year, date.Month, date.Day, 
+                date.Year, date.Month, date.Day,
                 now.Hour, now.Minute, now.Second
                 );
         }
