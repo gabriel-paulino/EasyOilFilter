@@ -257,11 +257,11 @@ namespace EasyOilFilter.Presentation.Forms
                 if (selectedProduct is null)
                     return;
 
-                SetSaleItemOnGrid(rowIndex, selectedProduct);
+                SetProductOnGrid(rowIndex, selectedProduct);
             }
 
             else if (products.Count() == 1)
-                SetSaleItemOnGrid(rowIndex, (SaleItemViewModel)products.FirstOrDefault());
+                SetProductOnGrid(rowIndex, products.First());
         }
 
         private void AddNewEmptyLineOnGrid()
@@ -329,23 +329,21 @@ namespace EasyOilFilter.Presentation.Forms
 
         private ProductViewModel? GetSelectedProduct(IEnumerable<ProductViewModel> dataSource)
         {
-            using (var cfl = new ChooseFromList())
-            {
-                cfl.DataSource = dataSource;
-                cfl.ShowDialog();
+            using var cfl = new ChooseFromList();
+            cfl.DataSource = dataSource;
+            cfl.ShowDialog();
 
-                return cfl?.Data is null
-                      ? default
-                      : (ProductViewModel)cfl.Data;
-            }
+            return cfl?.Data is null
+                  ? default
+                  : (ProductViewModel)cfl.Data;
         }
 
-        private void SetSaleItemOnGrid(int rowIndex, SaleItemViewModel selectedProduct)
+        private void SetProductOnGrid(int rowIndex, ProductViewModel selectedProduct)
         {
-            SetCellValue(rowIndex, "ProductId", selectedProduct.ProductId);
-            SetCellValue(rowIndex, "ItemDescription", selectedProduct.ItemDescription);
-            SetCellValue(rowIndex, "UnitOfMeasurement", selectedProduct.UnitOfMeasurement);
-            SetCellValue(rowIndex, "UnitaryPrice", selectedProduct.UnitaryPrice);
+            SetCellValue(rowIndex, "ProductId", selectedProduct.Id);
+            SetCellValue(rowIndex, "ItemDescription", selectedProduct.Name);
+            SetCellValue(rowIndex, "UnitOfMeasurement", selectedProduct.DefaultUoM);
+            SetCellValue(rowIndex, "UnitaryPrice", selectedProduct.DefaultPrice);
         }
 
         private object GetCellValue(int rowIndex, string column)

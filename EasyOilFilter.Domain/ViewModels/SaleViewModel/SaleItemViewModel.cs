@@ -47,8 +47,8 @@ namespace EasyOilFilter.Domain.ViewModels.SaleViewModel
             {
                 ProductId = Guid.Parse(model.Id),
                 ItemDescription = model.Name,
-                UnitOfMeasurement = model.UnitOfMeasurement,
-                UnitaryPrice = model.Price,
+                UnitOfMeasurement = model.DefaultUoM,
+                UnitaryPrice = model.DefaultPrice,
             };
     }
 }

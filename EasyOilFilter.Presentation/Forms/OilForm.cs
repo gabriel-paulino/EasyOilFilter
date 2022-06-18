@@ -204,24 +204,21 @@ namespace EasyOilFilter.Presentation.Forms
             DataGridView.DataSource = new List<OilViewModel>();
             DataGridView.ReadOnly = true;
             DataGridView.Columns["Id"].Visible = false;
+            DataGridView.Columns["DefaultPrice"].Visible = false;
+            DataGridView.Columns["DefaultUoM"].Visible = false;
+            DataGridView.Columns["AlternativePrice"].Visible = false;
+            DataGridView.Columns["AlternativeUoM"].Visible = false;
             DataGridView.Columns["HasAlternative"].Visible = false;
             DataGridView.Columns["Name"].HeaderText = "Lubrificante";
-            DataGridView.Columns["Viscosity"].HeaderText = "Viscosidade";
+            DataGridView.Columns["Viscosity"].HeaderText = "Visc.";
             DataGridView.Columns["Api"].HeaderText = "Api";
-            DataGridView.Columns["DefaultPrice"].HeaderText = "Preço";
-            DataGridView.Columns["DefaultUoM"].HeaderText = "Emb";
             DataGridView.Columns["StockQuantity"].HeaderText = "Estoque";
-            DataGridView.Columns["AlternativePrice"].HeaderText = "Preço*";
-            DataGridView.Columns["AlternativeUoM"].HeaderText = "Emb*";
+            DataGridView.Columns["PriceUoM"].HeaderText = "Preço";
             DataGridView.Columns["OilType"].HeaderText = "Tipo";
-            DataGridView.Columns["DefaultPrice"].DefaultCellStyle.Format = "C2";
-            DataGridView.Columns["AlternativePrice"].DefaultCellStyle.Format = "C2";
             DataGridView.Columns["StockQuantity"].DefaultCellStyle.Format = "F2";
             DataGridView.Columns["Name"].MinimumWidth = 190;
-            DataGridView.Columns["DefaultPrice"].MinimumWidth = 90;
-            DataGridView.Columns["Viscosity"].MinimumWidth = 80;
-            DataGridView.Columns["StockQuantity"].MinimumWidth = 90;
-            DataGridView.Columns["OilType"].MinimumWidth = 110;
+            DataGridView.Columns["OilType"].MinimumWidth = 105;
+            DataGridView.Columns["PriceUoM"].MinimumWidth = 240;
 
             DataGridView.AutoResizeColumns();
         }

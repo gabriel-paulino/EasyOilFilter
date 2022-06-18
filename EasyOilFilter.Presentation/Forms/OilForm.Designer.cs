@@ -73,7 +73,7 @@
             this.DataGridView.Name = "DataGridView";
             this.DataGridView.ReadOnly = true;
             this.DataGridView.RowTemplate.Height = 25;
-            this.DataGridView.Size = new System.Drawing.Size(930, 280);
+            this.DataGridView.Size = new System.Drawing.Size(807, 280);
             this.DataGridView.TabIndex = 0;
             this.DataGridView.RowHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_RowHeaderMouseDoubleClick);
             // 
@@ -82,7 +82,7 @@
             this.ButtonSearch.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ButtonSearch.Image = ((System.Drawing.Image)(resources.GetObject("ButtonSearch.Image")));
             this.ButtonSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonSearch.Location = new System.Drawing.Point(834, 52);
+            this.ButtonSearch.Location = new System.Drawing.Point(711, 59);
             this.ButtonSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.ButtonSearch.Name = "ButtonSearch";
             this.ButtonSearch.Size = new System.Drawing.Size(90, 30);
@@ -126,7 +126,7 @@
             // 
             this.ComboType.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ComboType.FormattingEnabled = true;
-            this.ComboType.Location = new System.Drawing.Point(489, 56);
+            this.ComboType.Location = new System.Drawing.Point(489, 59);
             this.ComboType.Name = "ComboType";
             this.ComboType.Size = new System.Drawing.Size(120, 27);
             this.ComboType.TabIndex = 5;
@@ -159,7 +159,7 @@
             this.GroupBoxSearch.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.GroupBoxSearch.Location = new System.Drawing.Point(14, 12);
             this.GroupBoxSearch.Name = "GroupBoxSearch";
-            this.GroupBoxSearch.Size = new System.Drawing.Size(930, 98);
+            this.GroupBoxSearch.Size = new System.Drawing.Size(807, 98);
             this.GroupBoxSearch.TabIndex = 8;
             this.GroupBoxSearch.TabStop = false;
             this.GroupBoxSearch.Text = "Pesquisar";
@@ -175,7 +175,7 @@
             this.GroupBoxUtils.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.GroupBoxUtils.Location = new System.Drawing.Point(14, 420);
             this.GroupBoxUtils.Name = "GroupBoxUtils";
-            this.GroupBoxUtils.Size = new System.Drawing.Size(930, 130);
+            this.GroupBoxUtils.Size = new System.Drawing.Size(807, 130);
             this.GroupBoxUtils.TabIndex = 9;
             this.GroupBoxUtils.TabStop = false;
             this.GroupBoxUtils.Text = "Alterar preço padrão de todos lubrificantes";
@@ -255,7 +255,7 @@
             this.ButtonAddOil.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ButtonAddOil.Image = ((System.Drawing.Image)(resources.GetObject("ButtonAddOil.Image")));
             this.ButtonAddOil.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonAddOil.Location = new System.Drawing.Point(854, 599);
+            this.ButtonAddOil.Location = new System.Drawing.Point(731, 599);
             this.ButtonAddOil.Name = "ButtonAddOil";
             this.ButtonAddOil.Size = new System.Drawing.Size(90, 30);
             this.ButtonAddOil.TabIndex = 0;
@@ -268,7 +268,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(958, 641);
+            this.ClientSize = new System.Drawing.Size(839, 641);
             this.Controls.Add(this.GroupBoxUtils);
             this.Controls.Add(this.GroupBoxSearch);
             this.Controls.Add(this.DataGridView);
