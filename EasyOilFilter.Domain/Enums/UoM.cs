@@ -1,9 +1,18 @@
-﻿namespace EasyOilFilter.Domain.Enums
+﻿using System.ComponentModel;
+
+namespace EasyOilFilter.Domain.Enums
 {
     public enum UoM
     {
+        [Description("")]
+        None,
+        [Description("Litro")]
         Liter,
-        Bucket,
-        Unit
+        [Description("Balde")]
+        Bucket,       
+        [Description("Unidade")]
+        Unity,
+        [Description("Outro")]
+        Other,
     }
 }

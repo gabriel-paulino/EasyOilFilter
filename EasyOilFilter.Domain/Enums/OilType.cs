@@ -1,10 +1,20 @@
-﻿namespace EasyOilFilter.Domain.Enums
+﻿using System.ComponentModel;
+
+namespace EasyOilFilter.Domain.Enums
 {
     public enum OilType
     {
+        [Description("")]
+        None,
+        [Description("Mineral")]
         Mineral,
+        [Description("Semissintético")]
         SemiSynthetic,
+        [Description("Sintético")]
         Synthetic,
-        Transmission
+        [Description("Transmissão")]
+        Transmission,
+        [Description("Outro")]
+        Other  
     }
 }

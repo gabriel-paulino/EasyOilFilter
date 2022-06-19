@@ -1,66 +1,65 @@
-﻿using EasyOilFilter.Domain.Entities.Base;
-using EasyOilFilter.Domain.Enums;
+﻿using EasyOilFilter.Domain.Enums;
 using Flunt.Validations;
 
 namespace EasyOilFilter.Domain.Entities
 {
-    public class Oil : BaseEntity
+    public class Oil : Product
     {
-        public Oil(Guid id, string name, string viscosity, decimal price, OilType type, UoM unitOfMeasurement)
+        public Oil(Guid id, string name, string viscosity, string api, decimal defaultPrice, decimal alternativePrice, decimal stockQuantity, OilType oilType, UoM defaultUoM, UoM alternativeUoM, bool hasAlternative)
         {
-            AddNotifications(GetContract(name, viscosity, price, type, unitOfMeasurement));
+            Id = id;
+            Name = name;
+            Viscosity = viscosity;
+            Api = api;
+            DefaultPrice = defaultPrice;
+            DefaultUoM = defaultUoM;
+            AlternativePrice = alternativePrice;
+            AlternativeUoM = alternativeUoM;
+            StockQuantity = stockQuantity;
+            OilType = oilType;
+            HasAlternative = hasAlternative;
+        }
+
+        public Oil(string name, string viscosity, string api, decimal defaultPrice, decimal alternativePrice, decimal stockQuantity, OilType oilType, UoM defaultUoM, UoM alternativeUoM, bool hasAlternative)
+        {
+            AddNotifications(GetContract(name, viscosity, api, defaultPrice, stockQuantity, oilType, defaultUoM));
 
             if (IsValid)
             {
-                Id = id;
                 Name = name;
                 Viscosity = viscosity;
-                Price = price;
-                Type = type;
-                UnitOfMeasurement = unitOfMeasurement;
+                Api = api;
+                DefaultPrice = defaultPrice;
+                AlternativePrice = alternativePrice;
+                StockQuantity = stockQuantity;
+                OilType = oilType;
+                DefaultUoM = defaultUoM;
+                AlternativeUoM = alternativeUoM;
+                Type = ProductType.Oil;
+                HasAlternative = hasAlternative;
             }
         }
 
-        public Oil(string name, string viscosity, decimal price, OilType type, UoM unitOfMeasurement)
+        public void ChangeDefaultPriceByAbsoluteValue(decimal absoluteValue)
         {
-            AddNotifications(GetContract(name, viscosity, price, type, unitOfMeasurement));
-
-            if (IsValid)
-            {
-                Name = name;
-                Viscosity = viscosity;
-                Price = price;
-                Type = type;
-                UnitOfMeasurement = unitOfMeasurement;
-            }
+            DefaultPrice += absoluteValue;
         }
 
-        public string Name { get; set; }
-        public string Viscosity { get; set; }
-        public decimal Price { get; set; }
-        public OilType Type { get; set; }
-        public UoM UnitOfMeasurement { get; set; }
-
-        public void ChangePriceByAbsoluteValue(decimal absoluteValue)
+        public void ChangeDefaultPriceByPercentage(decimal percentage)
         {
-            Price += absoluteValue;
+            DefaultPrice = (1 + percentage / 100) * DefaultPrice;
         }
 
-        public void ChangePriceByPercentage(decimal percentage)
-        {
-            Price = (1 + percentage / 100) * Price;
-        }
-
-        private static Contract<Oil> GetContract(string name, string viscosity, decimal price, OilType type, UoM unitOfMeasurement) =>
+        private static Contract<Oil> GetContract(string name, string viscosity, string api, decimal defaultPrice, decimal stockQuantity, OilType type, UoM defaultUoM) =>
             new Contract<Oil>()
-                .IsNullOrEmpty(name, "Name", "O nome do lubrificante deve estar preenchido.")
                 .IsLowerThan(name, 100, "Name", "O nome do lubrificante não pode ter mais do que 100 caracteres.")
-                .IsGreaterThan(name, 3, "Name", "O nome do lubrificante deve ter pelo menos 3 caracteres.")
-                .IsNullOrEmpty(name, "Name", "A viscosidade do lubrificante deve estar preenchida.")
-                .IsLowerThan(viscosity, 10, "Viscosity", "A viscosidade do lubrificante não pode ter mais do que 100 caracteres.")
+                .IsGreaterThan(name, 2, "Name", "O nome do lubrificante deve ter pelo menos 2 caracteres.")
+                .IsLowerThan(viscosity, 10, "Viscosity", "A viscosidade do lubrificante não pode ter mais do que 10 caracteres.")
+                .IsLowerThan(api, 10, "Api", "A API do lubrificante não pode ter mais do que 10 caracteres.")
                 .IsGreaterThan(viscosity, 2, "Viscosity", "A viscosidade do lubrificante deve ter pelo menos 2 caracteres.")
-                .IsBetween((int)type, 0, 14, "Type", "O tipo do lubrificante deve ser selecionado.")
-                .IsBetween((int)unitOfMeasurement, 0, 9, "UnitOfMeasurement", "A unidade de medida do lubrificante deve ser selecionada.")
-                .IsBetween(price, 1, 1000, "Price", "O preço do lubrificante deve ser pelo menos R$ 1 e não superior que R$ 1000.");
+                .IsBetween((int)type, 1, 5, "Type", "O tipo do lubrificante deve ser informado.")
+                .IsBetween((int)defaultUoM, 0, 2, "DefaultUoM", "A embalagem padrão do lubrificante deve ser preenchida.")
+                .IsBetween(defaultPrice, 1, 1000, "DefaultPrice", "O preço do lubrificante deve ser pelo menos R$ 1 e não maior que R$ 1000.")
+                .IsGreaterThan(stockQuantity, 0, "StockQuantity", "A quantidade em estoque do lubrificante deve ser maior que 0.");
     }
 }
