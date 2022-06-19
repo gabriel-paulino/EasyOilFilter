@@ -91,6 +91,10 @@ namespace EasyOilFilter.Presentation.Forms
             else if (IsItemUnitOfMeasurementCell(cell))
             {
                 var validsUoM = GetValidsUom(cell.RowIndex);
+
+                if (!validsUoM.Any())
+                    return;
+
                 bool isValidUoM = validsUoM.Contains(cell.FormattedValue?.ToString() ?? string.Empty);
 
                 cell.Cancel = !isValidUoM;
@@ -386,11 +390,11 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void SetValidsUoMInProduct(ProductViewModel product)
         {
-            var validUoM = new List<UoMPriceDto>() 
+            var validUoM = new List<UoMPriceDto>()
             {
                 new UoMPriceDto(
                     uom: product.DefaultUoM,
-                    price: product.DefaultPrice) 
+                    price: product.DefaultPrice)
             };
 
             if (product.HasAlternative)
