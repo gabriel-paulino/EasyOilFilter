@@ -120,17 +120,17 @@ namespace EasyOilFilter.Presentation.Forms
                 HasAlternative = (bool)DataGridView.CurrentRow.Cells["HasAlternative"].Value,
             };
 
-            bool isUpdated = false;
+            bool wasProcessed = false;
 
             using (var detail = new OilDetailForm(_productService))
             {
                 detail.Mode = FormMode.Update;
                 detail.Model = selectedOilModel;
                 detail.ShowDialog();
-                isUpdated = detail.IsUpdate;
+                wasProcessed = detail.IsUpdate || detail.IsDelete;
             }
 
-            if (isUpdated)
+            if (wasProcessed)
                 SearchLubs();
         }
 

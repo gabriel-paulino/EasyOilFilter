@@ -86,7 +86,7 @@ namespace EasyOilFilter.Presentation.Forms
             if (IsItemQuantityCell(cell))
             {
                 bool hasParsed = decimal.TryParse(cell.FormattedValue.ToString(), out decimal quantity);
-                cell.Cancel = !hasParsed || quantity <= 0;
+                cell.Cancel = !hasParsed || quantity < 0;
             }
             else if (IsItemUnitOfMeasurementCell(cell))
             {
@@ -464,7 +464,7 @@ namespace EasyOilFilter.Presentation.Forms
             bool isInvaliddiscount = discount < 0;
 
             if (isInvalidDescription)
-                errorMessage += $"A 'Descrição' deve ser preenchida.{Environment.NewLine}";
+                errorMessage += $"O 'Veículo' deve ser preenchido.{Environment.NewLine}";
 
             if (isInvalidPaymentMethod)
                 errorMessage += $"A 'Forma de pagamento' deve ser preenchida.{Environment.NewLine}";

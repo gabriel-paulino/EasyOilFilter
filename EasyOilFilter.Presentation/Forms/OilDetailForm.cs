@@ -4,7 +4,6 @@ using EasyOilFilter.Domain.Extensions;
 using EasyOilFilter.Domain.Shared.Utils;
 using EasyOilFilter.Domain.ViewModels.OilViewModel;
 using EasyOilFilter.Presentation.Enums;
-using System.Globalization;
 
 namespace EasyOilFilter.Presentation.Forms
 {
@@ -14,6 +13,7 @@ namespace EasyOilFilter.Presentation.Forms
         public OilViewModel Model { get; set; }
         public FormMode Mode { get; set; }
         public bool IsUpdate { get; private set; }
+        public bool IsDelete { get; private set; }
         public bool IsAdd { get; private set; }
 
         public OilDetailForm(IProductService productService)
@@ -21,7 +21,8 @@ namespace EasyOilFilter.Presentation.Forms
             _productService = productService;
             Model = new OilViewModel();
             IsUpdate = false;
-            IsAdd = false;
+            IsDelete = false;
+            IsAdd = false;        
             InitializeComponent();
         }
 
@@ -33,6 +34,7 @@ namespace EasyOilFilter.Presentation.Forms
             if (Mode == FormMode.Update)
             {
                 ButtonProcess.Text = "Atualizar";
+                ButtonDelete.Visible = true;
                 FillFieldsWithOilDetails();
                 return;
             }
@@ -52,7 +54,7 @@ namespace EasyOilFilter.Presentation.Forms
 
             if (Model.HasAlternative)
             {
-                SetAlternativeComponentsVisible(true);               
+                SetAlternativeComponentsVisible(true);
                 TextBoxAlternativePrice.Text = Model.AlternativePrice.ToString("C2");
                 ComboBoxAlternativeUoM.SelectedIndex = (int)EnumUtility.GetEnumByDescription<UoM>(Model.AlternativeUoM);
             }
@@ -70,7 +72,7 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 ComboBoxDefaultUoM.Items.Add(type.GetDescription());
                 ComboBoxAlternativeUoM.Items.Add(type.GetDescription());
-            }            
+            }
         }
 
         private void ButtonSave_Click(object sender, EventArgs e)
@@ -88,6 +90,30 @@ namespace EasyOilFilter.Presentation.Forms
             }
         }
 
+        private async void ButtonDelete_Click(object sender, EventArgs e)
+        {
+            var choice = MessageBox.Show(
+                    "Deletar um lubrificante é um processo irreversível. Deseja continuar?",
+                    "Alerta",
+                    MessageBoxButtons.YesNo);
+
+            if (choice == DialogResult.No)
+                return;
+
+            (bool sucess, string errorMessage) = await _productService.Delete(Model.Id);
+
+            MessageBox.Show(sucess
+                ? $"Lubrificante {Model.Name} removido com sucesso."
+                : $"Falha ao deletar lubrificante {Model.Name}.{Environment.NewLine}" +
+                  $"Retorno: {errorMessage}");
+
+            if (sucess)
+            {
+                IsDelete = true;
+                this.Close();
+            }              
+        }
+
         private async void AddOil()
         {
             var (model, message) = GetAddOilViewModel();
@@ -97,7 +123,7 @@ namespace EasyOilFilter.Presentation.Forms
                 MessageBox.Show(message);
                 return;
             }
-                
+
             var oils = await _productService.GetOilsByName(model.Name);
 
             if (oils?.Any() ?? false)
@@ -141,7 +167,7 @@ namespace EasyOilFilter.Presentation.Forms
                 MessageBox.Show(message);
                 return;
             }
-                
+
             bool anyChange = HasChangedAnyField(model);
 
             if (!anyChange)
@@ -185,7 +211,7 @@ namespace EasyOilFilter.Presentation.Forms
         private (AddOilViewModel model, string message) GetAddOilViewModel()
         {
             string message = GetValidateFormMessage();
-            
+
             if (!string.IsNullOrEmpty(message))
                 return (new AddOilViewModel(), message);
 
@@ -206,7 +232,7 @@ namespace EasyOilFilter.Presentation.Forms
 
         private decimal GetDecimalValueOnTextBox(TextBox textBox)
         {
-            decimal.TryParse(textBox.Text.Replace("R$",string.Empty), out decimal value);
+            decimal.TryParse(textBox.Text.Replace("R$", string.Empty), out decimal value);
             return value;
         }
 

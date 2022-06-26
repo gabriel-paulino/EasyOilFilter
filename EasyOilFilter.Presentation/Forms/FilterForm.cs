@@ -113,17 +113,17 @@ namespace EasyOilFilter.Presentation.Forms
                 FilterType = DataGridView.CurrentRow.Cells["FilterType"].Value.ToString()
             };
 
-            bool isUpdated = false;
+            bool wasProcessed = false;
 
             using (var detail = new FilterDetailForm(_productService))
             {
                 detail.Mode = FormMode.Update;
                 detail.Model = selectedFilterModel;
                 detail.ShowDialog();
-                isUpdated = detail.IsUpdate;
+                wasProcessed = detail.IsUpdate || detail.IsDelete;
             }
 
-            if (isUpdated)
+            if (wasProcessed)
                 SearchFilters();
         }
 

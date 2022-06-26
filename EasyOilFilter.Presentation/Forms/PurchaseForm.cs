@@ -75,7 +75,7 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 string userInput = cell.FormattedValue.ToString()?.Replace("R$", string.Empty) ?? string.Empty;
                 bool hasParsed = decimal.TryParse(userInput, out decimal quantity);
-                cell.Cancel = !hasParsed || quantity <= 0;
+                cell.Cancel = !hasParsed || quantity < 0;
             }
         }
 

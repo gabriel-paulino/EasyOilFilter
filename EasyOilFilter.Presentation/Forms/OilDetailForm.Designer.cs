@@ -48,6 +48,7 @@
             this.TextBoxAlternativePrice = new System.Windows.Forms.TextBox();
             this.LabelAlternativePrice = new System.Windows.Forms.Label();
             this.CheckBoxAlternative = new System.Windows.Forms.CheckBox();
+            this.ButtonDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // LabelName
@@ -224,11 +225,23 @@
             this.CheckBoxAlternative.UseVisualStyleBackColor = true;
             this.CheckBoxAlternative.CheckedChanged += new System.EventHandler(this.CheckBoxAlternative_CheckedChanged);
             // 
+            // ButtonDelete
+            // 
+            this.ButtonDelete.Location = new System.Drawing.Point(293, 590);
+            this.ButtonDelete.Name = "ButtonDelete";
+            this.ButtonDelete.Size = new System.Drawing.Size(90, 30);
+            this.ButtonDelete.TabIndex = 23;
+            this.ButtonDelete.Text = "Deletar";
+            this.ButtonDelete.UseVisualStyleBackColor = true;
+            this.ButtonDelete.Visible = false;
+            this.ButtonDelete.Click += new System.EventHandler(this.ButtonDelete_Click);
+            // 
             // OilDetailForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(417, 632);
+            this.Controls.Add(this.ButtonDelete);
             this.Controls.Add(this.CheckBoxAlternative);
             this.Controls.Add(this.ComboBoxAlternativeUoM);
             this.Controls.Add(this.LabelAlternativeUoM);
@@ -284,5 +297,6 @@
         private TextBox TextBoxAlternativePrice;
         private Label LabelAlternativePrice;
         private CheckBox CheckBoxAlternative;
+        private Button ButtonDelete;
     }
 }

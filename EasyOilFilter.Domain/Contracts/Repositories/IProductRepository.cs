@@ -6,6 +6,7 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
     public interface IProductRepository : IDisposable
     {
         Task<IEnumerable<Product>> GetAll();
+        Task<Product> Get(Guid id);
         Task<IEnumerable<Product>> GetByName(string name);
         Task<IEnumerable<Product>> Get(IEnumerable<Guid> ids);
         Task<IEnumerable<Filter>> GetAllFilters();
@@ -29,5 +30,6 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
         Task<IEnumerable<Oil>> Get(OilType type);
         Task<bool> Create(Oil oil);
         Task<bool> Update(Oil oil);
+        Task<bool> Delete(Guid id);
     }
 }

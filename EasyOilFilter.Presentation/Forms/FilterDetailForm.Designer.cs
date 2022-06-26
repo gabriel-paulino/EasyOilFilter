@@ -39,6 +39,7 @@
             this.ButtonProcess = new System.Windows.Forms.Button();
             this.TextBoxManufacturer = new System.Windows.Forms.TextBox();
             this.LabelManufacturer = new System.Windows.Forms.Label();
+            this.ButtonDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // LabelCode
@@ -131,11 +132,23 @@
             this.LabelManufacturer.TabIndex = 14;
             this.LabelManufacturer.Text = "Fabricante";
             // 
+            // ButtonDelete
+            // 
+            this.ButtonDelete.Location = new System.Drawing.Point(293, 368);
+            this.ButtonDelete.Name = "ButtonDelete";
+            this.ButtonDelete.Size = new System.Drawing.Size(90, 30);
+            this.ButtonDelete.TabIndex = 15;
+            this.ButtonDelete.Text = "Deletar";
+            this.ButtonDelete.UseVisualStyleBackColor = true;
+            this.ButtonDelete.Visible = false;
+            this.ButtonDelete.Click += new System.EventHandler(this.ButtonDelete_Click);
+            // 
             // FilterDetailForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(417, 422);
+            this.Controls.Add(this.ButtonDelete);
             this.Controls.Add(this.TextBoxManufacturer);
             this.Controls.Add(this.LabelManufacturer);
             this.Controls.Add(this.ButtonProcess);
@@ -173,5 +186,6 @@
         private Button ButtonProcess;
         private TextBox TextBoxManufacturer;
         private Label LabelManufacturer;
+        private Button ButtonDelete;
     }
 }

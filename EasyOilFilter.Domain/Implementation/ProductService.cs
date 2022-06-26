@@ -373,6 +373,18 @@ namespace EasyOilFilter.Domain.Implementation
             return (sucess, message);
         }
 
+        public async Task<(bool sucess, string message)> Delete(Guid id)
+        {
+            var product = await _productRepository.Get(id);
 
+            if (product is null)
+                return (false, $"Produto com id '{id}' não encontrado.");
+
+            bool deleted = await _productRepository.Delete(id);
+
+            return deleted 
+                ? (true, string.Empty)
+                : (false, $"Falha ao deletar produto: {product.Name}.");
+        }
     }
 }

@@ -80,6 +80,35 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return filters.OrderByDescending(filter => filter.Name);
         }
 
+        public async Task<Product> Get(Guid id)
+        {
+            string query = @"
+                SELECT
+                    [Id],
+                    [Name],                 
+                    [DefaultPrice],
+                    [AlternativePrice],
+                    [StockQuantity],
+                    [Type],
+                    [DefaultUoM],
+                    [AlternativeUoM],
+                    [Viscosity],
+                    [OilType],
+                    [Manufacturer],
+                    [FilterType],
+                    [HasAlternative]
+                FROM 
+                    [Product]
+                WHERE
+                    [Id] = @Id
+            ";
+
+            return await _session.Connection.QuerySingleOrDefaultAsync<Product>(query, new
+            {
+                Id = id
+            });
+        }
+
         public async Task<IEnumerable<Product>> GetByName(string name)
         {
             string query = @"
@@ -684,6 +713,22 @@ namespace EasyOilFilter.Infra.Data.Repositories
             },
             _session.Transaction
             );
+
+            return rowsAffected == 1;
+        }
+
+        public async Task<bool> Delete(Guid id)
+        {
+            string command =
+                @"
+                    DELETE FROM [Product] 
+                    WHERE [Id] = @Id
+                ";
+
+            int rowsAffected = await _session.Connection.ExecuteAsync(command, new
+            {
+                Id = id
+            });
 
             return rowsAffected == 1;
         }

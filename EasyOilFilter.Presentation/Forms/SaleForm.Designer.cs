@@ -57,9 +57,9 @@
             this.LabelDescription.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.LabelDescription.Location = new System.Drawing.Point(15, 19);
             this.LabelDescription.Name = "LabelDescription";
-            this.LabelDescription.Size = new System.Drawing.Size(73, 19);
+            this.LabelDescription.Size = new System.Drawing.Size(56, 19);
             this.LabelDescription.TabIndex = 0;
-            this.LabelDescription.Text = "Descrição";
+            this.LabelDescription.Text = "Veículo";
             // 
             // TextBoxDescription
             // 

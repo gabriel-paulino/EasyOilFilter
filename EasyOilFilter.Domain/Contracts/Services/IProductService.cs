@@ -32,5 +32,6 @@ namespace EasyOilFilter.Domain.Contracts.Services
         Task<OilViewModel> Update(Guid id, OilViewModel model);
         Task<(bool Sucess, string Message)> ChangePriceOfAllOilsByAbsoluteValue(decimal absoluteValue);
         Task<(bool Sucess, string Message)> ChangePriceOfAllOilsByPercentage(decimal percentage);
+        Task<(bool sucess, string message)> Delete(Guid id);
     }
 }

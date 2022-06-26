@@ -4,7 +4,6 @@ using EasyOilFilter.Domain.Extensions;
 using EasyOilFilter.Domain.Shared.Utils;
 using EasyOilFilter.Domain.ViewModels.FilterViewModel;
 using EasyOilFilter.Presentation.Enums;
-using System.Globalization;
 
 namespace EasyOilFilter.Presentation.Forms
 {
@@ -14,6 +13,7 @@ namespace EasyOilFilter.Presentation.Forms
         public FilterViewModel Model { get; set; }
         public FormMode Mode { get; set; }
         public bool IsUpdate { get; private set; }
+        public bool IsDelete { get; private set; }
         public bool IsAdd { get; private set; }
 
         public FilterDetailForm(IProductService productService)
@@ -21,6 +21,7 @@ namespace EasyOilFilter.Presentation.Forms
             _productService = productService;
             Model = new FilterViewModel();
             IsUpdate = false;
+            IsDelete = false;
             IsAdd = false;
             InitializeComponent();
         }
@@ -32,6 +33,7 @@ namespace EasyOilFilter.Presentation.Forms
             if (Mode == FormMode.Update)
             {
                 ButtonProcess.Text = "Atualizar";
+                ButtonDelete.Visible = true;
                 FillFieldsWithFilterDetails();
                 return;
             }
@@ -68,6 +70,30 @@ namespace EasyOilFilter.Presentation.Forms
             }
         }
 
+        private async void ButtonDelete_Click(object sender, EventArgs e)
+        {
+            var choice = MessageBox.Show(
+                    "Deletar um filtro é um processo irreversível. Deseja continuar?",
+                    "Alerta",
+                    MessageBoxButtons.YesNo);
+
+            if (choice == DialogResult.No)
+                return;
+
+            (bool sucess, string errorMessage) = await _productService.Delete(Model.Id);
+
+            MessageBox.Show(sucess
+                ? $"Filtro {Model.Name} removido com sucesso."
+                : $"Falha ao deletar filtro {Model.Name}.{Environment.NewLine}" +
+                  $"Retorno: {errorMessage}");
+
+            if (sucess)
+            {
+                IsDelete = true;
+                this.Close();
+            }                
+        }
+
         private async void AddFilter()
         {
             var (model, message) = GetAddFilterViewModel();
@@ -77,7 +103,7 @@ namespace EasyOilFilter.Presentation.Forms
                 MessageBox.Show(message);
                 return;
             }
-                
+
             var filters = await _productService.GetFiltersByName(model.Name);
 
             if (filters?.Any() ?? false)
@@ -116,7 +142,7 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 MessageBox.Show(message);
                 return;
-            }               
+            }
 
             bool anyChange = HasChangedAnyField(model);
 
