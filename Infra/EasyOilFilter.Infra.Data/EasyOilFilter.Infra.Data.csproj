@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EasyOilFilter.Domain\EasyOilFilter.Domain.csproj" />
+    <ProjectReference Include="..\..\EasyOilFilter.Domain\EasyOilFilter.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EasyOilFilter.Domain\EasyOilFilter.Domain.csproj" />
-    <ProjectReference Include="..\EasyOilFilter.Infra.Data\EasyOilFilter.Infra.Data.csproj" />
+    <ProjectReference Include="..\Infra\EasyOilFilter.Infra.Data\EasyOilFilter.Infra.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

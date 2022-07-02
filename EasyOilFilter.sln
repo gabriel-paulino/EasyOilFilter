@@ -5,11 +5,11 @@ VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyOilFilter.Domain", "EasyOilFilter.Domain\EasyOilFilter.Domain.csproj", "{6573ED54-0C7B-47D5-B889-13257778ED33}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{E6ECDF9D-2B1C-484E-BAD0-04102D5ABAB7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyOilFilter.Infra.Data", "EasyOilFilter.Infra.Data\EasyOilFilter.Infra.Data.csproj", "{ED52FD79-64AE-4700-BE0D-00B3FF4D63A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyOilFilter.Infra.Data", "Infra\EasyOilFilter.Infra.Data\EasyOilFilter.Infra.Data.csproj", "{ED52FD79-64AE-4700-BE0D-00B3FF4D63A1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyOilFilter.Presentation", "EasyOilFilter.Presentation\EasyOilFilter.Presentation.csproj", "{C4EBA619-920D-439A-8980-E6317FCBE020}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{0D15D587-0ABC-49FD-9FC0-499B8FA678E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,7 +34,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{ED52FD79-64AE-4700-BE0D-00B3FF4D63A1} = {E6ECDF9D-2B1C-484E-BAD0-04102D5ABAB7}
+		{ED52FD79-64AE-4700-BE0D-00B3FF4D63A1} = {0D15D587-0ABC-49FD-9FC0-499B8FA678E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D14E4A81-CD68-4FA1-8F62-DB0E4C58E9B5}
