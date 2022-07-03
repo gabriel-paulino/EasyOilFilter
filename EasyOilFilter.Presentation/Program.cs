@@ -6,6 +6,7 @@ using EasyOilFilter.Domain.Shared.Contexts;
 using EasyOilFilter.Infra.Data.Repositories;
 using EasyOilFilter.Infra.Data.Session;
 using EasyOilFilter.Infra.Data.UoW;
+using EasyOilFilter.Infra.Pdf.Services;
 using EasyOilFilter.Presentation.Forms;
 using SimpleInjector;
 using SimpleInjector.Diagnostics;
@@ -49,6 +50,9 @@ namespace EasyOilFilter.Presentation
             container.Register<IProductService, ProductService>(Lifestyle.Singleton);
             container.Register<ISaleService, SaleService>(Lifestyle.Singleton);
             container.Register<IPurchaseService, PurchaseService>(Lifestyle.Singleton);
+
+            container.Register<IReportService, ReportService>(Lifestyle.Singleton);
+            container.Register<IPdfService, PdfService>(Lifestyle.Singleton);
 
             AutoRegisterWindowsForms(container);
 

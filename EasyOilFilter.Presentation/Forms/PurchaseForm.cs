@@ -220,7 +220,12 @@ namespace EasyOilFilter.Presentation.Forms
             var products = await _productService.GetProducts(name);
 
             if (products is null)
+            {
+                SetCellValue(rowIndex, "ProductId", Guid.Empty);
+                SetCellValue(rowIndex, "UnitOfMeasurement", string.Empty);
                 return;
+            }
+                
 
             if (products.Count() > 1)
             {

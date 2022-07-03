@@ -5,6 +5,7 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
     public interface ISaleRepository : IDisposable
     {
         Task<IEnumerable<Sale>> Get(DateTime date);
+        Task<IEnumerable<Sale>> Get(DateTime startDate, DateTime finalDate);
         Task<Sale> Get(Guid id);       
         Task<bool> AddHeader(Sale sale);
         Task<bool> AddItem(SaleItem item);

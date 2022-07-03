@@ -130,6 +130,62 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return saleMap.Values;
         }
 
+        public async Task<IEnumerable<Sale>> Get(DateTime startDate, DateTime finalDate)
+        {
+            string query = @"
+                SELECT
+                    T0.[Id],
+                    T0.[Description],
+                    T0.[PaymentMethod],
+                    T0.[Total],
+                    T0.[Discount],
+                    T0.[Date],
+                    T0.[Time],
+                    T0.[Remarks],
+                    T0.[Status],
+                    T1.[Id],
+                    T1.[SaleId],
+                    T1.[ProductId],
+                    T1.[ItemDescription],
+                    T1.[UnitOfMeasurement],
+                    T1.[Quantity],
+                    T1.[UnitaryPrice],
+                    T1.[TotalItem]
+                FROM [Sale] T0
+                JOIN [SaleItem] T1
+                    ON T0.[Id] = T1.[SaleId]
+                WHERE 
+                    T0.[Date] >= @StartDate AND
+                    T0.[Date] <= @FinalDate AND
+                    T0.[Status] = @Status
+            ";
+
+            var saleMap = new Dictionary<Guid, Sale>();
+
+            await _session.Connection.QueryAsync<Sale, SaleItem, Sale>(query,
+                map: (sale, saleItem) =>
+                {
+                    saleItem.SetSaleId(sale.Id);
+
+                    if (saleMap.TryGetValue(sale.Id, out Sale? existingSale))
+                        sale = existingSale;
+                    else
+                        saleMap.Add(sale.Id, sale);
+
+                    sale.AddItem(saleItem);
+                    return sale;
+                },
+                param: new
+                {
+                    StartDate = startDate,
+                    FinalDate = finalDate,
+                    Status = (int)DocumentStatus.Finished
+                }
+            );
+
+            return saleMap.Values;
+        }
+
         public async Task<Sale?> Get(Guid id)
         {
             string query = @"

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyOilFilter.Presentation"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{0D15D587-0ABC-49FD-9FC0-499B8FA678E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyOilFilter.Infra.Pdf", "Infra\EasyOilFilter.Infra.Pdf\EasyOilFilter.Infra.Pdf.csproj", "{96EB3F19-7A55-499E-851D-9FE949530C58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,12 +31,17 @@ Global
 		{C4EBA619-920D-439A-8980-E6317FCBE020}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4EBA619-920D-439A-8980-E6317FCBE020}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4EBA619-920D-439A-8980-E6317FCBE020}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96EB3F19-7A55-499E-851D-9FE949530C58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96EB3F19-7A55-499E-851D-9FE949530C58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96EB3F19-7A55-499E-851D-9FE949530C58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96EB3F19-7A55-499E-851D-9FE949530C58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ED52FD79-64AE-4700-BE0D-00B3FF4D63A1} = {0D15D587-0ABC-49FD-9FC0-499B8FA678E5}
+		{96EB3F19-7A55-499E-851D-9FE949530C58} = {0D15D587-0ABC-49FD-9FC0-499B8FA678E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D14E4A81-CD68-4FA1-8F62-DB0E4C58E9B5}

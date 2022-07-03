@@ -34,6 +34,7 @@
             this.ButtonSale = new System.Windows.Forms.Button();
             this.PictureBoxMain = new System.Windows.Forms.PictureBox();
             this.ButtonPurchase = new System.Windows.Forms.Button();
+            this.ButtonReport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxMain)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,9 +85,9 @@
             this.PictureBoxMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PictureBoxMain.Image = ((System.Drawing.Image)(resources.GetObject("PictureBoxMain.Image")));
             this.PictureBoxMain.InitialImage = null;
-            this.PictureBoxMain.Location = new System.Drawing.Point(315, 12);
+            this.PictureBoxMain.Location = new System.Drawing.Point(258, 12);
             this.PictureBoxMain.Name = "PictureBoxMain";
-            this.PictureBoxMain.Size = new System.Drawing.Size(339, 355);
+            this.PictureBoxMain.Size = new System.Drawing.Size(396, 447);
             this.PictureBoxMain.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.PictureBoxMain.TabIndex = 3;
             this.PictureBoxMain.TabStop = false;
@@ -105,11 +106,26 @@
             this.ButtonPurchase.UseVisualStyleBackColor = true;
             this.ButtonPurchase.Click += new System.EventHandler(this.ButtonPurchase_Click);
             // 
+            // ButtonReport
+            // 
+            this.ButtonReport.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.ButtonReport.Image = ((System.Drawing.Image)(resources.GetObject("ButtonReport.Image")));
+            this.ButtonReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ButtonReport.Location = new System.Drawing.Point(12, 389);
+            this.ButtonReport.Name = "ButtonReport";
+            this.ButtonReport.Size = new System.Drawing.Size(220, 70);
+            this.ButtonReport.TabIndex = 5;
+            this.ButtonReport.Text = "Relatórios";
+            this.ButtonReport.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ButtonReport.UseVisualStyleBackColor = true;
+            this.ButtonReport.Click += new System.EventHandler(this.ButtonReport_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(666, 392);
+            this.ClientSize = new System.Drawing.Size(666, 491);
+            this.Controls.Add(this.ButtonReport);
             this.Controls.Add(this.ButtonPurchase);
             this.Controls.Add(this.PictureBoxMain);
             this.Controls.Add(this.ButtonSale);
@@ -132,5 +148,6 @@
         private Button ButtonSale;
         private PictureBox PictureBoxMain;
         private Button ButtonPurchase;
+        private Button ButtonReport;
     }
 }
