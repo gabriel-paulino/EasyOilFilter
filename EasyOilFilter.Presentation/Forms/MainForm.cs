@@ -50,7 +50,7 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void ButtonReport_Click(object sender, EventArgs e)
         {
-            using var saleReportForm = new SaleReportForm(_reportService);
+            using var saleReportForm = new ReportForm(_reportService);
             saleReportForm.ShowDialog();
         }
     }

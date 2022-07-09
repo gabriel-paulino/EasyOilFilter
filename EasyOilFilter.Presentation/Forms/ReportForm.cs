@@ -1,19 +1,20 @@
 ﻿using EasyOilFilter.Domain.Contracts.Services;
+using EasyOilFilter.Domain.Enums;
 using System.Diagnostics;
 
 namespace EasyOilFilter.Presentation.Forms
 {
-    public partial class SaleReportForm : Form
+    public partial class ReportForm : Form
     {
         private readonly IReportService _reportService;
 
-        public SaleReportForm(IReportService reportService)
+        public ReportForm(IReportService reportService)
         {
             _reportService = reportService;
             InitializeComponent();
         }
 
-        private async void ButtonGenerate_Click(object sender, EventArgs e)
+        private async void ButtonSaleReport_Click(object sender, EventArgs e)
         {
             var startDate = StartDatePicker.Value;
             var finalDate = FinalDatePicker.Value;
@@ -24,7 +25,28 @@ namespace EasyOilFilter.Presentation.Forms
                 return;
             }
 
-            var (saved, path, errorMessage) = await _reportService.SaveSaleReport(startDate, finalDate);
+            var (saved, path, errorMessage) = await _reportService.SaveReport(startDate, finalDate, ReportType.Sales);
+
+            MessageBox.Show(saved
+                ? $"Relatório salvo com sucesso. Disponível em: '{path}'."
+                : errorMessage);
+
+            if (saved)
+                Process.Start(new ProcessStartInfo { FileName = path, UseShellExecute = true });
+        }
+
+        private async void ButtonSoldItemReport_Click(object sender, EventArgs e)
+        {
+            var startDate = StartDatePicker.Value;
+            var finalDate = FinalDatePicker.Value;
+
+            if (startDate > finalDate)
+            {
+                MessageBox.Show("A 'Data inicial' não pode ser maior que a 'Data final'.");
+                return;
+            }
+
+            var (saved, path, errorMessage) = await _reportService.SaveReport(startDate, finalDate, ReportType.SoldItems);
 
             MessageBox.Show(saved
                 ? $"Relatório salvo com sucesso. Disponível em: '{path}'."

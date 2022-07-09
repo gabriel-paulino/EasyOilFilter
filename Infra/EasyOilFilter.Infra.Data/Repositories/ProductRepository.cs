@@ -75,9 +75,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     [Product]
             ";
 
-            var filters = await _session.Connection.QueryAsync<Product>(query);
+            var products = await _session.Connection.QueryAsync<Product>(query);
 
-            return filters.OrderByDescending(filter => filter.Name);
+            return products.OrderByDescending(product => product.Name);
         }
 
         public async Task<Product> Get(Guid id)

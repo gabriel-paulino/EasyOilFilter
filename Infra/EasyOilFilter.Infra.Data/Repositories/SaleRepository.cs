@@ -120,8 +120,8 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     sale.AddItem(saleItem);
                     return sale;
                 },
-                param: new 
-                { 
+                param: new
+                {
                     Date = date,
                     Status = (int)DocumentStatus.Finished
                 }
@@ -183,7 +183,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 }
             );
 
-            return saleMap.Values;
+            return saleMap.Values.OrderBy(sale => sale.Date);
         }
 
         public async Task<Sale?> Get(Guid id)
@@ -247,6 +247,32 @@ namespace EasyOilFilter.Infra.Data.Repositories
             );
 
             return rowsAffected == 1;
+        }
+
+        public async Task<IEnumerable<SoldItemReport>> GetSoldItems(DateTime startDate, DateTime finalDate)
+        {
+            string query = @"
+                SELECT
+                    T1.[ItemDescription] AS Name,
+                    SUM(T1.[Quantity]) AS Quantity
+                FROM [Sale] T0
+                JOIN [SaleItem] T1
+                    ON T0.[Id] = T1.[SaleId]
+                WHERE 
+                    T0.[Date] >= @StartDate AND
+                    T0.[Date] <= @FinalDate AND
+                    T0.[Status] = @Status
+				GROUP BY T1.[ItemDescription]
+            ";
+
+            var items = await _session.Connection.QueryAsync<SoldItemReport>(query, new
+            {
+                StartDate = startDate,
+                FinalDate = finalDate,
+                Status = (int)DocumentStatus.Finished
+            });
+
+            return items.OrderByDescending(item => item.Name);
         }
 
         public void Dispose()

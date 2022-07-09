@@ -10,5 +10,6 @@ namespace EasyOilFilter.Domain.Contracts.Repositories
         Task<bool> AddHeader(Sale sale);
         Task<bool> AddItem(SaleItem item);
         Task<bool> Cancel(Guid id);
+        Task<IEnumerable<SoldItemReport>> GetSoldItems(DateTime startDate, DateTime finalDate);
     }
 }
