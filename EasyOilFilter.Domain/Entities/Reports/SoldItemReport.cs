@@ -4,7 +4,13 @@ namespace EasyOilFilter.Domain.Entities.Reports
 {
     public class SoldItemReport : BaseEntity
     {
-        public string Name { get; set; }
-        public decimal Quantity { get; set; }
+        public SoldItemReport(string name, decimal quantity)
+        {
+            Name = name;
+            Quantity = quantity;
+        }
+
+        public string Name { get; private set; }
+        public decimal Quantity { get; private set; }
     }
 }

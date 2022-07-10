@@ -96,10 +96,7 @@ namespace EasyOilFilter.Domain.Implementation
 
         private async Task<string> GetSalesBodyContent(DateTime startDate, DateTime finalDate)
         {
-            var sales = await _saleRepository.Get(startDate, finalDate);
-
-            var salesGroupedByDate = sales.GroupBy(sale => sale.Date.Date);
-            var salesGroupedByPaymentMethod = sales.GroupBy(sale => sale.PaymentMethod);
+            var report = await _saleRepository.GetSaleReport(startDate, finalDate);
 
             return
                 $@"
@@ -107,12 +104,12 @@ namespace EasyOilFilter.Domain.Implementation
                     <h1>Relatório de vendas</h1> 
                     <div>
                         <h6 style=""margin:0"">{startDate:dd/MM/yy} até {finalDate:dd/MM/yy}</h6> 
-                        <h5 class=""font-weight-bold"">{sales.Sum(sale => sale.Total):C2}</h5>
+                        <h5 class=""font-weight-bold"">{report.TotalSales:C2}</h5>
                     </div>
                     <br>
-                    {GetTableSalesGroupedByDate(salesGroupedByDate)}
+                    {GetTableSalesGroupedByDate(report.SalesByDate)}
                     <br>
-                    {GetTableSalesGroupedByPaymentMethod(salesGroupedByPaymentMethod)}
+                    {GetTableSalesGroupedByPaymentMethod(report.SalesByPaymentMethod)}
                 </div>
                 ";
         }
@@ -148,17 +145,17 @@ namespace EasyOilFilter.Domain.Implementation
                 ";
         }
 
-        private string GetTableSalesGroupedByPaymentMethod(IEnumerable<IGrouping<PaymentMethod, Sale>> salesGroupedByPaymentMethod)
+        private string GetTableSalesGroupedByPaymentMethod(IEnumerable<SaleByPaymentMethod> salesByPaymentMethod)
         {
             var builder = new StringBuilder();
 
-            foreach (var paymentMethodSales in salesGroupedByPaymentMethod)
+            foreach (var paymentMethodSales in salesByPaymentMethod)
             {
                 builder.AppendLine(
                     @$"
                         <tr>
-                            <td scope=""row"">{paymentMethodSales.Key.GetDescription()}</th>
-                            <td>{paymentMethodSales.Sum(sale => sale.Total):C2}</td>
+                            <td scope=""row"">{paymentMethodSales.PaymentMethod.GetDescription()}</th>
+                            <td>{paymentMethodSales.Total:C2}</td>
                         </tr>
                     ");
             }
@@ -179,17 +176,17 @@ namespace EasyOilFilter.Domain.Implementation
                 ";
         }
 
-        private string GetTableSalesGroupedByDate(IEnumerable<IGrouping<DateTime, Sale>> salesGroupedByDate)
+        private string GetTableSalesGroupedByDate(IEnumerable<SaleByDate> salesByDate)
         {
             var builder = new StringBuilder();
 
-            foreach (var dateSales in salesGroupedByDate)
+            foreach (var sale in salesByDate)
             {
                 builder.AppendLine(
                     $@"
                         <tr>
-                            <td scope=""row"">{dateSales.Key:dd/MM/yyyy}</th>
-                            <td>{dateSales.Sum(sale => sale.Total):C2}</td>
+                            <td scope=""row"">{sale.Date:dd/MM/yyyy}</th>
+                            <td>{sale.Total:C2}</td>
                         </tr>
                     ");
             }
