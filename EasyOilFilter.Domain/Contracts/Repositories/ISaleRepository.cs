@@ -1,4 +1,5 @@
 ﻿using EasyOilFilter.Domain.Entities;
+using EasyOilFilter.Domain.Entities.Reports;
 
 namespace EasyOilFilter.Domain.Contracts.Repositories
 {

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EasyOilFilter.Domain.Contracts.Repositories;
 using EasyOilFilter.Domain.Entities;
+using EasyOilFilter.Domain.Entities.Reports;
 using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Infra.Data.Session;
 
@@ -254,10 +255,17 @@ namespace EasyOilFilter.Infra.Data.Repositories
             string query = @"
                 SELECT
                     T1.[ItemDescription] AS Name,
-                    SUM(T1.[Quantity]) AS Quantity
+                    SUM(CASE
+                            WHEN 
+                                COALESCE(T2.[HasAlternative], 0) = 1 AND 
+                                T1.[UnitOfMeasurement] != T2.[DefaultUoM] THEN T1.[Quantity] / 20
+                            ELSE T1.[Quantity]
+                        END) AS Quantity
                 FROM [Sale] T0
                 JOIN [SaleItem] T1
                     ON T0.[Id] = T1.[SaleId]
+                JOIN [Product] T2
+                    ON T2.[Id] = T1.[ProductId]
                 WHERE 
                     T0.[Date] >= @StartDate AND
                     T0.[Date] <= @FinalDate AND

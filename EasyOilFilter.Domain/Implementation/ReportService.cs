@@ -1,6 +1,7 @@
 ﻿using EasyOilFilter.Domain.Contracts.Repositories;
 using EasyOilFilter.Domain.Contracts.Services;
 using EasyOilFilter.Domain.Entities;
+using EasyOilFilter.Domain.Entities.Reports;
 using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Domain.Extensions;
 using System.Text;

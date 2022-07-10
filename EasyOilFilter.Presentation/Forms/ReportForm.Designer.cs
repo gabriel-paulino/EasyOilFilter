@@ -92,7 +92,7 @@
             this.ButtonSoldItemReport.Name = "ButtonSoldItemReport";
             this.ButtonSoldItemReport.Size = new System.Drawing.Size(245, 28);
             this.ButtonSoldItemReport.TabIndex = 17;
-            this.ButtonSoldItemReport.Text = "Itens vendidos";
+            this.ButtonSoldItemReport.Text = "Produtos vendidos";
             this.ButtonSoldItemReport.UseVisualStyleBackColor = true;
             this.ButtonSoldItemReport.Click += new System.EventHandler(this.ButtonSoldItemReport_Click);
             // 
