@@ -30,6 +30,7 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SaleForm));
             this.LabelDescription = new System.Windows.Forms.Label();
             this.TextBoxDescription = new System.Windows.Forms.TextBox();
             this.LabelPaymentMethod = new System.Windows.Forms.Label();
@@ -47,15 +48,21 @@
             this.GroupBoxContent = new System.Windows.Forms.GroupBox();
             this.Grid = new System.Windows.Forms.DataGridView();
             this.ButtonProcessSale = new System.Windows.Forms.Button();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.ToolStripLabelAddOil = new System.Windows.Forms.ToolStripLabel();
+            this.ToolStripButtonAddOil = new System.Windows.Forms.ToolStripButton();
+            this.ToolStripLabelAddFilter = new System.Windows.Forms.ToolStripLabel();
+            this.ToolStripButtonAddFilter = new System.Windows.Forms.ToolStripButton();
             this.GroupBoxContent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // LabelDescription
             // 
             this.LabelDescription.AutoSize = true;
             this.LabelDescription.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelDescription.Location = new System.Drawing.Point(15, 19);
+            this.LabelDescription.Location = new System.Drawing.Point(15, 48);
             this.LabelDescription.Name = "LabelDescription";
             this.LabelDescription.Size = new System.Drawing.Size(56, 19);
             this.LabelDescription.TabIndex = 0;
@@ -64,7 +71,7 @@
             // TextBoxDescription
             // 
             this.TextBoxDescription.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.TextBoxDescription.Location = new System.Drawing.Point(164, 19);
+            this.TextBoxDescription.Location = new System.Drawing.Point(164, 48);
             this.TextBoxDescription.Name = "TextBoxDescription";
             this.TextBoxDescription.Size = new System.Drawing.Size(181, 27);
             this.TextBoxDescription.TabIndex = 1;
@@ -73,7 +80,7 @@
             // 
             this.LabelPaymentMethod.AutoSize = true;
             this.LabelPaymentMethod.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelPaymentMethod.Location = new System.Drawing.Point(15, 66);
+            this.LabelPaymentMethod.Location = new System.Drawing.Point(15, 95);
             this.LabelPaymentMethod.Name = "LabelPaymentMethod";
             this.LabelPaymentMethod.Size = new System.Drawing.Size(146, 19);
             this.LabelPaymentMethod.TabIndex = 2;
@@ -83,7 +90,7 @@
             // 
             this.ComboBoxPaymentMethod.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ComboBoxPaymentMethod.FormattingEnabled = true;
-            this.ComboBoxPaymentMethod.Location = new System.Drawing.Point(164, 66);
+            this.ComboBoxPaymentMethod.Location = new System.Drawing.Point(164, 95);
             this.ComboBoxPaymentMethod.Name = "ComboBoxPaymentMethod";
             this.ComboBoxPaymentMethod.Size = new System.Drawing.Size(181, 27);
             this.ComboBoxPaymentMethod.TabIndex = 3;
@@ -92,7 +99,7 @@
             // 
             this.LabelDiscount.AutoSize = true;
             this.LabelDiscount.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelDiscount.Location = new System.Drawing.Point(510, 396);
+            this.LabelDiscount.Location = new System.Drawing.Point(510, 425);
             this.LabelDiscount.Name = "LabelDiscount";
             this.LabelDiscount.Size = new System.Drawing.Size(70, 19);
             this.LabelDiscount.TabIndex = 4;
@@ -100,7 +107,7 @@
             // 
             // TextBoxDiscountPercentage
             // 
-            this.TextBoxDiscountPercentage.Location = new System.Drawing.Point(586, 396);
+            this.TextBoxDiscountPercentage.Location = new System.Drawing.Point(586, 425);
             this.TextBoxDiscountPercentage.Name = "TextBoxDiscountPercentage";
             this.TextBoxDiscountPercentage.Size = new System.Drawing.Size(56, 23);
             this.TextBoxDiscountPercentage.TabIndex = 5;
@@ -111,7 +118,7 @@
             // 
             this.LabelPercentageDiscount.AutoSize = true;
             this.LabelPercentageDiscount.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelPercentageDiscount.Location = new System.Drawing.Point(645, 400);
+            this.LabelPercentageDiscount.Location = new System.Drawing.Point(645, 429);
             this.LabelPercentageDiscount.Name = "LabelPercentageDiscount";
             this.LabelPercentageDiscount.Size = new System.Drawing.Size(20, 19);
             this.LabelPercentageDiscount.TabIndex = 6;
@@ -119,7 +126,7 @@
             // 
             // TextBoxDiscountValue
             // 
-            this.TextBoxDiscountValue.Location = new System.Drawing.Point(668, 396);
+            this.TextBoxDiscountValue.Location = new System.Drawing.Point(668, 425);
             this.TextBoxDiscountValue.Name = "TextBoxDiscountValue";
             this.TextBoxDiscountValue.Size = new System.Drawing.Size(117, 23);
             this.TextBoxDiscountValue.TabIndex = 7;
@@ -128,7 +135,7 @@
             // 
             this.LabelTotal.AutoSize = true;
             this.LabelTotal.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelTotal.Location = new System.Drawing.Point(510, 445);
+            this.LabelTotal.Location = new System.Drawing.Point(510, 474);
             this.LabelTotal.Name = "LabelTotal";
             this.LabelTotal.Size = new System.Drawing.Size(41, 19);
             this.LabelTotal.TabIndex = 8;
@@ -136,7 +143,7 @@
             // 
             // TextBoxTotal
             // 
-            this.TextBoxTotal.Location = new System.Drawing.Point(668, 445);
+            this.TextBoxTotal.Location = new System.Drawing.Point(668, 474);
             this.TextBoxTotal.Name = "TextBoxTotal";
             this.TextBoxTotal.Size = new System.Drawing.Size(117, 23);
             this.TextBoxTotal.TabIndex = 9;
@@ -145,7 +152,7 @@
             // 
             this.LabelRemarks.AutoSize = true;
             this.LabelRemarks.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelRemarks.Location = new System.Drawing.Point(15, 390);
+            this.LabelRemarks.Location = new System.Drawing.Point(15, 419);
             this.LabelRemarks.Name = "LabelRemarks";
             this.LabelRemarks.Size = new System.Drawing.Size(93, 19);
             this.LabelRemarks.TabIndex = 10;
@@ -153,7 +160,7 @@
             // 
             // TextBoxRemarks
             // 
-            this.TextBoxRemarks.Location = new System.Drawing.Point(164, 390);
+            this.TextBoxRemarks.Location = new System.Drawing.Point(164, 419);
             this.TextBoxRemarks.Multiline = true;
             this.TextBoxRemarks.Name = "TextBoxRemarks";
             this.TextBoxRemarks.Size = new System.Drawing.Size(181, 117);
@@ -163,7 +170,7 @@
             // 
             this.LabelDate.AutoSize = true;
             this.LabelDate.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelDate.Location = new System.Drawing.Point(510, 17);
+            this.LabelDate.Location = new System.Drawing.Point(510, 46);
             this.LabelDate.Name = "LabelDate";
             this.LabelDate.Size = new System.Drawing.Size(103, 19);
             this.LabelDate.TabIndex = 12;
@@ -174,7 +181,7 @@
             this.DateTimePickerSaleDate.CalendarFont = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.DateTimePickerSaleDate.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.DateTimePickerSaleDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DateTimePickerSaleDate.Location = new System.Drawing.Point(668, 17);
+            this.DateTimePickerSaleDate.Location = new System.Drawing.Point(668, 46);
             this.DateTimePickerSaleDate.Name = "DateTimePickerSaleDate";
             this.DateTimePickerSaleDate.Size = new System.Drawing.Size(117, 27);
             this.DateTimePickerSaleDate.TabIndex = 13;
@@ -183,7 +190,7 @@
             // 
             this.GroupBoxContent.Controls.Add(this.Grid);
             this.GroupBoxContent.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.GroupBoxContent.Location = new System.Drawing.Point(12, 126);
+            this.GroupBoxContent.Location = new System.Drawing.Point(12, 155);
             this.GroupBoxContent.Name = "GroupBoxContent";
             this.GroupBoxContent.Size = new System.Drawing.Size(776, 234);
             this.GroupBoxContent.TabIndex = 14;
@@ -224,18 +231,64 @@
             // ButtonProcessSale
             // 
             this.ButtonProcessSale.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ButtonProcessSale.Location = new System.Drawing.Point(12, 551);
+            this.ButtonProcessSale.Location = new System.Drawing.Point(12, 580);
             this.ButtonProcessSale.Name = "ButtonProcessSale";
             this.ButtonProcessSale.Size = new System.Drawing.Size(93, 28);
             this.ButtonProcessSale.TabIndex = 15;
             this.ButtonProcessSale.UseVisualStyleBackColor = true;
             this.ButtonProcessSale.Click += new System.EventHandler(this.ButtonProcessSale_Click);
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripLabelAddOil,
+            this.ToolStripButtonAddOil,
+            this.ToolStripLabelAddFilter,
+            this.ToolStripButtonAddFilter});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(800, 25);
+            this.toolStrip1.TabIndex = 16;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // ToolStripLabelAddOil
+            // 
+            this.ToolStripLabelAddOil.Name = "ToolStripLabelAddOil";
+            this.ToolStripLabelAddOil.Size = new System.Drawing.Size(99, 22);
+            this.ToolStripLabelAddOil.Text = "Novo lubrificante";
+            // 
+            // ToolStripButtonAddOil
+            // 
+            this.ToolStripButtonAddOil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ToolStripButtonAddOil.Image = ((System.Drawing.Image)(resources.GetObject("ToolStripButtonAddOil.Image")));
+            this.ToolStripButtonAddOil.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ToolStripButtonAddOil.Name = "ToolStripButtonAddOil";
+            this.ToolStripButtonAddOil.Size = new System.Drawing.Size(23, 22);
+            this.ToolStripButtonAddOil.Text = "Adicionar lubrificante";
+            this.ToolStripButtonAddOil.Click += new System.EventHandler(this.ToolStripButtonAddOil_Click);
+            // 
+            // ToolStripLabelAddFilter
+            // 
+            this.ToolStripLabelAddFilter.Name = "ToolStripLabelAddFilter";
+            this.ToolStripLabelAddFilter.Size = new System.Drawing.Size(64, 22);
+            this.ToolStripLabelAddFilter.Text = "Novo filtro";
+            // 
+            // ToolStripButtonAddFilter
+            // 
+            this.ToolStripButtonAddFilter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ToolStripButtonAddFilter.Image = ((System.Drawing.Image)(resources.GetObject("ToolStripButtonAddFilter.Image")));
+            this.ToolStripButtonAddFilter.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ToolStripButtonAddFilter.Name = "ToolStripButtonAddFilter";
+            this.ToolStripButtonAddFilter.Size = new System.Drawing.Size(23, 22);
+            this.ToolStripButtonAddFilter.Text = "Adicionar filtro";
+            this.ToolStripButtonAddFilter.Click += new System.EventHandler(this.ToolStripButtonAddFilter_Click);
+            // 
             // SaleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 601);
+            this.ClientSize = new System.Drawing.Size(800, 637);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.ButtonProcessSale);
             this.Controls.Add(this.GroupBoxContent);
             this.Controls.Add(this.DateTimePickerSaleDate);
@@ -260,6 +313,8 @@
             this.Load += new System.EventHandler(this.SaleForm_Load);
             this.GroupBoxContent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -284,5 +339,10 @@
         private GroupBox GroupBoxContent;
         private DataGridView Grid;
         private Button ButtonProcessSale;
+        private ToolStrip toolStrip1;
+        private ToolStripLabel ToolStripLabelAddOil;
+        private ToolStripButton ToolStripButtonAddOil;
+        private ToolStripLabel ToolStripLabelAddFilter;
+        private ToolStripButton ToolStripButtonAddFilter;
     }
 }

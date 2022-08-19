@@ -581,5 +581,23 @@ namespace EasyOilFilter.Presentation.Forms
             SetDateTimePicker(DateTime.Today);
             Grid.DataSource = new List<SaleItemViewModel>() { new SaleItemViewModel() };
         }
+
+        private void ToolStripButtonAddOil_Click(object sender, EventArgs e)
+        {
+            using (var detail = new OilDetailForm(_productService))
+            {
+                detail.Mode = FormMode.Add;
+                detail.ShowDialog();
+            }
+        }
+
+        private void ToolStripButtonAddFilter_Click(object sender, EventArgs e)
+        {
+            using (var detail = new FilterDetailForm(_productService))
+            {
+                detail.Mode = FormMode.Add;
+                detail.ShowDialog();
+            }
+        }
     }
 }
