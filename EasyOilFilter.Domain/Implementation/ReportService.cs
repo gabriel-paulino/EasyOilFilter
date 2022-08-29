@@ -29,9 +29,8 @@ namespace EasyOilFilter.Domain.Implementation
                 var pdf = _pdfService.CreatePdf(htmlContent);
 
                 string fileName = $"resumo_{startDate:dd-MM-yy}_{finalDate:dd-MM-yy}.pdf";
-                string basePatch = @"C:\relatórios\";
 
-                string path = Path.Combine(basePatch, reportType.GetDescription(), fileName);
+                string path = Path.Combine("C:", "relatorios", reportType.GetDescription(), fileName);
 
                 var file = new FileInfo(path);
                 file.Directory?.Create();
@@ -41,7 +40,7 @@ namespace EasyOilFilter.Domain.Implementation
             }
             catch (Exception ex)
             {
-                return (false, string.Empty, $"Falha ao gerar relatório de vendas. Detalhes: {ex.Message}.");
+                return (false, string.Empty, $"Falha ao gerar relatório de vendas. Detalhes: {ex.Message}");
             }
         }
 

@@ -19,6 +19,8 @@ namespace EasyOilFilter.Domain.Enums
         [Description("Boleto bancário")]
         BankSlip,
         [Description("Outro")]
-        Other
+        Other,
+        [Description("Crédito lojas")]
+        CreditStores
     }
 }
