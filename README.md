@@ -30,8 +30,13 @@
 - Ajuste de preço de todos produtos por porcentagem ou valor absoluto.
 - Controle de estoque*.
 
-- *Ao comprar lubrificante/filtro a quantidade em estoque é incrementado, ao cancelar compra essa quantidade é decrementada do estoque.
-- *Ao vender lubrificante/filtro a quantidade em estoque é decrementado, ao cancelar venda essa quantidade é estornada ao estoque.
+- *Ao comprar lubrificante/filtro a quantidade em estoque é incrementado, 
+ao cancelar compra essa quantidade é decrementada do estoque.
+
+- *Ao vender lubrificante/filtro a quantidade em estoque é decrementado, 
+ao cancelar venda essa quantidade é estornada ao estoque.
+
+
 
 
 
