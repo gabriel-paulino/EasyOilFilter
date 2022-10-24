@@ -1,6 +1,5 @@
 ﻿using EasyOilFilter.Domain.Contracts.Repositories;
 using EasyOilFilter.Domain.Contracts.Services;
-using EasyOilFilter.Domain.Entities;
 using EasyOilFilter.Domain.Entities.Reports;
 using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Domain.Extensions;
@@ -30,13 +29,20 @@ namespace EasyOilFilter.Domain.Implementation
 
                 string fileName = $"resumo_{startDate:dd-MM-yy}_{finalDate:dd-MM-yy}.pdf";
 
-                string path = Path.Combine("C:", "relatorios", reportType.GetDescription(), fileName);
+                string path = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "relatorios",
+                    reportType.GetDescription()
+                    );
 
-                var file = new FileInfo(path);
-                file.Directory?.Create();
-                File.WriteAllBytes(file.FullName, pdf);
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
 
-                return (true, path, string.Empty);
+                string pathFile = Path.Combine(path, fileName);
+
+                File.WriteAllBytes(pathFile, pdf);
+
+                return (true, pathFile, string.Empty);
             }
             catch (Exception ex)
             {
