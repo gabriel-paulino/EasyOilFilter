@@ -15,9 +15,6 @@ namespace EasyOilFilter.Presentation
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
@@ -46,10 +43,12 @@ namespace EasyOilFilter.Presentation
             container.Register<IProductRepository, ProductRepository>(Lifestyle.Singleton);
             container.Register<ISaleRepository, SaleRepository>(Lifestyle.Singleton);
             container.Register<IPurchaseRepository, PurchaseRepository>(Lifestyle.Singleton);
+            container.Register<IPaymentRepository, PaymentRepository>(Lifestyle.Singleton);
 
             container.Register<IProductService, ProductService>(Lifestyle.Singleton);
             container.Register<ISaleService, SaleService>(Lifestyle.Singleton);
             container.Register<IPurchaseService, PurchaseService>(Lifestyle.Singleton);
+            container.Register<IPaymentService, PaymentService>(Lifestyle.Singleton);
 
             container.Register<IReportService, ReportService>(Lifestyle.Singleton);
             container.Register<IPdfService, PdfService>(Lifestyle.Singleton);

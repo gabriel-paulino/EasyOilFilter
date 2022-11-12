@@ -15,11 +15,21 @@ namespace EasyOilFilter.Domain.Entities
             _items = items;
         }
 
-        public Purchase(Guid id, string provider, decimal total, DateTime date, string remarks, DocumentStatus status)
+        public Purchase
+        (
+            Guid id,
+            string provider,
+            decimal total,
+            DateTime date,
+            string remarks,
+            DocumentStatus status,
+            decimal paymentDone
+        )
         {
             Id = id;
             Provider = provider;
             Total = total;
+            PaymentDone = paymentDone;
             Date = date;
             Remarks = remarks;
             Status = status;
@@ -29,6 +39,7 @@ namespace EasyOilFilter.Domain.Entities
 
         public string Provider { get; private set; }
         public decimal Total { get; private set; }
+        public decimal PaymentDone { get; private set; }
         public DateTime Date { get; private set; }
         public string Remarks { get; private set; }
         public DocumentStatus Status { get; private set; }

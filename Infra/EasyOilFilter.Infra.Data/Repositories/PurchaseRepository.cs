@@ -73,7 +73,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return rowsAffected == 1;
         }
 
-        public async Task<IEnumerable<Purchase>> Get(DateTime date)
+        public async Task<IEnumerable<Purchase>> Get(DateTime startDate, DateTime endDate)
         {
             string query = @"
                 SELECT
@@ -83,6 +83,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     T0.[Date],
                     T0.[Remarks],
                     T0.[Status],
+                    COALESCE(T2.[PaymentDone], 0) AS [PaymentDone],
                     T1.[Id],
                     T1.[PurchaseId],
                     T1.[ProductId],
@@ -94,9 +95,21 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 FROM [Purchase] T0
                 JOIN [PurchaseItem] T1
                     ON T0.[Id] = T1.[PurchaseId]
+                LEFT JOIN (
+					        SELECT 
+						        [PurchaseId], 
+						        SUM(AmountPaid) AS [PaymentDone]
+					        FROM [Payment]
+					        GROUP BY 
+						        [PurchaseId]
+					      ) T2 
+					ON T0.[Id] = T2.[PurchaseId]
                 WHERE 
-                    T0.[Date] = @Date AND
+                    T0.[Date] >= @StartDate AND
+                    T0.[Date] <= @EndDate AND
                     T0.[Status] = @Status
+                ORDER BY
+                    T0.[Date]
             ";
 
             var purchaseMap = new Dictionary<Guid, Purchase>();
@@ -116,7 +129,8 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 },
                 param: new
                 {
-                    Date = date,
+                    StartDate = startDate,
+                    EndDate = endDate,
                     Status = (int)DocumentStatus.Finished
                 }
             );
@@ -134,6 +148,7 @@ namespace EasyOilFilter.Infra.Data.Repositories
                     T0.[Date],
                     T0.[Remarks],
                     T0.[Status],
+                    COALESCE(T2.[PaymentDone], 0) AS [PaymentDone],
                     T1.[Id],
                     T1.[PurchaseId],
                     T1.[ProductId],
@@ -145,6 +160,15 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 FROM [Purchase] T0
                 JOIN [PurchaseItem] T1
                     ON T0.[Id] = T1.[PurchaseId]
+                LEFT JOIN (
+					        SELECT 
+						        [PurchaseId], 
+						        SUM(AmountPaid) AS [PaymentDone]
+					        FROM [Payment]
+					        GROUP BY 
+						        [PurchaseId]
+					      ) T2 
+					ON T0.[Id] = T2.[PurchaseId]
                 WHERE 
                     T0.[Id] = @Id
             ";

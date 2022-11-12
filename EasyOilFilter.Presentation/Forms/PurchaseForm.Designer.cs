@@ -41,6 +41,9 @@
             this.GroupBoxContent = new System.Windows.Forms.GroupBox();
             this.Grid = new System.Windows.Forms.DataGridView();
             this.ButtonProcessPurchase = new System.Windows.Forms.Button();
+            this.ButtonAddPayment = new System.Windows.Forms.Button();
+            this.LabelTotalPaid = new System.Windows.Forms.Label();
+            this.TextBoxTotalPaid = new System.Windows.Forms.TextBox();
             this.GroupBoxContent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
             this.SuspendLayout();
@@ -170,11 +173,42 @@
             this.ButtonProcessPurchase.UseVisualStyleBackColor = true;
             this.ButtonProcessPurchase.Click += new System.EventHandler(this.ButtonProcessPurchase_Click);
             // 
+            // ButtonAddPayment
+            // 
+            this.ButtonAddPayment.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonAddPayment.Location = new System.Drawing.Point(628, 551);
+            this.ButtonAddPayment.Name = "ButtonAddPayment";
+            this.ButtonAddPayment.Size = new System.Drawing.Size(160, 28);
+            this.ButtonAddPayment.TabIndex = 16;
+            this.ButtonAddPayment.Text = "Adicionar pagamento";
+            this.ButtonAddPayment.UseVisualStyleBackColor = true;
+            this.ButtonAddPayment.Click += new System.EventHandler(this.ButtonAddPayment_Click);
+            // 
+            // LabelTotalPaid
+            // 
+            this.LabelTotalPaid.AutoSize = true;
+            this.LabelTotalPaid.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.LabelTotalPaid.Location = new System.Drawing.Point(509, 488);
+            this.LabelTotalPaid.Name = "LabelTotalPaid";
+            this.LabelTotalPaid.Size = new System.Drawing.Size(77, 19);
+            this.LabelTotalPaid.TabIndex = 17;
+            this.LabelTotalPaid.Text = "Total pago";
+            // 
+            // TextBoxTotalPaid
+            // 
+            this.TextBoxTotalPaid.Location = new System.Drawing.Point(668, 488);
+            this.TextBoxTotalPaid.Name = "TextBoxTotalPaid";
+            this.TextBoxTotalPaid.Size = new System.Drawing.Size(117, 23);
+            this.TextBoxTotalPaid.TabIndex = 18;
+            // 
             // PurchaseForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 601);
+            this.Controls.Add(this.TextBoxTotalPaid);
+            this.Controls.Add(this.LabelTotalPaid);
+            this.Controls.Add(this.ButtonAddPayment);
             this.Controls.Add(this.ButtonProcessPurchase);
             this.Controls.Add(this.GroupBoxContent);
             this.Controls.Add(this.DateTimePickerPurchaseDate);
@@ -211,5 +245,8 @@
         private GroupBox GroupBoxContent;
         private DataGridView Grid;
         private Button ButtonProcessPurchase;
+        private Button ButtonAddPayment;
+        private Label LabelTotalPaid;
+        private TextBox TextBoxTotalPaid;
     }
 }

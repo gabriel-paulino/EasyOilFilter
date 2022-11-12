@@ -32,8 +32,11 @@
             this.DataGridView = new System.Windows.Forms.DataGridView();
             this.LabelDate = new System.Windows.Forms.Label();
             this.GroupBoxSearch = new System.Windows.Forms.GroupBox();
+            this.LabelEndDate = new System.Windows.Forms.Label();
+            this.DateTimePickerEnd = new System.Windows.Forms.DateTimePicker();
+            this.LabelStartDate = new System.Windows.Forms.Label();
             this.LabelTotal = new System.Windows.Forms.Label();
-            this.DateTimePickerSearch = new System.Windows.Forms.DateTimePicker();
+            this.DateTimePickerStart = new System.Windows.Forms.DateTimePicker();
             this.ButtonSearch = new System.Windows.Forms.Button();
             this.ButtonAddSale = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).BeginInit();
@@ -67,15 +70,46 @@
             // 
             // GroupBoxSearch
             // 
+            this.GroupBoxSearch.Controls.Add(this.LabelEndDate);
+            this.GroupBoxSearch.Controls.Add(this.DateTimePickerEnd);
+            this.GroupBoxSearch.Controls.Add(this.LabelStartDate);
             this.GroupBoxSearch.Controls.Add(this.LabelTotal);
-            this.GroupBoxSearch.Controls.Add(this.DateTimePickerSearch);
+            this.GroupBoxSearch.Controls.Add(this.DateTimePickerStart);
             this.GroupBoxSearch.Controls.Add(this.ButtonSearch);
             this.GroupBoxSearch.Location = new System.Drawing.Point(12, 495);
             this.GroupBoxSearch.Name = "GroupBoxSearch";
-            this.GroupBoxSearch.Size = new System.Drawing.Size(650, 83);
+            this.GroupBoxSearch.Size = new System.Drawing.Size(650, 92);
             this.GroupBoxSearch.TabIndex = 2;
             this.GroupBoxSearch.TabStop = false;
-            this.GroupBoxSearch.Text = "Consultar compras do dia";
+            this.GroupBoxSearch.Text = "Consultar compras";
+            // 
+            // LabelEndDate
+            // 
+            this.LabelEndDate.AutoSize = true;
+            this.LabelEndDate.Location = new System.Drawing.Point(189, 27);
+            this.LabelEndDate.Name = "LabelEndDate";
+            this.LabelEndDate.Size = new System.Drawing.Size(25, 15);
+            this.LabelEndDate.TabIndex = 7;
+            this.LabelEndDate.Text = "Até";
+            // 
+            // DateTimePickerEnd
+            // 
+            this.DateTimePickerEnd.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.DateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DateTimePickerEnd.Location = new System.Drawing.Point(189, 45);
+            this.DateTimePickerEnd.Name = "DateTimePickerEnd";
+            this.DateTimePickerEnd.Size = new System.Drawing.Size(124, 27);
+            this.DateTimePickerEnd.TabIndex = 6;
+            this.DateTimePickerEnd.Value = new System.DateTime(2022, 5, 30, 19, 12, 59, 0);
+            // 
+            // LabelStartDate
+            // 
+            this.LabelStartDate.AutoSize = true;
+            this.LabelStartDate.Location = new System.Drawing.Point(26, 27);
+            this.LabelStartDate.Name = "LabelStartDate";
+            this.LabelStartDate.Size = new System.Drawing.Size(21, 15);
+            this.LabelStartDate.TabIndex = 5;
+            this.LabelStartDate.Text = "De";
             // 
             // LabelTotal
             // 
@@ -87,22 +121,22 @@
             this.LabelTotal.Size = new System.Drawing.Size(0, 29);
             this.LabelTotal.TabIndex = 4;
             // 
-            // DateTimePickerSearch
+            // DateTimePickerStart
             // 
-            this.DateTimePickerSearch.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.DateTimePickerSearch.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DateTimePickerSearch.Location = new System.Drawing.Point(6, 31);
-            this.DateTimePickerSearch.Name = "DateTimePickerSearch";
-            this.DateTimePickerSearch.Size = new System.Drawing.Size(124, 27);
-            this.DateTimePickerSearch.TabIndex = 1;
-            this.DateTimePickerSearch.Value = new System.DateTime(2022, 5, 30, 19, 12, 59, 0);
+            this.DateTimePickerStart.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.DateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DateTimePickerStart.Location = new System.Drawing.Point(26, 45);
+            this.DateTimePickerStart.Name = "DateTimePickerStart";
+            this.DateTimePickerStart.Size = new System.Drawing.Size(124, 27);
+            this.DateTimePickerStart.TabIndex = 1;
+            this.DateTimePickerStart.Value = new System.DateTime(2022, 5, 30, 19, 12, 59, 0);
             // 
             // ButtonSearch
             // 
             this.ButtonSearch.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.ButtonSearch.Image = ((System.Drawing.Image)(resources.GetObject("ButtonSearch.Image")));
             this.ButtonSearch.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.ButtonSearch.Location = new System.Drawing.Point(153, 28);
+            this.ButtonSearch.Location = new System.Drawing.Point(352, 45);
             this.ButtonSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.ButtonSearch.Name = "ButtonSearch";
             this.ButtonSearch.Size = new System.Drawing.Size(90, 30);
@@ -155,7 +189,10 @@
         private GroupBox GroupBoxSearch;
         private Button ButtonSearch;
         private Button ButtonAddSale;
-        private DateTimePicker DateTimePickerSearch;
+        private DateTimePicker DateTimePickerStart;
         private Label LabelTotal;
+        private Label LabelEndDate;
+        private DateTimePicker DateTimePickerEnd;
+        private Label LabelStartDate;
     }
 }

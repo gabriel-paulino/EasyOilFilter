@@ -28,9 +28,9 @@ namespace EasyOilFilter.Domain.Implementation
 
         public void Dispose() => _purchaseRepository.Dispose();
 
-        public async Task<IEnumerable<PurchaseViewModel>> Get(DateTime date)
+        public async Task<IEnumerable<PurchaseViewModel>> Get(DateTime startDate, DateTime endDate)
         {
-            var purchases = await _purchaseRepository.Get(date);
+            var purchases = await _purchaseRepository.Get(startDate, endDate);
 
             return purchases?.Any() ?? false
                 ? PurchaseViewModel.MapMany(purchases)

@@ -15,6 +15,7 @@ namespace EasyOilFilter.Domain.ViewModels.PurchaseViewModel
         public Guid Id { get; set; }
         public string Provider { get; set; }
         public decimal Total { get; set; }
+        public decimal PaymentDone { get; set; }
         public DateTime Date { get; set; }
         public string Remarks { get; set; }
         public string Status { get; set; }
@@ -27,6 +28,7 @@ namespace EasyOilFilter.Domain.ViewModels.PurchaseViewModel
                 Id = purchase.Id,
                 Provider = purchase.Provider,
                 Total = purchase.Total,
+                PaymentDone = purchase.PaymentDone,
                 Date = purchase.Date,
                 Remarks = purchase.Remarks,
                 Status = purchase.Status.GetDescription(),
@@ -40,6 +42,7 @@ namespace EasyOilFilter.Domain.ViewModels.PurchaseViewModel
                             id: model.Id,
                             provider: model.Provider,
                             total: model.Total,
+                            paymentDone: model.PaymentDone,
                             date: model.Date,
                             remarks: model.Remarks,
                             status: EnumUtility.GetEnumByDescription<DocumentStatus>(model.Status)

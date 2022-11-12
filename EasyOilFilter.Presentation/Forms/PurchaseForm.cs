@@ -11,20 +11,28 @@ namespace EasyOilFilter.Presentation.Forms
     {
         private readonly IPurchaseService _purchaseService;
         private readonly IProductService _productService;
+        private readonly IPaymentService _paymentService;
         public PurchaseViewModel Model { get; set; }
         public FormMode Mode { get; set; }
         public bool IsAdd { get; private set; }
         public bool IsCanceled { get; private set; }
         public DateTime Date { get; private set; }
 
-        public PurchaseForm(IPurchaseService purchaseService, IProductService productService)
+        public PurchaseForm
+        (
+            IPurchaseService purchaseService, 
+            IProductService productService,
+            IPaymentService paymentService
+        )
         {
             _purchaseService = purchaseService;
             _productService = productService;
+            _paymentService = paymentService;
             Model = new PurchaseViewModel();
             IsAdd = false;
             IsCanceled = false;
-            InitializeComponent();
+
+            InitializeComponent();           
         }
 
         private void PurchaseForm_Load(object sender, EventArgs e)
@@ -34,6 +42,7 @@ namespace EasyOilFilter.Presentation.Forms
             if (Mode == FormMode.Add)
             {
                 ButtonProcessPurchase.Text = "Adicionar";
+                ButtonAddPayment.Visible = false;
 
                 SetDateTimePicker(DateTime.Today);
                 DisableTotal();
@@ -53,6 +62,7 @@ namespace EasyOilFilter.Presentation.Forms
             TextBoxProvider.Text = Model.Provider;
             TextBoxRemarks.Text = Model.Remarks;
             TextBoxTotal.Text = Model.Total.ToString("C2");
+            TextBoxTotalPaid.Text = Model.PaymentDone.ToString("C2");
 
             SetDateTimePicker(Model.Date);
 
@@ -187,6 +197,7 @@ namespace EasyOilFilter.Presentation.Forms
         private void DisableTotal()
         {
             TextBoxTotal.Enabled = false;
+            TextBoxTotalPaid.Enabled = false;
         }
 
         private void ConfigureGrid()
@@ -436,6 +447,25 @@ namespace EasyOilFilter.Presentation.Forms
             TextBoxRemarks.Clear();
             SetDateTimePicker(DateTime.Today);
             Grid.DataSource = new List<PurchaseItemViewModel>() { new PurchaseItemViewModel() };
+        }
+
+        private async void ButtonAddPayment_Click(object sender, EventArgs e)
+        {
+            bool paymentWasAdd = false;
+
+            using (var paymentForm = new PaymentForm(_paymentService))
+            {
+                paymentForm.CurrentPurchase = Model;
+                paymentForm.ShowDialog();
+                paymentWasAdd = paymentForm.IsAdd;
+            }
+
+            if (paymentWasAdd)
+            {
+                var payments = await _paymentService.Get(Model.Id);
+                decimal totalPaid = payments.Sum(payment => payment.AmountPaid);
+                TextBoxTotalPaid.Text = $"{totalPaid:C2}";
+            }
         }
     }
 }

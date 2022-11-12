@@ -8,18 +8,21 @@ namespace EasyOilFilter.Presentation.Forms
         private readonly ISaleService _saleService;
         private readonly IPurchaseService _purchaseService;
         private readonly IReportService _reportService;
+        private readonly IPaymentService _paymentService;
 
 
         public MainForm(
             IProductService productService,
             ISaleService saleService,
             IPurchaseService purchaseService,
-            IReportService reportService)
+            IReportService reportService,
+            IPaymentService paymentService)
         {
             _productService = productService;
             _saleService = saleService;
             _purchaseService = purchaseService;
             _reportService = reportService;
+            _paymentService = paymentService;
             InitializeComponent();
         }
 
@@ -44,7 +47,7 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void ButtonPurchase_Click(object sender, EventArgs e)
         {
-            using var purchaseForm = new PurchaseListForm(_purchaseService, _productService);
+            using var purchaseForm = new PurchaseListForm(_purchaseService, _productService, _paymentService);
             purchaseForm.ShowDialog();
         }
 

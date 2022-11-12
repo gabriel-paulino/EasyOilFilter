@@ -59,3 +59,10 @@ CREATE TABLE PurchaseItem (
 	UnitaryPrice decimal(19,4) not null,
 	TotalItem decimal(19,4) not null
 );
+
+CREATE TABLE Payment (
+    Id uniqueidentifier primary key,
+    PurchaseId uniqueidentifier FOREIGN KEY REFERENCES Purchase(Id),
+	PaymentDate date not null,
+	AmountPaid decimal(19,4) not null
+);
