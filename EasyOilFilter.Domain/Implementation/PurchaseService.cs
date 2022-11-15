@@ -11,17 +11,20 @@ namespace EasyOilFilter.Domain.Implementation
     {
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IPaymentRepository _paymentRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly NotificationContext _notification;
 
         public PurchaseService(
             IPurchaseRepository goodsReceiptRepository,
             IProductRepository productRepository,
+            IPaymentRepository paymentRepository,
             IUnitOfWork unitOfWork,
             NotificationContext notification)
         {
             _purchaseRepository = goodsReceiptRepository;
             _productRepository = productRepository;
+            _paymentRepository = paymentRepository;
             _unitOfWork = unitOfWork;
             _notification = notification;
         }
@@ -88,12 +91,12 @@ namespace EasyOilFilter.Domain.Implementation
 
             _unitOfWork.BeginTransaction();
 
-            bool success = await Cancel(purchase.Id);
+            var (wasCanceled, cancelErrorMessage) = await Cancel(purchase.Id);
 
-            if (!success)
+            if (!wasCanceled)
             {
                 _unitOfWork.Rollback();
-                return (false, "Falha ao cancelar compra.");
+                return (false, cancelErrorMessage);
             }
 
             var (successToReversalStock, errorMessage) = await ReduceStock(purchase.Items);
@@ -109,9 +112,21 @@ namespace EasyOilFilter.Domain.Implementation
             return (true, string.Empty);
         }
 
-        private async Task<bool> Cancel(Guid id)
+        private async Task<(bool wasCanceled, string errorMessage)> Cancel(Guid id)
         {
-            return await _purchaseRepository.Cancel(id);
+            var payments = await _paymentRepository.GetPaidByPurchaseId(id);
+
+            if (payments?.Any() ?? false)
+                return (false, 
+                    $"Não é possível realizar o cancelamento dessa compra.{Environment.NewLine}" +
+                    $"Existem pagamentos efetuados.");
+
+            bool wasCanceled = await _purchaseRepository.Cancel(id);
+
+            if (wasCanceled)
+                return (true, string.Empty);
+
+            return (false, "Erro ao cancelar compra.");
         }
 
         private async Task<bool> AddHeader(Purchase purchase)

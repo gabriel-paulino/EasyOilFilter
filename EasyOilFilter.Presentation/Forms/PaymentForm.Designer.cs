@@ -34,6 +34,8 @@
             this.AddPaymentButton = new System.Windows.Forms.Button();
             this.CancelPaymentButton = new System.Windows.Forms.Button();
             this.NumericUpDownPaymentValue = new System.Windows.Forms.NumericUpDown();
+            this.ComboBoxBank = new System.Windows.Forms.ComboBox();
+            this.BankLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.NumericUpDownPaymentValue)).BeginInit();
             this.SuspendLayout();
             // 
@@ -43,25 +45,27 @@
             this.PaymentDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.PaymentDateTimePicker.Location = new System.Drawing.Point(23, 44);
             this.PaymentDateTimePicker.Name = "PaymentDateTimePicker";
-            this.PaymentDateTimePicker.Size = new System.Drawing.Size(124, 27);
+            this.PaymentDateTimePicker.Size = new System.Drawing.Size(184, 27);
             this.PaymentDateTimePicker.TabIndex = 2;
             this.PaymentDateTimePicker.Value = new System.DateTime(2022, 5, 30, 19, 12, 59, 0);
             // 
             // PaymentDateLabel
             // 
             this.PaymentDateLabel.AutoSize = true;
-            this.PaymentDateLabel.Location = new System.Drawing.Point(23, 26);
+            this.PaymentDateLabel.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.PaymentDateLabel.Location = new System.Drawing.Point(23, 22);
             this.PaymentDateLabel.Name = "PaymentDateLabel";
-            this.PaymentDateLabel.Size = new System.Drawing.Size(31, 15);
+            this.PaymentDateLabel.Size = new System.Drawing.Size(41, 19);
             this.PaymentDateLabel.TabIndex = 3;
             this.PaymentDateLabel.Text = "Data";
             // 
             // ValuePaymentLabel
             // 
             this.ValuePaymentLabel.AutoSize = true;
-            this.ValuePaymentLabel.Location = new System.Drawing.Point(23, 92);
+            this.ValuePaymentLabel.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.ValuePaymentLabel.Location = new System.Drawing.Point(23, 88);
             this.ValuePaymentLabel.Name = "ValuePaymentLabel";
-            this.ValuePaymentLabel.Size = new System.Drawing.Size(33, 15);
+            this.ValuePaymentLabel.Size = new System.Drawing.Size(44, 19);
             this.ValuePaymentLabel.TabIndex = 4;
             this.ValuePaymentLabel.Text = "Valor";
             // 
@@ -98,15 +102,36 @@
             0,
             0});
             this.NumericUpDownPaymentValue.Name = "NumericUpDownPaymentValue";
-            this.NumericUpDownPaymentValue.Size = new System.Drawing.Size(124, 27);
+            this.NumericUpDownPaymentValue.Size = new System.Drawing.Size(184, 27);
             this.NumericUpDownPaymentValue.TabIndex = 14;
             this.NumericUpDownPaymentValue.ThousandsSeparator = true;
+            // 
+            // ComboBoxBank
+            // 
+            this.ComboBoxBank.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ComboBoxBank.FormattingEnabled = true;
+            this.ComboBoxBank.Location = new System.Drawing.Point(23, 178);
+            this.ComboBoxBank.Name = "ComboBoxBank";
+            this.ComboBoxBank.Size = new System.Drawing.Size(184, 27);
+            this.ComboBoxBank.TabIndex = 15;
+            // 
+            // BankLabel
+            // 
+            this.BankLabel.AutoSize = true;
+            this.BankLabel.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.BankLabel.Location = new System.Drawing.Point(23, 156);
+            this.BankLabel.Name = "BankLabel";
+            this.BankLabel.Size = new System.Drawing.Size(51, 19);
+            this.BankLabel.TabIndex = 16;
+            this.BankLabel.Text = "Banco";
             // 
             // PaymentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(364, 294);
+            this.Controls.Add(this.BankLabel);
+            this.Controls.Add(this.ComboBoxBank);
             this.Controls.Add(this.NumericUpDownPaymentValue);
             this.Controls.Add(this.CancelPaymentButton);
             this.Controls.Add(this.AddPaymentButton);
@@ -132,5 +157,7 @@
         private Button AddPaymentButton;
         private Button CancelPaymentButton;
         private NumericUpDown NumericUpDownPaymentValue;
+        private ComboBox ComboBoxBank;
+        private Label BankLabel;
     }
 }

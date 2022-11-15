@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using EasyOilFilter.Domain.Contracts.Repositories;
 using EasyOilFilter.Domain.Entities;
+using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Infra.Data.Session;
-using System.Xml.Linq;
 
 namespace EasyOilFilter.Infra.Data.Repositories
 {
@@ -34,9 +34,9 @@ namespace EasyOilFilter.Infra.Data.Repositories
             string command =
                 @"
                     INSERT INTO [Payment]
-                        ([Id], [PurchaseId], [PaymentDate], [AmountPaid]) 
+                        ([Id], [PurchaseId], [PaymentDate], [AmountPaid], [BankAccount], [Status]) 
                     VALUES 
-                        (@Id, @PurchaseId, @PaymentDate, @AmountPaid)
+                        (@Id, @PurchaseId, @PaymentDate, @AmountPaid, @BankAccount, @Status)
                 ";
 
             int rowsAffected = await _session.Connection.ExecuteAsync(command, new
@@ -44,20 +44,52 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 payment.Id,
                 payment.PurchaseId,
                 payment.PaymentDate,
-                payment.AmountPaid
+                payment.AmountPaid,
+                payment.BankAccount,
+                payment.Status
             });
 
             return rowsAffected == 1;
         }
 
-        public async Task<IEnumerable<Payment>> Get(Guid purchaseId)
+        public async Task<IEnumerable<Payment>> GetPaidByPurchaseId(Guid purchaseId)
         {
             string query = @"
                 SELECT
                     [Id],
                     [PurchaseId],                 
                     [PaymentDate],
-                    [AmountPaid]
+                    [AmountPaid],
+                    [BankAccount],
+                    [Status]
+                FROM 
+                    [Payment]
+                WHERE
+                    [PurchaseId] = @PurchaseId AND
+                    [Status] = @Status
+            ";
+
+            var payments = await _session.Connection.QueryAsync<Payment>(query, new
+            {
+                PurchaseId = purchaseId,
+                Status = (int)PaymentStatus.Done
+            },
+            _session.Transaction
+            );
+
+            return payments.OrderByDescending(payment => payment.PaymentDate);
+        }
+
+        public async Task<IEnumerable<Payment>> GetAllByPurchaseId(Guid purchaseId)
+        {
+            string query = @"
+                SELECT
+                    [Id],
+                    [PurchaseId],                 
+                    [PaymentDate],
+                    [AmountPaid],
+                    [BankAccount],
+                    [Status]
                 FROM 
                     [Payment]
                 WHERE
@@ -70,6 +102,28 @@ namespace EasyOilFilter.Infra.Data.Repositories
             });
 
             return payments.OrderByDescending(payment => payment.PaymentDate);
+        }
+
+        public async Task<bool> Cancel(Guid id)
+        {
+            string command =
+                @"
+                    UPDATE [Payment] 
+                    SET
+                        [Status] = @Status
+                    WHERE 
+                        [Id] = @Id
+                ";
+
+            int rowsAffected = await _session.Connection.ExecuteAsync(command, new
+            {
+                Id = id,
+                Status = (int)PaymentStatus.Canceled
+            },
+            _session.Transaction
+            );
+
+            return rowsAffected == 1;
         }
     }
 }

@@ -462,7 +462,7 @@ namespace EasyOilFilter.Presentation.Forms
 
             if (paymentWasAdd)
             {
-                var payments = await _paymentService.Get(Model.Id);
+                var payments = await _paymentService.GetByPurchaseId(Model.Id);
                 decimal totalPaid = payments.Sum(payment => payment.AmountPaid);
                 TextBoxTotalPaid.Text = $"{totalPaid:C2}";
             }

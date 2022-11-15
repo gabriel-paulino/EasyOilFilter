@@ -1,4 +1,7 @@
 ﻿using EasyOilFilter.Domain.Contracts.Services;
+using EasyOilFilter.Domain.Enums;
+using EasyOilFilter.Domain.Extensions;
+using EasyOilFilter.Domain.Shared.Utils;
 using EasyOilFilter.Domain.ViewModels.PaymentViewModel;
 using EasyOilFilter.Domain.ViewModels.PurchaseViewModel;
 
@@ -19,6 +22,7 @@ namespace EasyOilFilter.Presentation.Forms
 
         private void PaymentForm_Load(object sender, EventArgs e)
         {
+            LoadBankAccountComboBox();
             PaymentDateTimePicker.Value = DateTime.Today;
         }
 
@@ -38,16 +42,18 @@ namespace EasyOilFilter.Presentation.Forms
                 PaymentDate = PaymentDateTimePicker.Value,
                 PurchaseId = CurrentPurchase.Id,
                 AmountPaid = NumericUpDownPaymentValue.Value,
-                PurchaseTotal = CurrentPurchase.Total
+                PurchaseTotal = CurrentPurchase.Total,
+                BankAccount = ComboBoxBank.SelectedItem?.ToString() ?? string.Empty
             };
 
             var (isAdd, errors) = await _paymentService.Add(viewModel);
 
             MessageBox.Show(isAdd
-            ? "Pagamento adicionado com sucesso."
-            : $"Erro ao adicionar pagamento.{Environment.NewLine}" +
-              $"Retorno:{Environment.NewLine}" +
-              $"{string.Join(Environment.NewLine, errors)}");
+                ? "Pagamento adicionado com sucesso."
+                : $"Erro ao adicionar pagamento.{Environment.NewLine}" +
+                  $"Retorno:{Environment.NewLine}" +
+                  $"{string.Join(Environment.NewLine, errors)}"
+            );
 
             if (isAdd)
             {
@@ -57,5 +63,13 @@ namespace EasyOilFilter.Presentation.Forms
         }
 
         private void CancelPaymentButton_Click(object sender, EventArgs e) => Close();
+
+        private void LoadBankAccountComboBox()
+        {
+            foreach (var type in EnumUtility.EnumToList<BankAccount>())
+                ComboBoxBank.Items.Add(type.GetDescription());
+
+            ComboBoxBank.SelectedIndex = 0;
+        }
     }
 }

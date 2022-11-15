@@ -26,7 +26,7 @@ namespace EasyOilFilter.Domain.Implementation
                 return (false, entity.Notifications.Select(n => n.Message));
 
             decimal maxValueAllowedPay = model.PurchaseTotal;
-            var payments = await Get(entity.PurchaseId);
+            var payments = await GetByPurchaseId(entity.PurchaseId);
 
             if (payments?.Any() ?? false)
             {
@@ -48,7 +48,7 @@ namespace EasyOilFilter.Domain.Implementation
                 : (false, "Falha ao adicionar o pagamento.".GetListText());
         }
 
-        public async Task<IEnumerable<Payment>> Get(Guid purchaseId) =>
-            await _paymentRepository.Get(purchaseId);
+        public async Task<IEnumerable<Payment>> GetByPurchaseId(Guid purchaseId) =>
+            await _paymentRepository.GetPaidByPurchaseId(purchaseId);
     }
 }

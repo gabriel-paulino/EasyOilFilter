@@ -64,5 +64,7 @@ CREATE TABLE Payment (
     Id uniqueidentifier primary key,
     PurchaseId uniqueidentifier FOREIGN KEY REFERENCES Purchase(Id),
 	PaymentDate date not null,
-	AmountPaid decimal(19,4) not null
+	AmountPaid decimal(19,4) not null,
+	BankAccount int not null,
+	Status int not null
 );
