@@ -112,11 +112,11 @@ namespace EasyOilFilter.Presentation.Forms
                 return;
             }
 
-            var result = await _productService.Create(model);
+            var (result, error) = await _productService.Create(model);
 
             if (result == default)
             {
-                MessageBox.Show($"Falha ao adicionar filtro: {model.Name}.");
+                MessageBox.Show($"Falha ao adicionar filtro: {model.Name}. Retorno: {error}");
                 return;
             }
 
@@ -149,11 +149,11 @@ namespace EasyOilFilter.Presentation.Forms
             if (!anyChange)
                 return;
 
-            var result = await _productService.Update(Model.Id, model);
+            var (result, error) = await _productService.Update(Model.Id, model);
 
             if (result == default)
             {
-                MessageBox.Show($"Falha ao atualizar filtro: {TextBoxCode.Text}.");
+                MessageBox.Show($"Falha ao atualizar filtro: {TextBoxCode.Text}. Retorno: {error}");
                 return;
             }
 

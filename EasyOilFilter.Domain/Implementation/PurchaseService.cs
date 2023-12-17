@@ -2,7 +2,6 @@
 using EasyOilFilter.Domain.Contracts.Services;
 using EasyOilFilter.Domain.Contracts.UoW;
 using EasyOilFilter.Domain.Entities;
-using EasyOilFilter.Domain.Shared.Contexts;
 using EasyOilFilter.Domain.ViewModels.PurchaseViewModel;
 
 namespace EasyOilFilter.Domain.Implementation
@@ -13,20 +12,19 @@ namespace EasyOilFilter.Domain.Implementation
         private readonly IProductRepository _productRepository;
         private readonly IPaymentRepository _paymentRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly NotificationContext _notification;
 
-        public PurchaseService(
+        public PurchaseService
+        (
             IPurchaseRepository goodsReceiptRepository,
             IProductRepository productRepository,
             IPaymentRepository paymentRepository,
-            IUnitOfWork unitOfWork,
-            NotificationContext notification)
+            IUnitOfWork unitOfWork
+        )
         {
             _purchaseRepository = goodsReceiptRepository;
             _productRepository = productRepository;
             _paymentRepository = paymentRepository;
             _unitOfWork = unitOfWork;
-            _notification = notification;
         }
 
         public void Dispose() => _purchaseRepository.Dispose();
@@ -44,10 +42,8 @@ namespace EasyOilFilter.Domain.Implementation
         {
             var purchase = (Purchase)model;
 
-            _notification.AddNotifications(purchase.Notifications);
-
-            if (!_notification.IsValid)
-                return (false, purchase.Notifications.FirstOrDefault().Message);
+            if (!purchase.IsValid)
+                return (false, purchase.GetFirstNotificationMessage());
 
             _unitOfWork.BeginTransaction();
 
@@ -84,10 +80,8 @@ namespace EasyOilFilter.Domain.Implementation
         {
             var purchase = (Purchase)model;
 
-            _notification.AddNotifications(purchase.Notifications);
-
-            if (!_notification.IsValid)
-                return (false, purchase.Notifications.FirstOrDefault().Message);
+            if (!purchase.IsValid)
+                return (false, purchase.GetFirstNotificationMessage());
 
             _unitOfWork.BeginTransaction();
 

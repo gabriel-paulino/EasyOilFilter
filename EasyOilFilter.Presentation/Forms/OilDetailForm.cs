@@ -132,11 +132,11 @@ namespace EasyOilFilter.Presentation.Forms
                 return;
             }
 
-            var result = await _productService.Create(model);
+            var (result, error) = await _productService.Create(model);
 
             if (result == default)
             {
-                MessageBox.Show($"Falha ao adicionar lubrificante: {model.Name}.");
+                MessageBox.Show($"Falha ao adicionar lubrificante: {model.Name}. Retorno: {error}");
                 return;
             }
 

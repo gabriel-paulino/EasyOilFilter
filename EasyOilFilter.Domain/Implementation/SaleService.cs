@@ -2,7 +2,6 @@
 using EasyOilFilter.Domain.Contracts.Services;
 using EasyOilFilter.Domain.Contracts.UoW;
 using EasyOilFilter.Domain.Entities;
-using EasyOilFilter.Domain.Shared.Contexts;
 using EasyOilFilter.Domain.ViewModels.SaleViewModel;
 
 namespace EasyOilFilter.Domain.Implementation
@@ -12,18 +11,17 @@ namespace EasyOilFilter.Domain.Implementation
         private readonly ISaleRepository _saleRepository;
         private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly NotificationContext _notification;
 
-        public SaleService(
+        public SaleService
+        (
             ISaleRepository saleRepository,
             IProductRepository productRepository,
-            IUnitOfWork unitOfWork,
-            NotificationContext notification)
+            IUnitOfWork unitOfWork
+        )
         {
             _saleRepository = saleRepository;
             _productRepository = productRepository;
             _unitOfWork = unitOfWork;
-            _notification = notification;
         }
 
         public void Dispose() => _saleRepository.Dispose();
@@ -41,10 +39,8 @@ namespace EasyOilFilter.Domain.Implementation
         {
             var sale = (Sale)model;
 
-            _notification.AddNotifications(sale.Notifications);
-
-            if (!_notification.IsValid)
-                return (false, sale.Notifications.FirstOrDefault().Message);
+            if (!sale.IsValid)
+                return (false, sale.GetFirstNotificationMessage());
 
             _unitOfWork.BeginTransaction();
 
@@ -81,10 +77,8 @@ namespace EasyOilFilter.Domain.Implementation
         {
             var sale = (Sale)model;
 
-            _notification.AddNotifications(sale.Notifications);
-
-            if (!_notification.IsValid)
-                return (false, sale.Notifications.FirstOrDefault().Message);
+            if (!sale.IsValid)
+                return (false, sale.GetFirstNotificationMessage());
 
             _unitOfWork.BeginTransaction();
 

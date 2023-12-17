@@ -3,7 +3,6 @@ using EasyOilFilter.Domain.Contracts.Services;
 using EasyOilFilter.Domain.Contracts.UoW;
 using EasyOilFilter.Domain.Entities;
 using EasyOilFilter.Domain.Enums;
-using EasyOilFilter.Domain.Shared.Contexts;
 using EasyOilFilter.Domain.ViewModels;
 using EasyOilFilter.Domain.ViewModels.FilterViewModel;
 using EasyOilFilter.Domain.ViewModels.OilViewModel;
@@ -14,16 +13,15 @@ namespace EasyOilFilter.Domain.Implementation
     {
         private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly NotificationContext _notification;
 
-        public ProductService(
+        public ProductService
+        (
             IProductRepository productRepository,
-            IUnitOfWork unitOfWork,
-            NotificationContext notification)
+            IUnitOfWork unitOfWork
+        )
         {
             _productRepository = productRepository;
             _unitOfWork = unitOfWork;
-            _notification = notification;
         }
 
         public void Dispose() => _productRepository.Dispose();
@@ -103,19 +101,17 @@ namespace EasyOilFilter.Domain.Implementation
             return (sucess, message);
         }
 
-        public async Task<FilterViewModel> Create(AddFilterViewModel model)
+        public async Task<(FilterViewModel result, string error)> Create(AddFilterViewModel model)
         {
             var filter = (Filter)model;
-            _notification.AddNotifications(filter.Notifications);
 
-            if (!_notification.IsValid)
-                return default;
+            if (!filter.IsValid)
+                return (default, filter.GetFirstNotificationMessage());
 
             if (await _productRepository.Create(filter))
-                return (FilterViewModel)filter;
+                return ((FilterViewModel)filter, string.Empty);
 
-            _notification.AddNotification("Id", "Falha ao adicionar filtro.");
-            return default;
+            return (default, "Falha ao adicionar filtro.");
         }
 
         public async Task<IEnumerable<FilterViewModel>> GetFilters(int page, int quantity)
@@ -177,32 +173,27 @@ namespace EasyOilFilter.Domain.Implementation
                 : default;
         }
 
-        public async Task<FilterViewModel> Update(Guid id, FilterViewModel model)
+        public async Task<(FilterViewModel result, string error)> Update(Guid id, FilterViewModel model)
         {
             if (id != model.Id)
-            {
-                _notification.AddNotification("Id", "Filtro não encontrado.");
-                return default;
-            }
+                return (default, "Filtro não encontrado.");
 
             var updatedFilter = (Filter)model;
-            _notification.AddNotifications(updatedFilter.Notifications);
 
-            if (!_notification.IsValid)
-                return default;
+            if (!updatedFilter.IsValid)
+                return (default, updatedFilter.GetFirstNotificationMessage());
 
             _unitOfWork.BeginTransaction();
 
             if (await _productRepository.Update(updatedFilter))
             {
                 _unitOfWork.Commit();
-                return updatedFilter;
+                return (updatedFilter, string.Empty);
             }
 
             _unitOfWork.Rollback();
 
-            _notification.AddNotification("Id", "Falha ao atualizar filtro.");
-            return default;
+            return (default, "Falha ao atualizar filtro.");
         }
 
         public async Task<IEnumerable<OilViewModel>> GetAllOils()
@@ -264,47 +255,41 @@ namespace EasyOilFilter.Domain.Implementation
                 : default;
         }
 
-        public async Task<OilViewModel> Create(AddOilViewModel model)
+        public async Task<(OilViewModel result, string error)> Create(AddOilViewModel model)
         {
             var oil = (Oil)model;
-            _notification.AddNotifications(oil.Notifications);
 
-            if (!_notification.IsValid)
-                return default;
+            if (!oil.IsValid)
+                return (default, oil.GetFirstNotificationMessage());
 
             if (await _productRepository.Create(oil))
-                return (OilViewModel)oil;
+                return ((OilViewModel)oil, string.Empty);
 
-            _notification.AddNotification("Id", "Falha ao adicionar lubrificante.");
-            return default;
+            return (default, "Falha ao adicionar lubrificante.");
         }
 
-        public async Task<OilViewModel> Update(Guid id, OilViewModel model)
+        public async Task<(OilViewModel result, string error)> Update(Guid id, OilViewModel model)
         {
             if (id != model.Id)
-            {
-                _notification.AddNotification("Id", "Lubrificante não encontrado.");
-                return default;
-            }
+                return (default, "Lubrificante não encontrado.");
+
 
             var updatedOil = (Oil)model;
-            _notification.AddNotifications(updatedOil.Notifications);
 
-            if (!_notification.IsValid)
-                return default;
+            if (!updatedOil.IsValid)
+                return (default, updatedOil.GetFirstNotificationMessage());
 
             _unitOfWork.BeginTransaction();
 
             if (await _productRepository.Update(updatedOil))
             {
                 _unitOfWork.Commit();
-                return updatedOil;
+                return (updatedOil, string.Empty);
             }
 
             _unitOfWork.Rollback();
 
-            _notification.AddNotification("Id", "Falha ao atualizar lubrificante.");
-            return default;
+            return (default, "Falha ao atualizar lubrificante.");
         }
 
         public async Task<(bool Sucess, string Message)> ChangePriceOfAllOilsByAbsoluteValue(decimal absoluteValue)
@@ -382,7 +367,7 @@ namespace EasyOilFilter.Domain.Implementation
 
             bool deleted = await _productRepository.Delete(id);
 
-            return deleted 
+            return deleted
                 ? (true, string.Empty)
                 : (false, $"Falha ao deletar produto: {product.Name}.");
         }

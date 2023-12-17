@@ -2,19 +2,19 @@ using EasyOilFilter.Domain.Contracts.Repositories;
 using EasyOilFilter.Domain.Contracts.Services;
 using EasyOilFilter.Domain.Contracts.UoW;
 using EasyOilFilter.Domain.Implementation;
-using EasyOilFilter.Domain.Shared.Contexts;
 using EasyOilFilter.Infra.Data.Repositories;
 using EasyOilFilter.Infra.Data.Session;
 using EasyOilFilter.Infra.Data.UoW;
 using EasyOilFilter.Infra.Pdf.Services;
 using EasyOilFilter.Presentation.Forms;
-using SimpleInjector;
-using SimpleInjector.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EasyOilFilter.Presentation
 {
     internal static class Program
     {
+        public static IServiceProvider? ServiceProvider { get; private set; }
+
         [STAThread]
         static void Main()
         {
@@ -22,58 +22,47 @@ namespace EasyOilFilter.Presentation
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var container = Bootstrap();
+            var services = new ServiceCollection();
+            ConfigureServices(services);
+            ServiceProvider = services.BuildServiceProvider();
 
-            Application.Run(container.GetInstance<MainForm>());
+            var mainForm = ServiceProvider.GetRequiredService<MainForm>();
+            Application.Run(mainForm);
         }
 
-        private static Container Bootstrap()
+        private static void ConfigureServices(IServiceCollection services)
         {
             var settings = new Settings();
+            var sqlSettings = new SqlSettings(settings.ConnectionString);
 
-            var container = new Container();
+            services.AddSingleton(sqlSettings);
+            services.AddScoped<DbSession>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            //To-Do: Validar ajustes necessarios mudança do ciclo de vida para Transient
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<ISaleRepository, SaleRepository>();
+            services.AddTransient<IPurchaseRepository, PurchaseRepository>();
+            services.AddTransient<IPaymentRepository, PaymentRepository>();
 
-            container.RegisterInstance(new SqlSettings(settings.ConnectionString));
-            container.Register<DbSession>(Lifestyle.Singleton);
-            container.Register<NotificationContext>(Lifestyle.Singleton);
-            container.Register<IUnitOfWork, UnitOfWork>(Lifestyle.Singleton);
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ISaleService, SaleService>();
+            services.AddTransient<IPurchaseService, PurchaseService>();
+            services.AddTransient<IPaymentService, PaymentService>();
+            services.AddTransient<IReportService, ReportService>();
+            services.AddTransient<IPdfService, PdfService>();
 
-            container.Register<IProductRepository, ProductRepository>(Lifestyle.Singleton);
-            container.Register<ISaleRepository, SaleRepository>(Lifestyle.Singleton);
-            container.Register<IPurchaseRepository, PurchaseRepository>(Lifestyle.Singleton);
-            container.Register<IPaymentRepository, PaymentRepository>(Lifestyle.Singleton);
-
-            container.Register<IProductService, ProductService>(Lifestyle.Singleton);
-            container.Register<ISaleService, SaleService>(Lifestyle.Singleton);
-            container.Register<IPurchaseService, PurchaseService>(Lifestyle.Singleton);
-            container.Register<IPaymentService, PaymentService>(Lifestyle.Singleton);
-
-            container.Register<IReportService, ReportService>(Lifestyle.Singleton);
-            container.Register<IPdfService, PdfService>(Lifestyle.Singleton);
-
-            AutoRegisterWindowsForms(container);
-
-            container.Verify();
-
-            return container;
-        }
-        private static void AutoRegisterWindowsForms(Container container)
-        {
-            var types = container.GetTypesToRegister<Form>(typeof(Program).Assembly);
-
-            foreach (var type in types)
-            {
-                var registration =
-                    Lifestyle.Transient.CreateRegistration(type, container);
-
-                registration.SuppressDiagnosticWarning(
-                    DiagnosticType.DisposableTransientComponent,
-                    "Forms should be disposed by app code; not by the container.");
-
-                container.AddRegistration(type, registration);
-            }
+            services.AddTransient<MainForm>();
+            services.AddTransient<ChooseFromList>();
+            services.AddTransient<FilterDetailForm>();
+            services.AddTransient<FilterForm>();
+            services.AddTransient<OilDetailForm>();
+            services.AddTransient<OilForm>();
+            services.AddTransient<PaymentForm>();
+            services.AddTransient<PurchaseForm>();
+            services.AddTransient<PurchaseListForm>();
+            services.AddTransient<ReportForm>();
+            services.AddTransient<SaleForm>();
+            services.AddTransient<SaleListForm>();
         }
     }
 }

@@ -10,5 +10,8 @@ namespace EasyOilFilter.Domain.Entities.Base
         }
 
         public Guid Id { get; protected set; }
+
+        public string GetFirstNotificationMessage() =>
+            Notifications.FirstOrDefault()?.Message ?? string.Empty;
     }
 }
