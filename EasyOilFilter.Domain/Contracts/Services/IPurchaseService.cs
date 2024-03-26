@@ -1,11 +1,10 @@
 ﻿using EasyOilFilter.Domain.ViewModels.PurchaseViewModel;
 
-namespace EasyOilFilter.Domain.Contracts.Services
+namespace EasyOilFilter.Domain.Contracts.Services;
+
+public interface IPurchaseService : IDisposable
 {
-    public interface IPurchaseService : IDisposable
-    {
-        Task<IEnumerable<PurchaseViewModel>> Get(DateTime startDate, DateTime endDate);
-        Task<(bool sucess, string message)> Create(AddPurchaseViewModel model);
-        Task<(bool sucess, string message)> Cancel(PurchaseViewModel model);
-    }
+    Task<IEnumerable<PurchaseViewModel>> Get(DateTime startDate, DateTime endDate);
+    Task<(bool sucess, string message)> Create(AddPurchaseViewModel model);
+    Task<(bool sucess, string message)> Cancel(PurchaseViewModel model);
 }

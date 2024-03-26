@@ -4,182 +4,181 @@ using EasyOilFilter.Domain.Contracts.UoW;
 using EasyOilFilter.Domain.Entities;
 using EasyOilFilter.Domain.ViewModels.SaleViewModel;
 
-namespace EasyOilFilter.Domain.Implementation
+namespace EasyOilFilter.Domain.Implementation;
+
+public class SaleService : ISaleService
 {
-    public class SaleService : ISaleService
+    private readonly ISaleRepository _saleRepository;
+    private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public SaleService
+    (
+        ISaleRepository saleRepository,
+        IProductRepository productRepository,
+        IUnitOfWork unitOfWork
+    )
     {
-        private readonly ISaleRepository _saleRepository;
-        private readonly IProductRepository _productRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        _saleRepository = saleRepository;
+        _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
+    }
 
-        public SaleService
-        (
-            ISaleRepository saleRepository,
-            IProductRepository productRepository,
-            IUnitOfWork unitOfWork
-        )
+    public void Dispose() => _saleRepository.Dispose();
+
+    public async Task<IEnumerable<SaleViewModel>> Get(DateTime date)
+    {
+        var sales = await _saleRepository.Get(date);
+
+        return sales?.Any() ?? false
+            ? SaleViewModel.MapMany(sales.OrderBy(sale => sale.Date))
+            : default;
+    }
+
+    public async Task<(bool sucess, string message)> Create(AddSaleViewModel model)
+    {
+        var sale = (Sale)model;
+
+        if (!sale.IsValid)
+            return (false, sale.GetFirstNotificationMessage());
+
+        _unitOfWork.BeginTransaction();
+
+        bool success = await AddHeader(sale);
+
+        if (!success)
         {
-            _saleRepository = saleRepository;
-            _productRepository = productRepository;
-            _unitOfWork = unitOfWork;
+            _unitOfWork.Rollback();
+            return (false, "Falha ao adicionar venda.");
         }
 
-        public void Dispose() => _saleRepository.Dispose();
+        success = await AddSaleItems(sale.Items);
 
-        public async Task<IEnumerable<SaleViewModel>> Get(DateTime date)
+        if (!success)
         {
-            var sales = await _saleRepository.Get(date);
-
-            return sales?.Any() ?? false
-                ? SaleViewModel.MapMany(sales.OrderBy(sale => sale.Date))
-                : default;
+            _unitOfWork.Rollback();
+            return (false, "Falha ao adicionar venda.");
         }
 
-        public async Task<(bool sucess, string message)> Create(AddSaleViewModel model)
+        var (successToReduceStock, errorMessage) = await ReduceStock(sale.Items);
+
+        if (!successToReduceStock)
         {
-            var sale = (Sale)model;
+            _unitOfWork.Rollback();
+            return (false, $"Falha ao adicionar venda. Detalhes: {errorMessage}");
+        }
 
-            if (!sale.IsValid)
-                return (false, sale.GetFirstNotificationMessage());
+        _unitOfWork.Commit();
 
-            _unitOfWork.BeginTransaction();
+        return (true, string.Empty);
+    }
 
-            bool success = await AddHeader(sale);
+    public async Task<(bool sucess, string message)> Cancel(SaleViewModel model)
+    {
+        var sale = (Sale)model;
 
-            if (!success)
+        if (!sale.IsValid)
+            return (false, sale.GetFirstNotificationMessage());
+
+        _unitOfWork.BeginTransaction();
+
+        bool success = await Cancel(sale.Id);
+
+        if (!success)
+        {
+            _unitOfWork.Rollback();
+            return (false, "Falha ao cancelar venda.");
+        }
+
+        var (successToReversalStock, errorMessage) = await ReversalStock(sale.Items);
+
+        if (!successToReversalStock)
+        {
+            _unitOfWork.Rollback();
+            return (false, $"Falha ao cancelar venda. Detalhes: {errorMessage}");
+        }
+
+        _unitOfWork.Commit();
+
+        return (true, string.Empty);
+    }
+
+    private async Task<bool> Cancel(Guid id)
+    {
+        return await _saleRepository.Cancel(id);
+    }
+
+    private async Task<bool> AddHeader(Sale sale)
+    {
+        return await _saleRepository.AddHeader(sale);
+    }
+
+    private async Task<bool> AddSaleItems(IEnumerable<SaleItem> items)
+    {
+        bool success = true;
+
+        foreach (var item in items)
+        {
+            if (await _saleRepository.AddItem(item))
+                continue;
+            else
             {
-                _unitOfWork.Rollback();
-                return (false, "Falha ao adicionar venda.");
+                success = false;
+                break;
             }
-
-            success = await AddSaleItems(sale.Items);
-
-            if (!success)
-            {
-                _unitOfWork.Rollback();
-                return (false, "Falha ao adicionar venda.");
-            }
-
-            var (successToReduceStock, errorMessage) = await ReduceStock(sale.Items);
-
-            if (!successToReduceStock)
-            {
-                _unitOfWork.Rollback();
-                return (false, $"Falha ao adicionar venda. Detalhes: {errorMessage}");
-            }
-
-            _unitOfWork.Commit();
-
-            return (true, string.Empty);
         }
 
-        public async Task<(bool sucess, string message)> Cancel(SaleViewModel model)
+        return success;
+    }
+
+    private async Task<(bool success, string errorMessage)> ReduceStock(IEnumerable<SaleItem> items)
+    {
+        var products = await _productRepository.GetAsync(items.Select(x => x.ProductId));
+
+        foreach (var product in products)
         {
-            var sale = (Sale)model;
+            var soldItems = items.Where(item => item.ProductId == product.Id);
 
-            if (!sale.IsValid)
-                return (false, sale.GetFirstNotificationMessage());
-
-            _unitOfWork.BeginTransaction();
-
-            bool success = await Cancel(sale.Id);
-
-            if (!success)
+            foreach (var soldItem in soldItems)
             {
-                _unitOfWork.Rollback();
-                return (false, "Falha ao cancelar venda.");
-            }
+                decimal quantitySoldInDefaultUoM = product.GetQuantityInDefaultUoM(soldItem.Quantity, soldItem.UnitOfMeasurement);
 
-            var (successToReversalStock, errorMessage) = await ReversalStock(sale.Items);
+                if (quantitySoldInDefaultUoM > product.StockQuantity)
+                    return (false,
+                        $"Falha ao abater estoque do produto '{product.Name}'. " +
+                        $"Quantidade decai para valor negativo.");
 
-            if (!successToReversalStock)
-            {
-                _unitOfWork.Rollback();
-                return (false, $"Falha ao cancelar venda. Detalhes: {errorMessage}");
-            }
+                product.ReduceStock(soldItem.Quantity, soldItem.UnitOfMeasurement);
 
-            _unitOfWork.Commit();
-
-            return (true, string.Empty);
-        }
-
-        private async Task<bool> Cancel(Guid id)
-        {
-            return await _saleRepository.Cancel(id);
-        }
-
-        private async Task<bool> AddHeader(Sale sale)
-        {
-            return await _saleRepository.AddHeader(sale);
-        }
-
-        private async Task<bool> AddSaleItems(IEnumerable<SaleItem> items)
-        {
-            bool success = true;
-
-            foreach (var item in items)
-            {
-                if (await _saleRepository.AddItem(item))
+                if (await _productRepository.SetStockQuantityAsync(product.Id, product.StockQuantity))
                     continue;
                 else
-                {
-                    success = false;
-                    break;
-                }
+                    return (false, $"Falha ao decrementar estoque. Produto '{product.Name}'.");
             }
-
-            return success;
         }
 
-        private async Task<(bool success, string errorMessage)> ReduceStock(IEnumerable<SaleItem> items)
+        return (true, string.Empty);
+    }
+
+    private async Task<(bool success, string errorMessage)> ReversalStock(IEnumerable<SaleItem> items)
+    {
+        var products = await _productRepository.GetAsync(items.Select(x => x.ProductId));
+
+        foreach (var product in products)
         {
-            var products = await _productRepository.Get(items.Select(x => x.ProductId));
+            var canceledSoldItems = items.Where(item => item.ProductId == product.Id);
 
-            foreach (var product in products)
+            foreach (var canceledSoldItem in canceledSoldItems)
             {
-                var soldItems = items.Where(item => item.ProductId == product.Id);
+                product.IncreseStock(canceledSoldItem.Quantity, canceledSoldItem.UnitOfMeasurement);
 
-                foreach (var soldItem in soldItems)
-                {
-                    decimal quantitySoldInDefaultUoM = product.GetQuantityInDefaultUoM(soldItem.Quantity, soldItem.UnitOfMeasurement);
-
-                    if (quantitySoldInDefaultUoM > product.StockQuantity)
-                        return (false,
-                            $"Falha ao abater estoque do produto '{product.Name}'. " +
-                            $"Quantidade decai para valor negativo.");
-
-                    product.ReduceStock(soldItem.Quantity, soldItem.UnitOfMeasurement);
-
-                    if (await _productRepository.SetStockQuantity(product.Id, product.StockQuantity))
-                        continue;
-                    else
-                        return (false, $"Falha ao decrementar estoque. Produto '{product.Name}'.");
-                }
+                if (await _productRepository.SetStockQuantityAsync(product.Id, product.StockQuantity))
+                    continue;
+                else
+                    return (false, $"Falha ao incrementar estoque. Produto '{product.Name}'.");
             }
-
-            return (true, string.Empty);
         }
 
-        private async Task<(bool success, string errorMessage)> ReversalStock(IEnumerable<SaleItem> items)
-        {
-            var products = await _productRepository.Get(items.Select(x => x.ProductId));
-
-            foreach (var product in products)
-            {
-                var canceledSoldItems = items.Where(item => item.ProductId == product.Id);
-
-                foreach (var canceledSoldItem in canceledSoldItems)
-                {
-                    product.IncreseStock(canceledSoldItem.Quantity, canceledSoldItem.UnitOfMeasurement);
-
-                    if (await _productRepository.SetStockQuantity(product.Id, product.StockQuantity))
-                        continue;
-                    else
-                        return (false, $"Falha ao incrementar estoque. Produto '{product.Name}'.");
-                }
-            }
-
-            return (true, string.Empty);
-        }
+        return (true, string.Empty);
     }
 }
