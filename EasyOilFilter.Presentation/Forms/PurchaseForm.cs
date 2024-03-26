@@ -83,7 +83,7 @@ namespace EasyOilFilter.Presentation.Forms
         {
             if (IsQuantityOrUnitaryPriceCell(cell))
             {
-                string userInput = cell.FormattedValue.ToString()?.Replace("R$", string.Empty) ?? string.Empty;
+                string userInput = cell.FormattedValue?.ToString()?.Replace("R$", string.Empty) ?? string.Empty;
                 bool hasParsed = decimal.TryParse(userInput, out decimal quantity);
                 cell.Cancel = !hasParsed || quantity < 0;
             }
@@ -230,14 +230,13 @@ namespace EasyOilFilter.Presentation.Forms
 
             var products = await _productService.GetProducts(name);
 
-            if (products is null)
+            if (!products.Any())
             {
                 SetCellValue(rowIndex, "ProductId", Guid.Empty);
                 SetCellValue(rowIndex, "UnitOfMeasurement", string.Empty);
                 return;
             }
                 
-
             if (products.Count() > 1)
             {
                 var selectedProduct = GetSelectedProduct(products);

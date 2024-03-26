@@ -1,7 +1,6 @@
-﻿namespace EasyOilFilter.Domain.Contracts.Services
+﻿namespace EasyOilFilter.Domain.Contracts.Services;
+
+public interface IPdfService
 {
-    public interface IPdfService
-    {
-        byte[] CreatePdf(string htmlContent);
-    }
+    byte[] CreatePdf(string htmlContent);
 }

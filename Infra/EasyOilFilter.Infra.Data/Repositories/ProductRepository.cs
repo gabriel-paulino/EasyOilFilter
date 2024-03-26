@@ -21,31 +21,6 @@ namespace EasyOilFilter.Infra.Data.Repositories
             Dispose();
         }
 
-        public async Task<bool> Create(Filter filter)
-        {
-            string command =
-                @"
-                    INSERT INTO [Product]
-                        ([Id], [Name], [Manufacturer], [DefaultPrice], [FilterType], [Type], [DefaultUoM], [StockQuantity]) 
-                    VALUES 
-                        (@Id, @Name, @Manufacturer, @DefaultPrice, @FilterType, @Type, @DefaultUoM, @StockQuantity)
-                ";
-
-            int rowsAffected = await _session.Connection.ExecuteAsync(command, new
-            {
-                filter.Id,
-                filter.Name,
-                filter.Manufacturer,
-                filter.DefaultPrice,
-                filter.StockQuantity,
-                FilterType = (int)filter.FilterType,
-                Type = (int)filter.Type,
-                DefaultUoM = (int)filter.DefaultUoM
-            });
-
-            return rowsAffected == 1;
-        }
-
         public void Dispose()
         {
             if (!_disposed)
@@ -54,33 +29,132 @@ namespace EasyOilFilter.Infra.Data.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public async Task<IEnumerable<Product>> GetAll()
+        public async Task<bool> CreateAsync<T>(T product) where T : Product
         {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],                 
-                    [DefaultPrice],
-                    [AlternativePrice],
-                    [StockQuantity],
-                    [Type],
-                    [DefaultUoM],
-                    [AlternativeUoM],
-                    [Viscosity],
-                    [OilType],
-                    [Manufacturer],
-                    [FilterType],
-                    [HasAlternative]
-                FROM 
-                    [Product]
-            ";
+            string command =
+                @"
+                    INSERT INTO [Product]
+                        (
+                            [Id], 
+                            [Name], 
+                            [Viscosity], 
+                            [Api], 
+                            [Manufacturer], 
+                            [DefaultPrice], 
+                            [AlternativePrice], 
+                            [Type], 
+                            [OilType], 
+                            [FilterType], 
+                            [DefaultUoM],
+                            [AlternativeUoM], 
+                            [StockQuantity], 
+                            [HasAlternative]
+                        ) 
+                    VALUES 
+                        (
+                            @Id, 
+                            @Name, 
+                            @Viscosity, 
+                            @Api, 
+                            @Manufacturer, 
+                            @DefaultPrice, 
+                            @AlternativePrice,
+                            @Type, 
+                            @OilType, 
+                            @FilterType, 
+                            @DefaultUoM, 
+                            @AlternativeUoM, 
+                            @StockQuantity, 
+                            @HasAlternative
+                        )
+                ";
 
-            var products = await _session.Connection.QueryAsync<Product>(query);
+            var oil = product as Oil;
+            var filter = product as Filter;
+
+            int rowsAffected = await _session.Connection.ExecuteAsync(command, new
+            {
+                product.Id,
+                product.Name,
+                oil?.Viscosity,
+                oil?.Api,
+                filter?.Manufacturer,
+                product.DefaultPrice,
+                product.AlternativePrice,
+                Type = (int)product.Type,
+                OilType = (int?)oil?.OilType,
+                FilterType = (int?)filter?.FilterType,
+                DefaultUoM = (int)product.DefaultUoM,
+                AlternativeUoM = (int?)oil?.AlternativeUoM,
+                product.StockQuantity,
+                product.HasAlternative
+            }).ConfigureAwait(false);
+
+            return rowsAffected == 1;
+        }
+
+        public async Task<bool> UpdateAsync<T>(T product) where T : Product
+        {
+            string command =
+                @"
+                    UPDATE [Product] 
+                    SET
+                        [Name] = @Name,
+                        [Viscosity] = @Viscosity,
+                        [Api] = @Api,
+                        [Manufacturer] = @Manufacturer,
+                        [DefaultPrice] = @DefaultPrice,
+                        [AlternativePrice] = @AlternativePrice,
+                        [StockQuantity] = @StockQuantity,
+                        [OilType] = @OilType,
+                        [FilterType] = @FilterType,
+                        [DefaultUoM] = @DefaultUoM,
+                        [AlternativeUoM] = @AlternativeUoM,
+                        [HasAlternative] = @HasAlternative                      
+                    WHERE [Id] = @Id
+                ";
+
+            var oil = product as Oil;
+            var filter = product as Filter;
+
+            int rowsAffected = await _session.Connection.ExecuteAsync(command, new
+            {
+                product.Id,
+                product.Name,
+                oil?.Viscosity,
+                oil?.Api,
+                filter?.Manufacturer,
+                product.DefaultPrice,
+                oil?.AlternativePrice,
+                product.StockQuantity,
+                OilType = (int?)oil?.OilType,
+                FilterType = (int?)filter?.FilterType,
+                DefaultUoM = (int?)product?.DefaultUoM,
+                AlternativeUoM = (int?)oil?.AlternativeUoM,
+                product?.HasAlternative,
+            },
+            _session.Transaction
+            ).ConfigureAwait(false);
+
+            return rowsAffected == 1;
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync<T>() where T : Product
+        {
+            var type = typeof(T);
+            string query = GetQueryProduct<T>(type);
+            var builder = new SqlBuilder();
+            AddProductType<T>(builder, type);
+            var templete = builder.AddTemplate(query);
+
+            var products = await _session.Connection
+                .QueryAsync<T>(templete.RawSql, templete.Parameters)
+                .ConfigureAwait(false);
 
             return products.OrderByDescending(product => product.Name);
         }
 
-        public async Task<Product> Get(Guid id)
+        public async Task<Product?> GetAsync(Guid id)
         {
             string query = @"
                 SELECT
@@ -106,69 +180,31 @@ namespace EasyOilFilter.Infra.Data.Repositories
             return await _session.Connection.QuerySingleOrDefaultAsync<Product>(query, new
             {
                 Id = id
-            });
+            }).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<Product>> GetByName(string name)
+        public async Task<IEnumerable<T>> GetByName<T>(string name) where T : Product
         {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],                 
-                    [DefaultPrice],
-                    [AlternativePrice],
-                    [StockQuantity],
-                    [Type],
-                    [DefaultUoM],
-                    [AlternativeUoM],
-                    [Viscosity],
-                    [Api],
-                    [OilType],
-                    [Manufacturer],
-                    [FilterType],
-                    [HasAlternative]
-                FROM 
-                    [Product]
-                WHERE
-                    [Name] LIKE @Name
-            ";
+            var type = typeof(T);
+            string query = GetQueryProduct<T>(type);
 
-            var products = await _session.Connection.QueryAsync<Product>(query, new
-            {
-                Name = $"%{name}%"
-            });
+            var builder = new SqlBuilder();
 
-            return products.OrderByDescending(filter => filter.Name);
+            if (!string.IsNullOrEmpty(name))
+                builder.Where("[Name] LIKE @Name", new { Name = $"%{name}%" });
+
+            AddProductType<T>(builder, type);
+
+            var templete = builder.AddTemplate(query);
+
+            var products = await _session.Connection
+                .QueryAsync<T>(templete.RawSql, templete.Parameters)
+                .ConfigureAwait(false);
+
+            return products.OrderByDescending(product => product.Name);
         }
 
-        public async Task<IEnumerable<Filter>> GetFilters(int page, int quantity)
-        {
-            string query = (@"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Manufacturer],
-                    [DefaultPrice],
-                    [StockQuantity],
-                    [FilterType]
-                FROM 
-                    [Product]
-                WHERE
-                    [Type] = @Type
-                ORDER BY [Name]
-                OFFSET @Page ROWS 
-                FETCH NEXT @Quantity ROWS ONLY
-            ");
-
-            return await _session.Connection.QueryAsync<Filter>(query, new
-            {
-                Page = (page - 1) * quantity,
-                Quantity = quantity,
-                Type = (int)ProductType.Filter
-            });
-        }
-
-        public async Task<IEnumerable<Filter>> Get(string name = "", string manufacturer = "", FilterType type = FilterType.None)
+        public async Task<IEnumerable<Filter>> GetAsync(string name = "", string manufacturer = "", FilterType type = FilterType.None)
         {
             string query = @"
                 SELECT
@@ -198,312 +234,14 @@ namespace EasyOilFilter.Infra.Data.Repositories
 
             var templete = builder.AddTemplate(query);
 
-            var filters = await _session.Connection.QueryAsync<Filter>(templete.RawSql, templete.Parameters);
-            return filters.OrderByDescending(filter => filter.Name);
-        }
-
-        public async Task<Filter> GetFilter(Guid id)
-        {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Manufacturer],
-                    [DefaultPrice],
-                    [StockQuantity],
-                    [FilterType]
-                FROM 
-                    [Product]
-                WHERE
-                    [Id] = @Id
-            ";
-
-            return await _session.Connection.QuerySingleOrDefaultAsync<Filter>(query, new
-            {
-                Id = id
-            });
-        }
-
-        public async Task<IEnumerable<Filter>> Get(FilterType type)
-        {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Manufacturer],
-                    [DefaultPrice],
-                    [StockQuantity],
-                    [FilterType]
-                FROM 
-                    [Product]
-                WHERE
-                    [Type] = @Type AND
-                    [FilterType] = @FilterType
-            ";
-
-            var filters = await _session.Connection.QueryAsync<Filter>(query, new
-            {
-                Type = (int)ProductType.Filter,
-                FilterType = (int)type
-            });
+            var filters = await _session.Connection
+                .QueryAsync<Filter>(templete.RawSql, templete.Parameters)
+                .ConfigureAwait(false);
 
             return filters.OrderByDescending(filter => filter.Name);
         }
 
-        public async Task<IEnumerable<Filter>> GetAllFilters()
-        {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Manufacturer],
-                    [DefaultPrice],
-                    [StockQuantity],
-                    [FilterType]
-                FROM 
-                    [Product]
-                WHERE
-                    [Type] = @Type
-            ";
-
-            var filters = await _session.Connection.QueryAsync<Filter>(query, new
-            {
-                Type = (int)ProductType.Filter
-            });
-
-            return filters.OrderByDescending(filter => filter.Name);
-        }
-
-        public async Task<IEnumerable<Filter>> GetFiltersByName(string name)
-        {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Manufacturer],
-                    [DefaultPrice],
-                    [StockQuantity],
-                    [FilterType]
-                FROM 
-                    [Product]
-                WHERE
-                    [Type] = @Type AND
-                    [Name] LIKE @Name
-            ";
-
-            var filters = await _session.Connection.QueryAsync<Filter>(query, new
-            {
-                Type = (int)ProductType.Filter,
-                Name = $"%{name}%"
-            });
-
-            return filters.OrderByDescending(filter => filter.Name);
-        }
-
-        public async Task<IEnumerable<Filter>> GetByManufacturer(string manufacturer)
-        {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Manufacturer],
-                    [DefaultPrice],
-                    [StockQuantity],
-                    [FilterType]
-                FROM 
-                    [Product]
-                WHERE
-                    [Type] = @Type AND
-                    [Manufacturer] LIKE @Manufacturer
-            ";
-
-            var filters = await _session.Connection.QueryAsync<Filter>(query, new
-            {
-                Type = (int)ProductType.Filter,
-                Manufacturer = $"%{manufacturer}%"
-            });
-
-            return filters.OrderByDescending(filter => filter.Name);
-        }
-
-        public async Task<bool> Update(Filter filter)
-        {
-            string command =
-                @"
-                    UPDATE [Product] 
-                    SET
-                        [Name] = @Name,
-                        [Manufacturer] = @Manufacturer,
-                        [DefaultPrice] = @DefaultPrice,
-                        [StockQuantity] = @StockQuantity,
-                        [FilterType] = @FilterType
-                    WHERE [Id] = @Id
-                ";
-
-            int rowsAffected = await _session.Connection.ExecuteAsync(command, new
-            {
-                filter.Id,
-                filter.Name,
-                filter.Manufacturer,
-                filter.DefaultPrice,
-                filter.StockQuantity,
-                FilterType = (int)filter.FilterType,
-            },
-            _session.Transaction
-            );
-
-            return rowsAffected == 1;
-        }
-
-        public async Task<bool> Create(Oil oil)
-        {
-            string command =
-                @"
-                    INSERT INTO [Product]
-                        ([Id], [Name], [Viscosity], [Api], [DefaultPrice], [AlternativePrice], [OilType], [Type], [DefaultUoM], [AlternativeUoM], [StockQuantity], [HasAlternative]) 
-                    VALUES 
-                        (@Id, @Name, @Viscosity, @Api, @DefaultPrice, @AlternativePrice, @OilType, @Type, @DefaultUoM, @AlternativeUoM, @StockQuantity, @HasAlternative)
-                ";
-
-            int rowsAffected = await _session.Connection.ExecuteAsync(command, new
-            {
-                oil.Id,
-                oil.Name,
-                oil.Viscosity,
-                oil.Api,
-                oil.DefaultPrice,
-                oil.AlternativePrice,
-                oil.StockQuantity,
-                OilType = (int)oil.OilType,
-                Type = (int)oil.Type,
-                DefaultUoM = (int)oil.DefaultUoM,
-                AlternativeUoM = (int)oil.AlternativeUoM,
-                HasAlternative = oil.HasAlternative
-            });
-
-            return rowsAffected == 1;
-        }
-
-        public async Task<IEnumerable<Oil>> GetOils(int page, int quantity)
-        {
-            string query = (@"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Viscosity],
-                    [Api],
-                    [DefaultPrice],
-                    [AlternativePrice],                   
-                    [StockQuantity],
-                    [OilType],
-                    [DefaultUoM],
-                    [AlternativeUoM],
-                    [HasAlternative]
-                FROM 
-                    [Product]
-                WHERE
-                    [Type] = @Type
-                ORDER BY [Name]
-                OFFSET @Page ROWS 
-                FETCH NEXT @Quantity ROWS ONLY
-            ");
-
-            return await _session.Connection.QueryAsync<Oil>(query, new
-            {
-                Type = (int)ProductType.Oil,
-                Page = (page - 1) * quantity,
-                Quantity = quantity
-            });
-        }
-
-        public async Task<Oil> GetOil(Guid id)
-        {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Viscosity],
-                    [Api],
-                    [DefaultPrice],
-                    [AlternativePrice],
-                    [StockQuantity],
-                    [OilType],
-                    [DefaultUoM],
-                    [AlternativeUoM],
-                    [HasAlternative]
-                FROM 
-                    [Product]
-                WHERE
-                    [Id] = @Id
-            ";
-
-            return await _session.Connection.QuerySingleOrDefaultAsync<Oil>(query, new
-            {
-                Id = id
-            });
-        }
-
-        public async Task<IEnumerable<Oil>> Get(OilType type)
-        {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Viscosity],
-                    [Api],
-                    [DefaultPrice],
-                    [AlternativePrice],
-                    [StockQuantity],
-                    [OilType],
-                    [DefaultUoM],
-                    [AlternativeUoM],
-                    [HasAlternative]
-                FROM 
-                    [Product]
-                WHERE
-                    [Type] = @Type AND
-                    [OilType] = @OilType        
-            ";
-
-            var oils = await _session.Connection.QueryAsync<Oil>(query, new
-            {
-                Type = (int)type,
-                OilType = (int)ProductType.Oil
-            });
-
-            return oils.OrderByDescending(oil => oil.Name);
-        }
-
-        public async Task<IEnumerable<Oil>> GetAllOils()
-        {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Viscosity],
-                    [Api],
-                    [DefaultPrice],
-                    [AlternativePrice],
-                    [StockQuantity],
-                    [OilType],
-                    [DefaultUoM],
-                    [AlternativeUoM],
-                    [HasAlternative]
-                FROM 
-                    [Product]
-                WHERE
-                    [Type] = @Type
-            ";
-
-            var oils = await _session.Connection.QueryAsync<Oil>(query, new
-            {
-                Type = (int)ProductType.Oil
-            });
-
-            return oils.OrderByDescending(oil => oil.Name);
-        }
-
-        public async Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", OilType type = OilType.None)
+        public async Task<IEnumerable<Oil>> GetAsync(string name = "", string viscosity = "", OilType type = OilType.None)
         {
             string query = @"
                 SELECT
@@ -538,110 +276,14 @@ namespace EasyOilFilter.Infra.Data.Repositories
 
             var templete = builder.AddTemplate(query);
 
-            var oils = await _session.Connection.QueryAsync<Oil>(templete.RawSql, templete.Parameters);
+            var oils = await _session.Connection
+                .QueryAsync<Oil>(templete.RawSql, templete.Parameters)
+                .ConfigureAwait(false);
+
             return oils.OrderByDescending(oil => oil.Name);
         }
 
-        public async Task<IEnumerable<Oil>> GetOilsByName(string name)
-        {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Viscosity],
-                    [Api],
-                    [DefaultPrice],
-                    [AlternativePrice],
-                    [StockQuantity],
-                    [OilType],
-                    [DefaultUoM],
-                    [AlternativeUoM],
-                    [HasAlternative]
-                FROM 
-                    [Product]
-                WHERE
-                    [Type] = @Type AND
-                    [Name] LIKE @Name
-            ";
-
-            var oils = await _session.Connection.QueryAsync<Oil>(query, new
-            {
-                Type = (int)ProductType.Oil,
-                Name = $"%{name}%"
-            }
-            );
-            return oils.OrderByDescending(oil => oil.Name);
-        }
-
-        public async Task<IEnumerable<Oil>> GetByViscosity(string viscosity)
-        {
-            string query = @"
-                SELECT
-                    [Id],
-                    [Name],
-                    [Viscosity],
-                    [Api],
-                    [DefaultPrice],
-                    [AlternativePrice],
-                    [StockQuantity],
-                    [OilType],
-                    [DefaultUoM],
-                    [AlternativeUoM],
-                    [HasAlternative]
-                FROM 
-                    [Product]
-                WHERE
-                    [Type] = @Type AND
-                    [Viscosity] LIKE @Viscosity
-            ";
-
-            var oils = await _session.Connection.QueryAsync<Oil>(query, new
-            {
-                Type = (int)ProductType.Oil,
-                Viscosity = $"%{viscosity}%"
-            }
-            );
-            return oils.OrderByDescending(oil => oil.Name);
-        }
-
-        public async Task<bool> Update(Oil oil)
-        {
-            string command =
-                @"
-                    UPDATE [Product] 
-                    SET
-                        [Name] = @Name,
-                        [Viscosity] = @Viscosity,
-                        [DefaultPrice] = @DefaultPrice,
-                        [AlternativePrice] = @AlternativePrice,
-                        [StockQuantity] = @StockQuantity,
-                        [OilType] = @OilType,
-                        [DefaultUoM] = @DefaultUoM,
-                        [AlternativeUoM] = @AlternativeUoM,
-                        [HasAlternative] = @HasAlternative
-                    WHERE [Id] = @Id
-                ";
-
-            int rowsAffected = await _session.Connection.ExecuteAsync(command, new
-            {
-                oil.Id,
-                oil.Name,
-                oil.Viscosity,
-                oil.DefaultPrice,
-                oil.AlternativePrice,
-                oil.StockQuantity,
-                OilType = (int)oil.OilType,
-                DefaultUoM = (int)oil.DefaultUoM,
-                AlternativeUoM = (int)oil.AlternativeUoM,
-                HasAlternative = oil.HasAlternative,
-            },
-            _session.Transaction
-            );
-
-            return rowsAffected == 1;
-        }
-
-        public async Task<bool> UpdateDefaultPrice(Guid id, decimal defaultPrice)
+        public async Task<bool> UpdateDefaultPriceAsync(Guid id, decimal defaultPrice)
         {
             string command =
                 @"
@@ -657,12 +299,12 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 DefaultPrice = defaultPrice
             },
             _session.Transaction
-            );
+            ).ConfigureAwait(false);
 
             return rowsAffected == 1;
         }
 
-        public async Task<IEnumerable<Product>> Get(IEnumerable<Guid> ids)
+        public async Task<IEnumerable<Product>> GetAsync(IEnumerable<Guid> ids)
         {
             string query = @"
                 SELECT
@@ -691,12 +333,12 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 Ids = ids
             },
             _session.Transaction
-            );
+            ).ConfigureAwait(false);
 
             return products.OrderByDescending(filter => filter.Name);
         }
 
-        public async Task<bool> SetStockQuantity(Guid id, decimal stockQuantity)
+        public async Task<bool> SetStockQuantityAsync(Guid id, decimal stockQuantity)
         {
             string command =
                 @"
@@ -712,12 +354,12 @@ namespace EasyOilFilter.Infra.Data.Repositories
                 StockQuantity = stockQuantity
             },
             _session.Transaction
-            );
+            ).ConfigureAwait(false);
 
             return rowsAffected == 1;
         }
 
-        public async Task<bool> Delete(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             string command =
                 @"
@@ -728,9 +370,76 @@ namespace EasyOilFilter.Infra.Data.Repositories
             int rowsAffected = await _session.Connection.ExecuteAsync(command, new
             {
                 Id = id
-            });
+            }).ConfigureAwait(false);
 
             return rowsAffected == 1;
+        }
+
+        private string GetQueryProduct<T>(Type type) where T : Product
+        {
+            if (type == typeof(Filter)) return
+            @"
+                SELECT
+                    [Id],
+                    [Name],
+                    [Manufacturer],
+                    [DefaultPrice],
+                    [StockQuantity],
+                    [FilterType]
+                FROM 
+                    [Product]
+                /**where**/
+            ";
+
+            if (type == typeof(Oil)) return
+            @"
+                SELECT
+                    [Id],
+                    [Name],
+                    [Viscosity],
+                    [Api],
+                    [DefaultPrice],
+                    [AlternativePrice],
+                    [StockQuantity],
+                    [OilType],
+                    [DefaultUoM],
+                    [AlternativeUoM],
+                    [HasAlternative]
+                FROM 
+                    [Product]
+                /**where**/
+            ";
+
+            return
+            @"
+                SELECT
+                    [Id],
+                    [Name],                 
+                    [DefaultPrice],
+                    [AlternativePrice],
+                    [StockQuantity],
+                    [Type],
+                    [DefaultUoM],
+                    [AlternativeUoM],
+                    [Viscosity],
+                    [Api],
+                    [OilType],
+                    [Manufacturer],
+                    [FilterType],
+                    [HasAlternative]
+                FROM 
+                    [Product]
+                /**where**/
+            ";
+        }
+
+        private void AddProductType<T>(SqlBuilder builder, Type type) where T : Product
+        {
+            if (type == typeof(Filter))
+                builder.Where("[Type] = @Type", new { Type = (int)ProductType.Filter });
+
+            if (type == typeof(Oil))
+                builder.Where("[Type] = @Type", new { Type = (int)ProductType.Oil });
         }
     }
 }

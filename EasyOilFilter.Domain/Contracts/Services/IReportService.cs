@@ -1,9 +1,8 @@
 ﻿using EasyOilFilter.Domain.Enums;
 
-namespace EasyOilFilter.Domain.Contracts.Services
+namespace EasyOilFilter.Domain.Contracts.Services;
+
+public interface IReportService
 {
-    public interface IReportService
-    {
-        Task<(bool saved, string path, string errorMessage)> SaveReport(DateTime startDate, DateTime finalDate, ReportType reportType);
-    }
+    Task<(bool saved, string path, string errorMessage)> SaveReport(DateTime startDate, DateTime finalDate, ReportType reportType);
 }

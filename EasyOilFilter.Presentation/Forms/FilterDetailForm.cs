@@ -91,7 +91,7 @@ namespace EasyOilFilter.Presentation.Forms
             {
                 IsDelete = true;
                 this.Close();
-            }                
+            }
         }
 
         private async void AddFilter()
@@ -106,7 +106,7 @@ namespace EasyOilFilter.Presentation.Forms
 
             var filters = await _productService.GetFiltersByName(model.Name);
 
-            if (filters?.Any() ?? false)
+            if (filters.Any())
             {
                 MessageBox.Show($"O filtro: {model.Name} já está adicionado na base de dados.");
                 return;
@@ -161,22 +161,22 @@ namespace EasyOilFilter.Presentation.Forms
             MessageBox.Show($"{model.FilterType}: {TextBoxCode.Text} atualizado com sucesso.");
         }
 
-        private (FilterViewModel model, string message) GetFilterViewModel()
+        private (FilterViewModel? model, string message) GetFilterViewModel()
         {
             string message = GetValidateFormMessage();
 
             if (!string.IsNullOrEmpty(message))
                 return (new FilterViewModel(), message);
 
-            return (new FilterViewModel()
-            {
-                Id = Model.Id,
-                Name = TextBoxCode.Text,
-                Manufacturer = TextBoxManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: true),
-                DefaultPrice = GetDecimalValueOnTextBox(TextBoxPrice),
-                StockQuantity = decimal.Parse(TextBoxStockQuantity.Text.Replace('.', ',')),
-                FilterType = ComboBoxType.SelectedItem.ToString()
-            }, message);
+            return (new FilterViewModel(
+
+                Id: Model.Id,
+                Name: TextBoxCode.Text,
+                Manufacturer: TextBoxManufacturer.Text.FixTextToManageDataBaseResult(allowWithSpaces: true),
+                DefaultPrice: GetDecimalValueOnTextBox(TextBoxPrice),
+                StockQuantity: decimal.Parse(TextBoxStockQuantity.Text.Replace('.', ',')),
+                FilterType: ComboBoxType?.SelectedItem?.ToString()
+            ), message);
         }
 
         private (AddFilterViewModel model, string message) GetAddFilterViewModel()

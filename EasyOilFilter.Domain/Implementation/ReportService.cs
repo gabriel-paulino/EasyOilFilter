@@ -5,53 +5,53 @@ using EasyOilFilter.Domain.Enums;
 using EasyOilFilter.Domain.Extensions;
 using System.Text;
 
-namespace EasyOilFilter.Domain.Implementation
+namespace EasyOilFilter.Domain.Implementation;
+
+public class ReportService : IReportService
 {
-    public class ReportService : IReportService
+    private readonly ISaleRepository _saleRepository;
+    private readonly IPdfService _pdfService;
+
+    public ReportService(ISaleRepository saleRepository, IPdfService pdfService)
     {
-        private readonly ISaleRepository _saleRepository;
-        private readonly IPdfService _pdfService;
+        _saleRepository = saleRepository;
+        _pdfService = pdfService;
+    }
 
-        public ReportService(ISaleRepository saleRepository, IPdfService pdfService)
+    public async Task<(bool saved, string path, string errorMessage)> SaveReport(DateTime startDate, DateTime finalDate, ReportType reportType)
+    {
+        try
         {
-            _saleRepository = saleRepository;
-            _pdfService = pdfService;
-        }
+            string bodyContent = await GetBodyContent(startDate, finalDate, reportType);
+            string htmlContent = GetHtmlContent(bodyContent, reportType);
 
-        public async Task<(bool saved, string path, string errorMessage)> SaveReport(DateTime startDate, DateTime finalDate, ReportType reportType)
+            var pdf = _pdfService.CreatePdf(htmlContent);
+
+            string fileName = $"resumo_{startDate:dd-MM-yy}_{finalDate:dd-MM-yy}.pdf";
+
+            string path = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "relatorios",
+                reportType.GetDescription()
+                );
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            string pathFile = Path.Combine(path, fileName);
+
+            File.WriteAllBytes(pathFile, pdf);
+
+            return (true, pathFile, string.Empty);
+        }
+        catch (Exception ex)
         {
-            try
-            {
-                string bodyContent = await GetBodyContent(startDate, finalDate, reportType);
-                string htmlContent = GetHtmlContent(bodyContent, reportType);
-
-                var pdf = _pdfService.CreatePdf(htmlContent);
-
-                string fileName = $"resumo_{startDate:dd-MM-yy}_{finalDate:dd-MM-yy}.pdf";
-
-                string path = Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    "relatorios",
-                    reportType.GetDescription()
-                    );
-
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-
-                string pathFile = Path.Combine(path, fileName);
-
-                File.WriteAllBytes(pathFile, pdf);
-
-                return (true, pathFile, string.Empty);
-            }
-            catch (Exception ex)
-            {
-                return (false, string.Empty, $"Falha ao gerar relatório de vendas. Detalhes: {ex.Message}");
-            }
+            return (false, string.Empty, $"Falha ao gerar relatório de vendas. Detalhes: {ex.Message}");
         }
+    }
 
-        private string GetHtmlContent(string bodyContent, ReportType reportType) =>
-            @$"
+    private string GetHtmlContent(string bodyContent, ReportType reportType) =>
+        @$"
                 <!doctype html>
                 <html lang=""en"">
                   <head>
@@ -69,25 +69,25 @@ namespace EasyOilFilter.Domain.Implementation
                 </html>
             ";
 
-        private async Task<string> GetBodyContent(DateTime startDate, DateTime finalDate, ReportType reportType)
+    private async Task<string> GetBodyContent(DateTime startDate, DateTime finalDate, ReportType reportType)
+    {
+        switch (reportType)
         {
-            switch (reportType)
-            {
-                case ReportType.Sales:
-                    return await GetSalesBodyContent(startDate, finalDate);
-                case ReportType.SoldItems:
-                    return await GetSoldItemsBodyContent(startDate, finalDate);
-                default:
-                    return string.Empty;
-            }
+            case ReportType.Sales:
+                return await GetSalesBodyContent(startDate, finalDate);
+            case ReportType.SoldItems:
+                return await GetSoldItemsBodyContent(startDate, finalDate);
+            default:
+                return string.Empty;
         }
+    }
 
-        private async Task<string> GetSoldItemsBodyContent(DateTime startDate, DateTime finalDate)
-        {
-            var soldItems = await _saleRepository.GetSoldItems(startDate, finalDate);
+    private async Task<string> GetSoldItemsBodyContent(DateTime startDate, DateTime finalDate)
+    {
+        var soldItems = await _saleRepository.GetSoldItems(startDate, finalDate);
 
-            return
-                $@"
+        return
+            $@"
                 <div class=""w-75 mx-auto text-center"">
                     <h1>Relatório de itens vendidos</h1> 
                     <div>
@@ -97,14 +97,14 @@ namespace EasyOilFilter.Domain.Implementation
                     {GetTableSoldItems(soldItems)}                 
                 </div>
                 ";
-        }
+    }
 
-        private async Task<string> GetSalesBodyContent(DateTime startDate, DateTime finalDate)
-        {
-            var report = await _saleRepository.GetSaleReport(startDate, finalDate);
+    private async Task<string> GetSalesBodyContent(DateTime startDate, DateTime finalDate)
+    {
+        var report = await _saleRepository.GetSaleReport(startDate, finalDate);
 
-            return
-                $@"
+        return
+            $@"
                 <div class=""w-75 mx-auto text-center"">
                     <h1>Relatório de vendas</h1> 
                     <div>
@@ -117,25 +117,25 @@ namespace EasyOilFilter.Domain.Implementation
                     {GetTableSalesGroupedByPaymentMethod(report.SalesByPaymentMethod)}
                 </div>
                 ";
-        }
+    }
 
-        private string GetTableSoldItems(IEnumerable<SoldItemReport> soldItems)
+    private string GetTableSoldItems(IEnumerable<SoldItemReport> soldItems)
+    {
+        var builder = new StringBuilder();
+
+        foreach (var soldItem in soldItems)
         {
-            var builder = new StringBuilder();
-
-            foreach (var soldItem in soldItems)
-            {
-                builder.AppendLine(
-                    @$"
+            builder.AppendLine(
+                @$"
                         <tr>
                             <td scope=""row"">{soldItem.Name}</th>
                             <td>{soldItem.Quantity:N2}</td>
                         </tr>
                     ");
-            }
+        }
 
-            return
-                $@"
+        return
+            $@"
                 <table class=""table table-striped"">
                         <thead>
                             <tr>
@@ -148,25 +148,25 @@ namespace EasyOilFilter.Domain.Implementation
                         </tbody>
                     </table>
                 ";
-        }
+    }
 
-        private string GetTableSalesGroupedByPaymentMethod(IEnumerable<SaleByPaymentMethod> salesByPaymentMethod)
+    private string GetTableSalesGroupedByPaymentMethod(IEnumerable<SaleByPaymentMethod> salesByPaymentMethod)
+    {
+        var builder = new StringBuilder();
+
+        foreach (var paymentMethodSales in salesByPaymentMethod)
         {
-            var builder = new StringBuilder();
-
-            foreach (var paymentMethodSales in salesByPaymentMethod)
-            {
-                builder.AppendLine(
-                    @$"
+            builder.AppendLine(
+                @$"
                         <tr>
                             <td scope=""row"">{paymentMethodSales.PaymentMethod.GetDescription()}</th>
                             <td>{paymentMethodSales.Total:C2}</td>
                         </tr>
                     ");
-            }
+        }
 
-            return
-                $@"
+        return
+            $@"
                 <table class=""table table-striped"">
                         <thead>
                             <tr>
@@ -179,25 +179,25 @@ namespace EasyOilFilter.Domain.Implementation
                         </tbody>
                     </table>
                 ";
-        }
+    }
 
-        private string GetTableSalesGroupedByDate(IEnumerable<SaleByDate> salesByDate)
+    private string GetTableSalesGroupedByDate(IEnumerable<SaleByDate> salesByDate)
+    {
+        var builder = new StringBuilder();
+
+        foreach (var sale in salesByDate)
         {
-            var builder = new StringBuilder();
-
-            foreach (var sale in salesByDate)
-            {
-                builder.AppendLine(
-                    $@"
+            builder.AppendLine(
+                $@"
                         <tr>
                             <td scope=""row"">{sale.Date:dd/MM/yyyy}</th>
                             <td>{sale.Total:C2}</td>
                         </tr>
                     ");
-            }
+        }
 
-            return
-                $@"
+        return
+            $@"
                 <table class=""table table-striped"">
                         <thead>
                             <tr>
@@ -210,6 +210,5 @@ namespace EasyOilFilter.Domain.Implementation
                         </tbody>
                 </table>
                 ";
-        }
     }
 }

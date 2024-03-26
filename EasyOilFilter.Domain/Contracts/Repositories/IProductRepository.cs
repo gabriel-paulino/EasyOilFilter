@@ -1,35 +1,19 @@
 ﻿using EasyOilFilter.Domain.Entities;
 using EasyOilFilter.Domain.Enums;
 
-namespace EasyOilFilter.Domain.Contracts.Repositories
-{
-    public interface IProductRepository : IDisposable
-    {
-        Task<IEnumerable<Product>> GetAll();
-        Task<Product> Get(Guid id);
-        Task<IEnumerable<Product>> GetByName(string name);
-        Task<IEnumerable<Product>> Get(IEnumerable<Guid> ids);
-        Task<IEnumerable<Filter>> GetAllFilters();
-        Task<IEnumerable<Filter>> GetFilters(int page, int quantity);
-        Task<IEnumerable<Filter>> Get(string name = "", string manufacturer = "", FilterType type = FilterType.None);
-        Task<Filter> GetFilter(Guid id);
-        Task<IEnumerable<Filter>> GetFiltersByName(string name);
-        Task<IEnumerable<Filter>> GetByManufacturer(string manufacturer);
-        Task<IEnumerable<Filter>> Get(FilterType type);
-        Task<bool> Create(Filter filter);
-        Task<bool> Update(Filter filter);
-        Task<bool> UpdateDefaultPrice(Guid id, decimal defaultPrice);
-        Task<bool> SetStockQuantity(Guid id, decimal stockQuantity);
+namespace EasyOilFilter.Domain.Contracts.Repositories;
 
-        Task<IEnumerable<Oil>> GetAllOils();
-        Task<IEnumerable<Oil>> GetOils(int page, int quantity);
-        Task<IEnumerable<Oil>> Get(string name = "", string viscosity = "", OilType type = OilType.None);
-        Task<Oil> GetOil(Guid id);
-        Task<IEnumerable<Oil>> GetOilsByName(string name);
-        Task<IEnumerable<Oil>> GetByViscosity(string viscosity);
-        Task<IEnumerable<Oil>> Get(OilType type);
-        Task<bool> Create(Oil oil);
-        Task<bool> Update(Oil oil);
-        Task<bool> Delete(Guid id);
-    }
+public interface IProductRepository : IDisposable
+{
+    Task<Product> GetAsync(Guid id);
+    Task<IEnumerable<Product>> GetAsync(IEnumerable<Guid> ids);
+    Task<IEnumerable<T>> GetAllAsync<T>() where T : Product;
+    Task<IEnumerable<T>> GetByName<T>(string name) where T : Product;
+    Task<bool> CreateAsync<T>(T product) where T : Product;
+    Task<bool> UpdateAsync<T>(T product) where T : Product;
+    Task<bool> DeleteAsync(Guid id);
+    Task<IEnumerable<Filter>> GetAsync(string name = "", string manufacturer = "", FilterType type = FilterType.None);
+    Task<IEnumerable<Oil>> GetAsync(string name = "", string viscosity = "", OilType type = OilType.None);
+    Task<bool> UpdateDefaultPriceAsync(Guid id, decimal defaultPrice);
+    Task<bool> SetStockQuantityAsync(Guid id, decimal stockQuantity);
 }

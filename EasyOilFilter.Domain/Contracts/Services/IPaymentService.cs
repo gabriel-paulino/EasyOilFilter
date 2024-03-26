@@ -1,11 +1,10 @@
 ﻿using EasyOilFilter.Domain.Entities;
 using EasyOilFilter.Domain.ViewModels.PaymentViewModel;
 
-namespace EasyOilFilter.Domain.Contracts.Services
+namespace EasyOilFilter.Domain.Contracts.Services;
+
+public interface IPaymentService : IDisposable
 {
-    public interface IPaymentService : IDisposable
-    {
-        Task<(bool isAdd, IEnumerable<string> messages)> Add(AddPaymentViewModel model);
-        Task<IEnumerable<Payment>> GetByPurchaseId(Guid purchaseId);
-    }
+    Task<(bool isAdd, IEnumerable<string> messages)> Add(AddPaymentViewModel model);
+    Task<IEnumerable<Payment>> GetByPurchaseId(Guid purchaseId);
 }

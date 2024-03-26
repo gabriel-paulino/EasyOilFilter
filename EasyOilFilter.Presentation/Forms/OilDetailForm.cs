@@ -126,7 +126,7 @@ namespace EasyOilFilter.Presentation.Forms
 
             var oils = await _productService.GetOilsByName(model.Name);
 
-            if (oils?.Any() ?? false)
+            if (oils.Any())
             {
                 MessageBox.Show($"O lubrificante: {model.Name} já está adicionado na base de dados.");
                 return;

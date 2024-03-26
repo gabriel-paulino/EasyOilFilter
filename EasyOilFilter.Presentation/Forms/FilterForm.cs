@@ -103,15 +103,16 @@ namespace EasyOilFilter.Presentation.Forms
             decimal.TryParse(DataGridView.CurrentRow.Cells["DefaultPrice"].Value.ToString(), out decimal price);
             decimal.TryParse(DataGridView.CurrentRow.Cells["StockQuantity"].Value.ToString(), out decimal stockQuantity);
 
-            FilterViewModel selectedFilterModel = new()
-            {
-                Id = id,
-                Name = DataGridView.CurrentRow.Cells["Name"].Value.ToString(),
-                Manufacturer = DataGridView.CurrentRow.Cells["Manufacturer"].Value.ToString(),
-                DefaultPrice = price,
-                StockQuantity = stockQuantity,
-                FilterType = DataGridView.CurrentRow.Cells["FilterType"].Value.ToString()
-            };
+            var selectedFilterModel = new FilterViewModel
+            (
+
+                Id: id,
+                Name: DataGridView.CurrentRow.Cells["Name"].Value.ToString(),
+                Manufacturer: DataGridView.CurrentRow.Cells["Manufacturer"].Value.ToString(),
+                DefaultPrice: price,
+                StockQuantity: stockQuantity,
+                FilterType: DataGridView.CurrentRow.Cells["FilterType"].Value.ToString()
+            );
 
             bool wasProcessed = false;
 
